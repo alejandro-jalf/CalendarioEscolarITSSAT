@@ -95,7 +95,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | telefono_user | String | |
 | ciudad_user | String | |
 | password_user | String | Contraseña para inicio de sesion, encriptada con sha1 |
-| codigo_recuperacion_user | String | Codigo en caso olvidar la contraseña |
+| codigo_recuperacion_user | String | Codigo en caso de olvidar la contraseña |
 | tipo_user | String | Puede ser invitado, ejecutivo, o administrador |
 | categoria_user | String | La categoria dependera directamente de las categorias agregadas, por ejemplo, maestro, directivo, oficina, etc |
 | acceso_a_user | Object | Detalles de a que pestaña y acciones puede acceder el usuario |
@@ -129,7 +129,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | Campo | Tipo | Descripcion |
 |-------|------|-------------|
 | UUID_category | String | Id para la categoria |
-| nombre_category | Nombre de la categoria | |
+| nombre_category | String | Nombre de la categoria |
 | fecha_creada_category | String | |
 | creada_por_category | String | Id del usuario que la creo |
 | fecha_modificada_category | String | |

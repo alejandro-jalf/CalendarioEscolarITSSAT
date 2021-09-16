@@ -19,7 +19,7 @@ Aplicacion web para visualizar las actividades academicas de la institucion ITSS
 5. Base de datos de firebase [CloudFirestore](https://firebase.google.com/docs/firestore)
 6. Hosting de firebase [Hosting](https://firebase.google.com/docs/hosting)
 7. Implementacion de backen en firebase [Functions](https://firebase.google.com/docs/functions)
-8. Axios, clienta de la api REST [dcoumentacion](https://axios-http.com/docs/intro)
+8. Axios, cliente de la api REST [dcoumentacion](https://axios-http.com/docs/intro)
 9. Generador de claves UUID de Javascript [UUID](https://www.npmjs.com/package/uuid)
 10. Encriptador por sha1 de Javascript [sha1](https://www.npmjs.com/package/sha1)
 
@@ -136,4 +136,26 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | modificada_por_category | String |Id del usuario que la creo |
 | activa_category | Boolean | Muestra si aun esta activa la categoria |
 
+## Rutas de la api (functions)
 
+La aplicacion estara alojada en un servidor con node js, tendremos una ruta base la cual es la direccion donde estara alojada la api, por ejemplo
+
+https://calendario_scolar_itssat.com/
+
+Aunado a ello se a continuacion se muestran las rutas que estaran disponibles para acceder o manipular los datos de la aplicacion
+
+### Rutas para usuario
+
+| **Metodo** | **Ruta** | **Request** | **Descripcion** |
+|-----------|----------|------------|-----------------|
+| **GET** | api/v1/usuarios | | Obtiene todos los datos almacenandos en base de datos |
+| **GET** | api/v1/usuarios/:correo_user | | Obtiene un usuario determinado |
+| **POST** | api/v1/usuarios | { nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '', sucursal_user: '', correo_user: '', password_user: '', tipo_user: '', access_to_user: '' } | Crea un nuevo usuario |
+| **POST** | api/v1/usuarios/:correo_user/login | { password_user: '' } | Verifica el logueo de un usuario |
+| **PUT** | api/v1/usuarios/:correo_user | { nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '', sucursal_user: '', correo_user: '', tipo_user: '', access_to_user: '', activo_user: true } | Modifica los datos de un usuario determinado |
+| **PUT** | api/v1/usuarios/:correo_user/general | { nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '' } | Modifica los datos generales del usuario |
+| **PUT** | api/v1/usuarios/:correo_user/email | { new_correo_user: '', password_user: '' } | Actualiza la direccion de correo electronico de un usuario |
+| **PUT** | api/v1/usuarios/:correo_user/password | { password_user: '', new_password_user: '' } | Modifica la contraseña actual del usuario |
+| **PUT** | api/v1/usuarios/:correo_user/recovery | | Recupera la cuenta de un usuario |
+| **PUT** | api/v1/usuarios/:correo_user/status | { activo_user: true } | Cambia el status de un usuario puede enviar true o false |
+| **DELETE** | api/v1/usuarios/:correo_user | | Elimina un usuario |

@@ -29,7 +29,7 @@ const servicesUsuarios =  (() => {
             return createResponse(400, resultValidate);
         }
 
-        const existUser = await getUserByCorreo(correo_user);
+        const existUser = await getUserByCorreo(bodyUsuarios.correo_user);
         if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
 
@@ -37,6 +37,9 @@ const servicesUsuarios =  (() => {
             return createResponse(200, createContentError(`El correo ${bodyUsuarios.correo_user} ya esta registrado`, {}));
 
         const uuid = createUUID();
+
+        bodyUsuarios.UUID_user = uuid;
+        bodyUsuarios.activo_user = true;
 
         bodyUsuarios.password_user = encriptData(bodyUsuarios.password_user);
         const response = await createUser(uuid, bodyUsuarios);

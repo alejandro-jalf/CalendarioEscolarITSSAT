@@ -10,11 +10,9 @@ const modelUsuarios = (() => {
             const documentos = await collectionUser.orderBy('UUID_user').get();
 
             if (documentos.empty) return createContentAssert("No hay usuarios registrados");
-
-            const data = documentos.reduce((acumuladoDoc, documento) => {
-                acumuladoDoc.push(documento.data())
-                return acumuladoDoc;
-            }, [])
+            
+            const data = [];
+            documentos.forEach(doc => { data.push(doc.data()); });
 
             return createContentAssert("Lista de usuarios", data);
         } catch (error) {
@@ -44,7 +42,10 @@ const modelUsuarios = (() => {
             if (documentos.empty)
                 return createContentError('No se encontro al usuario con el correo: ' + correo_user);
 
-            return createContentAssert("Usuario localizado", documentos[0].data());
+            const data = [];
+            documentos.forEach(doc => { data.push(doc.data()); });
+
+            return createContentAssert("Usuario localizado", data);
         } catch (error) {
             console.log(error);
             return createContentError("Error al obtener usuario por correo", error);

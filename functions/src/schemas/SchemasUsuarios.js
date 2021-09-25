@@ -10,17 +10,17 @@ const schemasUsuario = (() => {
     const schemaNumberPhone = joi.string().regex(/^\d{10,12}$/);
     
     // 2021-08-24T05:00:00.000z
-    const schemaDate = joi.string().regex(/^\d{4,4}-\d{2,2}-\d{2,2}$/);
+    const schemaDate = joi.string().regex(/^\d{4,4}-\d{2,2}-\d{2,2}T\d{2,2}:\d{2,2}:\d{2,2}.000z$/);
     
     const schemaCreateUser = joi.object({
         correo_user: joi.string().min(5).required(),
         nombre_user: joi.string().min(3).required(),
         apellid_p_user: joi.string().min(3).required(),
         apellid_m_user: joi.string().min(3).required(),
-        direccion_user: joi.string().min(9).max(10).required(),
+        direccion_user: joi.string().min(9).required(),
         telefono_user: joi.string().min(10).max(12).required(),
         ciudad_user: joi.string().min(3).required(),
-        password_user: joi.string().min(7).required(),
+        password_user: joi.string().min(3).required(),
         tipo_user: joi.string().min(8).required(),
         area_user: joi.string().min(2).required(),
         accessTo_user: joi.object().required(),

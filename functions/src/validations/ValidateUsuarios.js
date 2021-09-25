@@ -42,12 +42,12 @@ const validateUsuarios = (() => {
 
         resultValidate = schemaDate.validate(bodyUsuarios.fecha_alta_user);
         if (resultValidate.error) {
-            return createContentError("La fecha de alta no tiene el formato correcto 0000-00-00", (resultValidate.error));
+            return createContentError("La fecha de alta no tiene el formato correcto 0000-00-00T00:00:00.000z", (resultValidate.error));
         }
 
         resultValidate = schemaDate.validate(bodyUsuarios.fecha_modificacion_user);
         if (resultValidate.error) {
-            return createContentError("La fecha de actualizacion no tiene el formato correcto 0000-00-00", (resultValidate.error));
+            return createContentError("La fecha de actualizacion no tiene el formato correcto 0000-00-00T00:00:00.000z", (resultValidate.error));
         }
 
         resultValidate = schemaNumberPhone.validate(bodyUsuarios.telefono_user);
@@ -83,7 +83,7 @@ const validateUsuarios = (() => {
         
         resultValidate = schemaDate.validate(bodyUsuarios.fecha_modificacion_user);
         if (resultValidate.error) {
-            return createContentError("La fecha de actualizacion no tiene el formato correcto 0000-00-00", (resultValidate.error));
+            return createContentError("La fecha de actualizacion no tiene el formato correcto 0000-00-00T00:00:00.000z", (resultValidate.error));
         }
 
         if (

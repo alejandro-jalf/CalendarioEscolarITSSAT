@@ -1,24 +1,25 @@
 const router = require("express").Router();
+const {
+    getAllUsuarios,
+    getUsuario,
+    createUsuario,
+} = require('../services')
 
 router.route("/v1/usuarios").get(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Obtiene todos los usuarios',
-    });
+    const { status, response } = await getAllUsuarios();
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user").get(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Obtiene un usuario por el correo',
-    });
+    const { correo_user } = req.params
+    const { status, response } = await getUsuario(correo_user);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios").post(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Crea un nuevo usuario',
-    });
+    const bodyUsuarios = req.body
+    const { status, response } = await createUsuario(bodyUsuarios);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user/login").post(async (req, res) => {

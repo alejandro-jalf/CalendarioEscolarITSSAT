@@ -44,7 +44,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - password_user
     - codigo_recuperacion_user
     - tipo_user
-    - categoria_user
+    - area_user
     - acceso_a_user
     - activo_user
     - fecha_alta_user
@@ -63,22 +63,22 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - descripcion_task
     - mes_task
     - dias_task
-    - para_categoria_task
+    - para_area_task
     - activa_task
     - fecha_creada_task
     - creada_por_task
     - fecha_modificada_task
     - modificada_por_task
 
-**Coleccion de categorias**
-- **UUID_categoria**
-    - UUID_category
-    - nombre_category
-    - fecha_creada_category
-    - creada_por_category
-    - fecha_modificada_category
-    - modificada_por_category
-    - activa_category
+**Coleccion de areas**
+- **UUID_area**
+    - UUID_area
+    - nombre_area
+    - fecha_creada_area
+    - creada_por_area
+    - fecha_modificada_area
+    - modificada_por_area
+    - activa_area
 
 ### Contenido de cada documento por coleccion
 
@@ -97,7 +97,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | password_user | String | Contraseña para inicio de sesion, encriptada con sha1 |
 | codigo_recuperacion_user | String | Codigo en caso de olvidar la contraseña |
 | tipo_user | String | Puede ser invitado, ejecutivo, o administrador |
-| categoria_user | String | La categoria dependera directamente de las categorias agregadas, por ejemplo, maestro, directivo, oficina, etc |
+| area_user | String | La area dependera directamente de las areas agregadas, por ejemplo, maestro, directivo, oficina, etc |
 | acceso_a_user | Object | Detalles de a que pestaña y acciones puede acceder el usuario |
 | activo_user | Boolean | Indica si el usuario esta dado de baja o no |
 | fecha_alta_user | String | |
@@ -117,24 +117,24 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | descripcion_task | String | Titulo o descripcion de la actividad a realizar |
 | mes_task | String | Mes o meses en los que se realizara la actividad |
 | dias_task | String | Si no se establece fecha especifica pueda contener texto en la descripcion de dias |
-| para_categoria_task | String | relacionada con el id de categoria a que va dirijido |
+| para_area_task | String | relacionada con el id de area a que va dirijido |
 | activa_task | String | Indica si esta activa la actividad |
 | fecha_creada_task | String |  |
 | creada_por_task | String | Id del usuario que la creo |
 | fecha_modificada_task | Object | Detalles de a que pestaña y acciones puede acceder el usuario |
 | modificada_por_task | Boolean | Id del usuario que la modifico |
 
-**Documentos para categorias**
+**Documentos para areas**
 
 | Campo | Tipo | Descripcion |
 |-------|------|-------------|
-| UUID_category | String | Id para la categoria |
-| nombre_category | String | Nombre de la categoria |
-| fecha_creada_category | String | |
-| creada_por_category | String | Id del usuario que la creo |
-| fecha_modificada_category | String | |
-| modificada_por_category | String |Id del usuario que la creo |
-| activa_category | Boolean | Muestra si aun esta activa la categoria |
+| UUID_area | String | Id para la area |
+| nombre_area | String | Nombre de la area |
+| fecha_creada_area | String | |
+| creada_por_area | String | Id del usuario que la creo |
+| fecha_modificada_area | String | |
+| modificada_por_area | String |Id del usuario que la creo |
+| activa_area | Boolean | Muestra si aun esta activa la area |
 
 ## Rutas de la api (functions)
 

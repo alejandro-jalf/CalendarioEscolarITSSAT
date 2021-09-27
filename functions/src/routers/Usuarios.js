@@ -72,17 +72,16 @@ router.route("/v1/usuarios/:correo_user/recovery").put(async (req, res) => {
 });
 
 router.route("/v1/usuarios/:correo_user/status").put(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Cambia el status activo de un usuario',
-    });
+    const bodyActivo = req.body;
+    const { correo_user } = req.params;
+    const { status, response } = await updateActivo(correo_user, bodyActivo);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user").delete(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Elimina un usuario',
-    });
+    const { correo_user } = req.params;
+    const { status, response } = await deleteUsuario(correo_user);
+    res.status(status).json(response);
 });
 
 module.exports = router;

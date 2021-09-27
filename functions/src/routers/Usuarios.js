@@ -43,17 +43,17 @@ router.route("/v1/usuarios/:correo_user").put(async (req, res) => {
 });
 
 router.route("/v1/usuarios/:correo_user/general").put(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Modifica los datos generales de un usuario',
-    });
+    const bodyUpdate = req.body;
+    const { correo_user } = req.params;
+    const { status, response } = await updateCorreo(correo_user, bodyUpdate);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user/email").put(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Modifica el correo de un usuario',
-    });
+    const bodyUpdate = req.body;
+    const { correo_user } = req.params;
+    const { status, response } = await updateCorreo(correo_user, bodyUpdate);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user/password").put(async (req, res) => {

@@ -6,6 +6,7 @@ const {
     loginUsuario,
     updateUsuario,
     updateUsuarioGeneral,
+    recuperaPassword,
     updateCorreo,
     updateActivo,
     updateContra,
@@ -65,10 +66,9 @@ router.route("/v1/usuarios/:correo_user/password").put(async (req, res) => {
 });
 
 router.route("/v1/usuarios/:correo_user/recovery").put(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Recupera cuenta de un usuario',
-    });
+    const { correo_user } = req.params;
+    const { status, response } = await recuperaPassword(correo_user);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user/status").put(async (req, res) => {

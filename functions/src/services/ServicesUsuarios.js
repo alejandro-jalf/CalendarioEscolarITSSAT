@@ -41,6 +41,7 @@ const servicesUsuarios =  (() => {
 
         bodyUsuarios.UUID_user = uuid;
         bodyUsuarios.activo_user = true;
+        bodyUsuarios.recovery_code_user = 'empty';
 
         bodyUsuarios.password_user = encriptData(bodyUsuarios.password_user);
         const response = await createUser(uuid, bodyUsuarios);
@@ -65,11 +66,23 @@ const servicesUsuarios =  (() => {
             return createResponse(200, existUser);
         }
 
-        if (existUser.data[0].password_user !== encriptData(bodyLogin.password_user)) {
-            return createResponse(
-                401,
-                createContentError("La contraseña es incorrecta", {})
-            );
+        if (existUser.data[0].recovery_code_user === 'empty') {
+            if (existUser.data[0].password_user !== encriptData(bodyLogin.password_user)) {
+                return createResponse(
+                    401,
+                    createContentError("La contraseña es incorrecta", {})
+                );
+            }
+        } else {
+            if (
+                existUser.data[0].password_user !== encriptData(bodyLogin.password_user) &&
+                existUser.data[0].recovery_code_user !== bodyLogin.password_user
+            ) {
+                return createResponse(
+                    401,
+                    createContentError("Codigo de seguridad y contraseña actual incorrecta", {})
+                );
+            }
         }
 
         if (!existUser.data[0].activo_user) {
@@ -232,10 +245,16 @@ const servicesUsuarios =  (() => {
 
         const caracteres = "abcdefghijkmnpqrtuvwxyzABCDEFGHJKMNPQRTUVWXYZ012346789";
         let codigo = "";
-        for (i=0; i<13; i++) codigo +=caracteres.charAt(Math.floor(Math.random()*caracteres.length)); 
-        console.log(codigo)
+        for (i=0; i<13; i++) codigo +=caracteres.charAt(Math.floor(Math.random()*caracteres.length));
 
-        const response = await sendEmail(correo_user, codigo);
+        let response = await updateUser(existUser.data[0].UUID_user, { recovery_code_user: codigo })
+        if(!response.success) {
+            response.message = 'No su puedo crear el codigo de recuperacion, intentelo mas tarde'
+            return createResponse(400, response);
+        }
+
+        response = await sendEmail(correo_user, codigo);
+        if (!response.success) return createResponse(400, response);
 
         return createResponse(200, response);
     }

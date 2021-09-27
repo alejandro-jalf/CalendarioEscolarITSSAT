@@ -58,10 +58,10 @@ router.route("/v1/usuarios/:correo_user/email").put(async (req, res) => {
 });
 
 router.route("/v1/usuarios/:correo_user/password").put(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Cambia la contraseña de un usuario',
-    });
+    const bodyUpdatePassword = req.body;
+    const { correo_user } = req.params;
+    const { status, response } = await updateContra(correo_user, bodyUpdatePassword);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user/recovery").put(async (req, res) => {

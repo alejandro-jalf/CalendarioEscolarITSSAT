@@ -49,6 +49,15 @@ const schemasUsuario = (() => {
         activo_user: joi.boolean()
     });
 
+    const schemaUpdateUsuarioGeneral = joi.object({
+        nombre_user: joi.string().min(3),
+        apellid_p_user: joi.string().min(3),
+        apellid_m_user: joi.string().min(3),
+        direccion_user: joi.string().min(9),
+        telefono_user: joi.string().min(10).max(12),
+        ciudad_user: joi.string().min(3)
+    });
+
     const schemaUpdateEmail = joi.object({
         new_correo_user: joi.string().email().required(),
         password_user: joi.string().required()
@@ -75,6 +84,7 @@ const schemasUsuario = (() => {
         schemaUpdatePassword,
         schemaContentNumbers,
         schemaContentLetters,
+        schemaUpdateUsuarioGeneral,
     }
 
 })();

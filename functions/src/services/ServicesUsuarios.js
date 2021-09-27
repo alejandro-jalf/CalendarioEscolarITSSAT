@@ -4,6 +4,7 @@ const {
     validateCreateUsuario,
     validateLogin,
     validateUpdateUsuario,
+    validateUpdateUsuarioGeneral,
     validateUpdateEmail,
     validateUpdatePassword,
     validateUpdateActivo
@@ -90,6 +91,30 @@ const servicesUsuarios =  (() => {
 
     const updateUsuario = async (correo_user, bodyUsuarios) => {
         const resultValidate = validateUpdateUsuario(bodyUsuarios);
+        if (!resultValidate.success) {
+            return createResponse(400, resultValidate);
+        }
+
+        const existUser = await getUserByCorreo(correo_user);
+        if (existUser.message === "Error al obtener usuario por correo") {
+            return createResponse(400, existUser);
+        }
+
+        if (!existUser.success) {
+            return createResponse(200, existUser);
+        }
+
+        const id_user = existUser.data[0].UUID_user
+        
+        const response = await updateUser(id_user, bodyUsuarios);
+        
+        if(!response.success) return createResponse(400, response);
+        
+        return createResponse(200, response);
+    }
+
+    const updateUsuarioGeneral = async (correo_user, bodyUsuarios) => {
+        const resultValidate = validateUpdateUsuarioGeneral(bodyUsuarios);
         if (!resultValidate.success) {
             return createResponse(400, resultValidate);
         }
@@ -273,6 +298,7 @@ const servicesUsuarios =  (() => {
         updateActivo,
         deleteUsuario,
         recuperaPassword,
+        updateUsuarioGeneral,
     }
 })();
 

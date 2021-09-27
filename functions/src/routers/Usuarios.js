@@ -5,6 +5,7 @@ const {
     createUsuario,
     loginUsuario,
     updateUsuario,
+    updateUsuarioGeneral,
     updateCorreo,
     updateActivo,
     updateContra,
@@ -45,7 +46,7 @@ router.route("/v1/usuarios/:correo_user").put(async (req, res) => {
 router.route("/v1/usuarios/:correo_user/general").put(async (req, res) => {
     const bodyUpdate = req.body;
     const { correo_user } = req.params;
-    const { status, response } = await updateCorreo(correo_user, bodyUpdate);
+    const { status, response } = await updateUsuarioGeneral(correo_user, bodyUpdate);
     res.status(status).json(response);
 });
 

@@ -97,6 +97,15 @@ const validateUsuarios = (() => {
         return createContentAssert("Datos validados");
     }
 
+    const validateUpdateUsuarioGeneral = (bodyUsuariosGeneral) => {
+        let resultValidate = schemaUpdateUsuario.validate(bodyUsuariosGeneral);
+        if (resultValidate.error) {
+            return createContentError("Algun dato fue enviado de manera equivocada", (resultValidate.error));
+        }
+
+        return createContentAssert("Datos validados");
+    }
+
     const validateUpdateEmail = (bodyEmail) => {
         let resultValidate = schemaUpdateEmail.validate(bodyEmail);
         if (resultValidate.error) {
@@ -145,6 +154,7 @@ const validateUsuarios = (() => {
         validateUpdateEmail,
         validateUpdatePassword,
         validateUpdateActivo,
+        validateUpdateUsuarioGeneral,
     }
 })();
 

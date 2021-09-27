@@ -49,7 +49,7 @@ const servicesUsuarios =  (() => {
         return createResponse(201, response);
     }
 
-    const loginUsuario = async (bodyLogin) => {
+    const loginUsuario = async (correo_user, bodyLogin) => {
         const resultValidate = validateLogin(bodyLogin);
         if (!resultValidate.success) {
             return createResponse(400, resultValidate);
@@ -64,19 +64,25 @@ const servicesUsuarios =  (() => {
             return createResponse(200, existUser);
         }
 
-        if (existUser.data.password_user !== encriptData(bodyLogin.password_user)) {
+        if (existUser.data[0].password_user !== encriptData(bodyLogin.password_user)) {
             return createResponse(
                 401,
                 createContentError("La contraseña es incorrecta", {})
             );
         }
 
-        if (!existUser.data.activo_user) {
+        if (!existUser.data[0].activo_user) {
             return createResponse(
                 401,
                 createContentError("Tu cuenta esta supendida, comunicate con el administrador", {})
             );
         }
+
+        delete existUser.data[0].modificado_por_user
+        delete existUser.data[0].creado_por_user
+        delete existUser.data[0].fecha_modificacion_user
+        delete existUser.data[0].fecha_alta_user
+        delete existUser.data[0].password_user
 
         existUser.message = "Bienvenido";
         return createResponse(200, existUser);
@@ -97,7 +103,7 @@ const servicesUsuarios =  (() => {
             return createResponse(200, existUser);
         }
 
-        const id_user = existUser.data.UUID_user
+        const id_user = existUser.data[0].UUID_user
         
         const response = await updateUser(id_user, bodyUsuarios);
         
@@ -128,13 +134,13 @@ const servicesUsuarios =  (() => {
             return createResponse(200, existUser);
         }
 
-        if (existUser.data.password_user !== encriptData(bodyCorreo.password_user)) {
+        if (existUser.data[0].password_user !== encriptData(bodyCorreo.password_user)) {
             return createResponse(
                 401,
                 createContentError("La contraseña actual no es correcta", {})
             );
         }
-        const id_user = existUser.data.UUID_user
+        const id_user = existUser.data[0].UUID_user
         
         bodyCorreo.correo_user = bodyCorreo.new_correo_user
         delete bodyCorreo.password_user
@@ -163,7 +169,7 @@ const servicesUsuarios =  (() => {
             return createResponse(200, existUser);
         }
 
-        if (existUser.data.password_user !== encriptData(bodyPassword.password_user)) {
+        if (existUser.data[0].password_user !== encriptData(bodyPassword.password_user)) {
             return createResponse(
                 200,
                 createContentError("Contraseña actual incorrecta", {})
@@ -171,7 +177,7 @@ const servicesUsuarios =  (() => {
         }
 
         const newPassword = encriptData(bodyPassword.new_password_user);
-        if (existUser.data.password_user === newPassword) {
+        if (existUser.data[0].password_user === newPassword) {
             return createResponse(
                 200,
                 createContentError("La nueva contraseña y la contraeña actual son iguales", {})
@@ -181,7 +187,7 @@ const servicesUsuarios =  (() => {
         delete bodyPassword.new_password_user;
         bodyPassword.password_user = newPassword;
 
-        const response = await updateUser(existUser.data.UUID_user, bodyPassword);
+        const response = await updateUser(existUser.data[0].UUID_user, bodyPassword);
         
         if(!response.success) return createResponse(400, response);
         
@@ -224,14 +230,14 @@ const servicesUsuarios =  (() => {
             return createResponse(200, existUser);
         }
 
-        if (existUser.data.activo_user === bodyActivo.activo_user) {
+        if (existUser.data[0].activo_user === bodyActivo.activo_user) {
             return createResponse(
                 200,
                 createContentError("El estatus de activo_user es igual", {})
             );
         }
 
-        const response = await updateUser(existUser.data.UUID_user, bodyActivo);
+        const response = await updateUser(existUser.data[0].UUID_user, bodyActivo);
         
         if(!response.success) return createResponse(400, response);
         
@@ -249,7 +255,7 @@ const servicesUsuarios =  (() => {
             return createResponse(200, existUser);
         }
         
-        const responseDelete = await deleteUser(existUser.data.UUID_user);
+        const responseDelete = await deleteUser(existUser.data[0].UUID_user);
         if(!responseDelete.success) return createResponse(400, responseDelete);
         
         responseDelete.message = `La cuenta de usuario ${correo_user} ha sido eliminada`;

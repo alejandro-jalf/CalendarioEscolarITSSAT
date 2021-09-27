@@ -3,6 +3,12 @@ const {
     getAllUsuarios,
     getUsuario,
     createUsuario,
+    loginUsuario,
+    updateUsuario,
+    updateCorreo,
+    updateActivo,
+    updateContra,
+    deleteUsuario,
 } = require('../services')
 
 router.route("/v1/usuarios").get(async (req, res) => {
@@ -23,17 +29,17 @@ router.route("/v1/usuarios").post(async (req, res) => {
 });
 
 router.route("/v1/usuarios/:correo_user/login").post(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'loguea a un usuario',
-    });
+    const bodyLogin = req.body;
+    const { correo_user } = req.params;
+    const { status, response } = await loginUsuario(correo_user, bodyLogin);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user").put(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Modifica un determinado usuario',
-    });
+    const bodyUpdate = req.body;
+    const { correo_user } = req.params;
+    const { status, response } = await updateUsuario(correo_user, bodyUpdate);
+    res.status(status).json(response);
 });
 
 router.route("/v1/usuarios/:correo_user/general").put(async (req, res) => {

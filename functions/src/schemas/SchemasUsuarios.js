@@ -31,7 +31,6 @@ const schemasUsuario = (() => {
     });
 
     const schemaLogin = joi.object({
-        correo_user: joi.string().min(5).required(),
         password_user: joi.string().required()
     });
 
@@ -39,7 +38,7 @@ const schemasUsuario = (() => {
         nombre_user: joi.string().min(3),
         apellid_p_user: joi.string().min(3),
         apellid_m_user: joi.string().min(3),
-        direccion_user: joi.string().min(9).max(10),
+        direccion_user: joi.string().min(9),
         telefono_user: joi.string().min(10).max(12),
         ciudad_user: joi.string().min(3),
         tipo_user: joi.string().min(8),

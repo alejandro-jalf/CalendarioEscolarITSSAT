@@ -80,6 +80,67 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - modificada_por_area
     - activa_area
 
+### Diagrama de base de datos
+
+```` javascript
+// Coleccion de Usuarios
+
+{
+    UUID_user: String,
+    correo_user: String,
+    nombre_user: String,
+    apellido_p_user: String,
+    apellido_m_user: String,
+    direccion_user: String,
+    telefono_user: String,
+    ciudad_user: String,
+    password_user: String,
+    codigo_recuperacion_user: String,
+    tipo_user: String,
+    area_user: String,
+    accessTo_user: {
+        inicio: String || Object,
+        administracion: String || Object
+    },
+    activo_user: Boolean,
+    fecha_alta_user: String,
+    creado_por_user: String,
+    fecha_modificacion_user: String,
+    modificado_por_user: String
+}
+
+// Coleccion de Actividades
+
+{
+    UUID_task: String,
+    year_task: String,
+    rango_fechas_task: String,
+    fecha_inicial_task: String,
+    fecha_final_task: String,
+    descripcion_task: String,
+    mes_task: String,
+    dias_task: String,
+    para_area_task: String,
+    activa_task: Boolean,
+    fecha_creada_task: String,
+    creada_por_task: String,
+    fecha_modificada_task: String,
+    modificada_por_task: String
+}
+
+// Coleccion de Area
+
+{
+    UUID_area: String,
+    nombre_area: String,
+    fecha_creada_area: String,
+    creada_por_area: String,
+    fecha_modificada_area: String,
+    modificada_por_area: String,
+    activa_area: Boolean
+}
+````
+
 ### Contenido de cada documento por coleccion
 
 **Documentos para usuarios**

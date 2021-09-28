@@ -114,7 +114,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 {
     UUID_task: String,
     year_task: String,
-    rango_fechas_task: String,
+    rango_fechas_task: Boolean,
     fecha_inicial_task: String,
     fecha_final_task: String,
     descripcion_task: String,
@@ -179,7 +179,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | mes_task | String | Mes o meses en los que se realizara la actividad |
 | dias_task | String | Si no se establece fecha especifica pueda contener texto en la descripcion de dias |
 | para_area_task | String | relacionada con el id de area a que va dirijido |
-| activa_task | String | Indica si esta activa la actividad |
+| activa_task | Boolean | Indica si esta activa la actividad |
 | fecha_creada_task | String |  |
 | creada_por_task | String | Id del usuario que la creo |
 | fecha_modificada_task | Object | Detalles de a que pestaña y acciones puede acceder el usuario |

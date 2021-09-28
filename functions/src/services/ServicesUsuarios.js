@@ -26,9 +26,7 @@ const servicesUsuarios =  (() => {
 
     const createUsuario = async (bodyUsuarios) => {
         const resultValidate = validateCreateUsuario(bodyUsuarios);
-        if (!resultValidate.success) {
-            return createResponse(400, resultValidate);
-        }
+        if (!resultValidate.success) return createResponse(400, resultValidate);
 
         const existUser = await getUserByCorreo(bodyUsuarios.correo_user);
         if (existUser.message === "Error al obtener usuario por correo")
@@ -53,44 +51,35 @@ const servicesUsuarios =  (() => {
 
     const loginUsuario = async (correo_user, bodyLogin) => {
         const resultValidate = validateLogin(bodyLogin);
-        if (!resultValidate.success) {
-            return createResponse(400, resultValidate);
-        }
+        if (!resultValidate.success) return createResponse(400, resultValidate);
 
         const existUser = await getUserByCorreo(correo_user);
-        if (existUser.message === "Error al obtener usuario por correo") {
+        if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
-        }
         
-        if (!existUser.success) {
-            return createResponse(200, existUser);
-        }
+        if (!existUser.success) return createResponse(200, existUser);
 
         if (existUser.data[0].recovery_code_user === 'empty') {
-            if (existUser.data[0].password_user !== encriptData(bodyLogin.password_user)) {
+            if (existUser.data[0].password_user !== encriptData(bodyLogin.password_user))
                 return createResponse(
                     401,
                     createContentError("La contraseña es incorrecta", {})
                 );
-            }
         } else {
             if (
                 existUser.data[0].password_user !== encriptData(bodyLogin.password_user) &&
                 existUser.data[0].recovery_code_user !== bodyLogin.password_user
-            ) {
-                return createResponse(
+            ) return createResponse(
                     401,
                     createContentError("Codigo de seguridad y contraseña actual incorrecta", {})
                 );
-            }
         }
 
-        if (!existUser.data[0].activo_user) {
+        if (!existUser.data[0].activo_user)
             return createResponse(
                 401,
                 createContentError("Tu cuenta esta supendida, comunicate con el administrador", {})
             );
-        }
 
         delete existUser.data[0].modificado_por_user
         delete existUser.data[0].creado_por_user
@@ -104,18 +93,13 @@ const servicesUsuarios =  (() => {
 
     const updateUsuario = async (correo_user, bodyUsuarios) => {
         const resultValidate = validateUpdateUsuario(bodyUsuarios);
-        if (!resultValidate.success) {
-            return createResponse(400, resultValidate);
-        }
+        if (!resultValidate.success) return createResponse(400, resultValidate);
 
         const existUser = await getUserByCorreo(correo_user);
-        if (existUser.message === "Error al obtener usuario por correo") {
+        if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
-        }
 
-        if (!existUser.success) {
-            return createResponse(200, existUser);
-        }
+        if (!existUser.success) return createResponse(200, existUser);
 
         const id_user = existUser.data[0].UUID_user
         
@@ -128,18 +112,13 @@ const servicesUsuarios =  (() => {
 
     const updateUsuarioGeneral = async (correo_user, bodyUsuarios) => {
         const resultValidate = validateUpdateUsuarioGeneral(bodyUsuarios);
-        if (!resultValidate.success) {
-            return createResponse(400, resultValidate);
-        }
+        if (!resultValidate.success) return createResponse(400, resultValidate);
 
         const existUser = await getUserByCorreo(correo_user);
-        if (existUser.message === "Error al obtener usuario por correo") {
+        if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
-        }
 
-        if (!existUser.success) {
-            return createResponse(200, existUser);
-        }
+        if (!existUser.success) return createResponse(200, existUser);
 
         const id_user = existUser.data[0].UUID_user
         
@@ -152,32 +131,26 @@ const servicesUsuarios =  (() => {
 
     const updateCorreo = async (correo_user, bodyCorreo) => {
         const resultValidate = validateUpdateEmail(bodyCorreo);
-        if (!resultValidate.success) {
-            return createResponse(400, resultValidate);
-        }
+        if (!resultValidate.success) return createResponse(400, resultValidate);
 
-        if (correo_user === bodyCorreo.new_correo_user) {
+        if (correo_user === bodyCorreo.new_correo_user) 
             return createResponse(
                 200,
                 createContentError("El nuevo correo es igual al correo actual", {})
             );
-        }
 
         const existUser = await getUserByCorreo(correo_user);
-        if (existUser.message === "Error al obtener usuario por correo") {
+        if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
-        }
         
-        if (!existUser.success) {
-            return createResponse(200, existUser);
-        }
+        if (!existUser.success) return createResponse(200, existUser);
 
-        if (existUser.data[0].password_user !== encriptData(bodyCorreo.password_user)) {
+        if (existUser.data[0].password_user !== encriptData(bodyCorreo.password_user))
             return createResponse(
                 401,
                 createContentError("La contraseña actual no es correcta", {})
             );
-        }
+
         const id_user = existUser.data[0].UUID_user
         
         bodyCorreo.correo_user = bodyCorreo.new_correo_user
@@ -194,33 +167,26 @@ const servicesUsuarios =  (() => {
 
     const updateContra = async (correo_user, bodyPassword) => {
         const resultValidate = validateUpdatePassword(bodyPassword);
-        if (!resultValidate.success) {
-            return createResponse(400, resultValidate);
-        }
+        if (!resultValidate.success) return createResponse(400, resultValidate);
 
         const existUser = await getUserByCorreo(correo_user);
-        if (existUser.message === "Error al obtener usuario por correo") {
+        if (existUser.message === "Error al obtener usuario por correo") 
             return createResponse(400, existUser);
-        }
         
-        if (!existUser.success) {
-            return createResponse(200, existUser);
-        }
+        if (!existUser.success) return createResponse(200, existUser);
 
-        if (existUser.data[0].password_user !== encriptData(bodyPassword.password_user)) {
+        if (existUser.data[0].password_user !== encriptData(bodyPassword.password_user))
             return createResponse(
                 200,
                 createContentError("Contraseña actual incorrecta", {})
             );
-        }
 
         const newPassword = encriptData(bodyPassword.new_password_user);
-        if (existUser.data[0].password_user === newPassword) {
+        if (existUser.data[0].password_user === newPassword)
             return createResponse(
                 200,
                 createContentError("La nueva contraseña y la contraeña actual son iguales", {})
             );
-        }
 
         delete bodyPassword.new_password_user;
         bodyPassword.password_user = newPassword;
@@ -235,13 +201,11 @@ const servicesUsuarios =  (() => {
 
     const recuperaPassword = async (correo_user) => {
         const existUser = await getUserByCorreo(correo_user);
-        if (existUser.message === "Error al obtener usuario por correo") {
+        if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
-        }
         
-        if (!existUser.success) {
+        if (!existUser.success)
             return createResponse(200, existUser);
-        }
 
         const caracteres = "abcdefghijkmnpqrtuvwxyzABCDEFGHJKMNPQRTUVWXYZ012346789";
         let codigo = "";
@@ -261,25 +225,19 @@ const servicesUsuarios =  (() => {
 
     const updateActivo = async (correo_user, bodyActivo) => {
         const resultValidate = validateUpdateActivo(bodyActivo);
-        if (!resultValidate.success) {
-            return createResponse(400, resultValidate);
-        }
+        if (!resultValidate.success) return createResponse(400, resultValidate);
 
         const existUser = await getUserByCorreo(correo_user);
-        if (existUser.message === "Error al obtener usuario por correo") {
+        if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
-        }
         
-        if (!existUser.success) {
-            return createResponse(200, existUser);
-        }
+        if (!existUser.success) return createResponse(200, existUser);
 
-        if (existUser.data[0].activo_user === bodyActivo.activo_user) {
+        if (existUser.data[0].activo_user === bodyActivo.activo_user) 
             return createResponse(
                 200,
                 createContentError("El estatus de activo_user es igual", {})
             );
-        }
 
         const response = await updateUser(existUser.data[0].UUID_user, bodyActivo);
         
@@ -291,13 +249,10 @@ const servicesUsuarios =  (() => {
 
     const deleteUsuario = async (correo_user) => {
         const existUser = await getUserByCorreo(correo_user);
-        if (existUser.message === "Error al obtener usuario por correo") {
+        if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
-        }
         
-        if (!existUser.success) {
-            return createResponse(200, existUser);
-        }
+        if (!existUser.success) return createResponse(200, existUser);
         
         const responseDelete = await deleteUser(existUser.data[0].UUID_user);
         if(!responseDelete.success) return createResponse(400, responseDelete);

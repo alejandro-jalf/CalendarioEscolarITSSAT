@@ -51,6 +51,16 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - creado_por_user
     - fecha_modificacion_user
     - modificado_por_user
+    
+**Coleccion de areas**
+- **UUID_master_task**
+    - UUID_master_task
+    - titulo_master_task
+    - publicada_master_task
+    - fecha_creada_master_task
+    - creada_por_master_task
+    - fecha_modificada_master_task
+    - modificada_por_master_task
 
 **Colecion de actividades**
 
@@ -61,6 +71,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - fecha_inicial_task
     - fecha_final_task
     - descripcion_task
+    - observaciones_task
     - mes_task
     - dias_task
     - para_area_task
@@ -109,17 +120,30 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     modificado_por_user: String
 }
 
+// Coleccion de MaestroActividad
+
+{
+    UUID_master_task: String,
+    titulo_master_task: String,
+    publicada_master_task: Boolean,
+    fecha_creada_master_task: String,
+    creada_por_master_task: String,
+    fecha_modificada_master_task: String,
+    modificada_por_master_task: String
+}
+
 // Coleccion de Actividades
 
 {
     UUID_task: String,
-    year_task: String,
+    year_task: int,
     rango_fechas_task: Boolean,
     fecha_inicial_task: String,
     fecha_final_task: String,
     descripcion_task: String,
-    mes_task: String,
-    dias_task: String,
+    observaciones_task: String,
+    mes_task: Array,
+    dias_task: Array,
     para_area_task: String,
     activa_task: Boolean,
     fecha_creada_task: String,
@@ -166,18 +190,31 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | fecha_modificacion_user | String | |
 | modificado_por_user | String | |
 
+**Documentos para MaestroActividades**
+
+| Campo | Tipo | Descripcion |
+|-------|------|-------------|
+| UUID_master_task | String | Id para la lista de actividades |
+| titulo_master_task | String | Titulo de la lista de actividades |
+| publicada_master_task | Boolean | Muestra si la lista de actividades esta publica(visible) o no |
+| fecha_creada_master_task | String | |
+| creada_por_master_task | String | Id del usuario que la creo |
+| fecha_modificada_master_task | String | |
+| modificada_por_master_task | Boolean | Id del usuario que la creo |
+
 **Documentos para actividades**
 
 | Campo | Tipo | Descripcion |
 |-------|------|-------------|
 | UUID_task | String | Id para la actividad |
-| year_task | String | Corresponde al periodo escolar por ejemplo 2021 |
+| year_task | int | Corresponde al año de la actividad 2021 |
 | rango_fechas_task | Boolean | Se especifica si tiene fecha establecida o se desconoce la fecha |
 | fecha_inicial_task | String | la fecha inicial de la actividad |
 | fecha_final_task | String | fecha final de la actividad, puede ser igual que la inicial pero no menor que la inicial |
 | descripcion_task | String | Titulo o descripcion de la actividad a realizar |
+| observaciones_task | String | Observaciones para la actividad |
 | mes_task | String | Mes o meses en los que se realizara la actividad |
-| dias_task | String | Si no se establece fecha especifica pueda contener texto en la descripcion de dias |
+| dias_task | String | Dias en que se llevara a cabo la actividad |
 | para_area_task | String | relacionada con el id de area a que va dirijido |
 | activa_task | Boolean | Indica si esta activa la actividad |
 | fecha_creada_task | String |  |
@@ -191,11 +228,11 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 |-------|------|-------------|
 | UUID_area | String | Id para la area |
 | nombre_area | String | Nombre de la area |
+| activa_area | Boolean | Muestra si aun esta activa la area |
 | fecha_creada_area | String | |
 | creada_por_area | String | Id del usuario que la creo |
 | fecha_modificada_area | String | |
 | modificada_por_area | String |Id del usuario que la creo |
-| activa_area | Boolean | Muestra si aun esta activa la area |
 
 ## Rutas de la api (functions)
 
@@ -209,14 +246,47 @@ Aunado a ello se a continuacion se muestran las rutas que estaran disponibles pa
 
 | **Metodo** | **Ruta** | **Request** | **Descripcion** |
 |-----------|----------|------------|-----------------|
-| **GET** | api/v1/usuarios | | Obtiene todos los datos almacenandos en base de datos |
+| **GET** | api/v1/usuarios | | Obtiene todos los usuarios almacenandos en base de datos |
 | **GET** | api/v1/usuarios/:correo_user | | Obtiene un usuario determinado |
-| **POST** | api/v1/usuarios | { nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '', sucursal_user: '', correo_user: '', password_user: '', tipo_user: '', access_to_user: '' } | Crea un nuevo usuario |
+| **POST** | api/v1/usuarios | { correo_user: '', nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '', telefono_user: '', sucursal_user: '', ciudad_user: '', password_user: '', tipo_user: '', area_user: '', accessTo_user: '', fecha_alta_user: '', creado_por_user: '', fecha_modificacion_user:'', modificado_por_user } | Crea un nuevo usuario |
 | **POST** | api/v1/usuarios/:correo_user/login | { password_user: '' } | Verifica el logueo de un usuario |
-| **PUT** | api/v1/usuarios/:correo_user | { nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '', sucursal_user: '', correo_user: '', tipo_user: '', access_to_user: '', activo_user: true } | Modifica los datos de un usuario determinado |
-| **PUT** | api/v1/usuarios/:correo_user/general | { nombre_user: '', apellido_p_user: '', apellido_m_user: '', direccion_user: '' } | Modifica los datos generales del usuario |
+| **PUT** | api/v1/usuarios/:correo_user | { nombre_user?: '', apellido_p_user?: '', apellido_m_user?: '', direccion_user?: '', sucursal_user?: '', correo_user?: '', tipo_user?: '', access_to_user?: '', activo_user?: true } | Modifica los datos de un usuario determinado |
+| **PUT** | api/v1/usuarios/:correo_user/general | { nombre_user?: '', apellido_p_user?: '', apellido_m_user?: '', direccion_user?: '' } | Modifica los datos generales del usuario |
 | **PUT** | api/v1/usuarios/:correo_user/email | { new_correo_user: '', password_user: '' } | Actualiza la direccion de correo electronico de un usuario |
 | **PUT** | api/v1/usuarios/:correo_user/password | { password_user: '', new_password_user: '' } | Modifica la contraseña actual del usuario |
 | **PUT** | api/v1/usuarios/:correo_user/recovery | | Recupera la cuenta de un usuario |
 | **PUT** | api/v1/usuarios/:correo_user/status | { activo_user: true } | Cambia el status de un usuario puede enviar true o false |
 | **DELETE** | api/v1/usuarios/:correo_user | | Elimina un usuario |
+
+### Rutas para MaestroActividades
+
+| **Metodo** | **Ruta** | **Request** | **Descripcion** |
+|-----------|----------|------------|-----------------|
+| **GET** | api/v1/maestroactividades | | Obtiene todas las listas de actividades en base de datos |
+| **GET** | api/v1/maestroactividades/:id_maestro | | Obtiene una lista de actividades determinada |
+| **POST** | api/v1/maestroactividades | { titulo_master_task: '', publicada_master_task: true || false, fecha_creada_master_task: '', creada_por_master_task: '', fecha_modificada_master_task: '', modificada_por_master_task: '' } | Crea una nueva lista de actividades |
+| **PUT** | api/v1/maestroactividades/:id_maestro | { titulo_master_task?: '', publicada_master_task?: true || false, fecha_modificada_master_task: '', modificada_por_master_task: '' } | Modifica una lista de usuarios determinada |
+| **PUT** | api/v1/maestroactividades/:id_maestro/publica | { publicada_master_task: true || false, fecha_modificada_master_task: '', modificada_por_master_task: '' } | Modifica si esta publica o no la lista de actividades |
+| **DELETE** | api/v1/maestroactividades/:id_maestro | | Elimina una lista de usuarios determinada |
+
+### Rutas para Areas
+
+| **Metodo** | **Ruta** | **Request** | **Descripcion** |
+|-----------|----------|------------|-----------------|
+| **GET** | api/v1/areas | | Obtiene todas las areas en base de datos |
+| **GET** | api/v1/areas/:id_area | | Obtiene un area determinada |
+| **POST** | api/v1/areas | { nombre_area: '', activa_area: true || false, fecha_creada_area: '', creada_por_area: '', fecha_modificada_area: '', modificada_por_area: '' } | Crea una nueva area |
+| **PUT** | api/v1/areas/:id_area | { nombre_area?: '', activa_area?: true || false, fecha_modificada_area: '', modificada_por_area: '' } | Modifica los datos de un area determinada |
+| **PUT** | api/v1/areas/:id_area/activa | { activa_area: true || false, fecha_modificada_area: '', modificada_por_area: '' } | Modifica los datos de un area determinada |
+| **DELETE** | api/v1/areas/:id_area | | Elimina un area determinada |
+
+### Rutas para actividades
+
+| **Metodo** | **Ruta** | **Request** | **Descripcion** |
+|-----------|----------|------------|-----------------|
+| **GET** | api/v1/actividades | | Obtiene todas las actividades almacenadas en base de datos |
+| **GET** | api/v1/actividades/:id_actividad | | Obtiene una actividad determinada |
+| **POST** | api/v1/actividades | { year_task: int, rango_fechas_task: '', fecha_inicial_task: '', fecha_final_task: '', descripcion_task: '', mes_task: [], dias_task: [], para_area_task: '', activa_task: true || false, fecha_creada_task: '', creada_por_task: '', fecha_modificada_task: '', modificada_por_task: '' } | Crea una nueva actividad |
+| **PUT** | api/v1/actividades/:id_actividad | { year_task?: int, rango_fechas_task?: '', fecha_inicial_task?: '', fecha_final_task?: '', descripcion_task?: '', mes_task?: [], dias_task?: [], para_area_task?: '', activa_task?: true || false, fecha_modificada_task: '', modificada_por_task: '' } | Modifica los datos de una actividad determinada |
+| **PUT** | api/v1/actividades/:id_actividad/activa | { activa_task: true } | Cambia el estatus de la actividad puede enviar true o false |
+| **DELETE** | api/v1/actividades/:id_actividad | | Elimina una actividad en especifico |

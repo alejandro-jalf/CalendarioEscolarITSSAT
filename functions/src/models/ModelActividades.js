@@ -35,6 +35,48 @@ const modelActividades = (() => {
         }
     }
     
+    const getActividadByIdUser = async (idUser) => {
+        try {
+            const documentosCreate = await collectionActividades.where('creada_por_task', '==', idUser).get();
+            const documentosUpdate = await collectionActividades.where('modificada_por_task', '==', idUser).get();
+            if (documentosUpdate.empty && documentosCreate.empty)
+                return createContentError('Actividad por usuario no fue encontrada');
+
+            return createContentAssert("Actividad por usuario localizada");
+        } catch (error) {
+            console.log(error);
+            return createContentError("Error al obtener la actividad por id de usario", error);
+        }
+    }
+    
+    const getActividadByIdMaestro = async (idMaestro) => {
+        try {
+            const documentMaster =
+                await collectionActividades.where('id_master_task', '==', idMaestro).get();
+            if (documentMaster.empty)
+                return createContentError('Actividad por Maestro actividad no fue encontrada');
+
+            return createContentAssert("Actividad por Maestro actividad localizada");
+        } catch (error) {
+            console.log(error);
+            return createContentError("Error al obtener la actividad por id de Maestro Actividades", error);
+        }
+    }
+    
+    const getActividadByIdArea = async (idArea) => {
+        try {
+            const documentMaster =
+                await collectionActividades.where('para_area_task', '==', idArea).get();
+            if (documentMaster.empty)
+                return createContentError('Actividad por area no fue encontrada');
+
+            return createContentAssert("Actividad por area localizada");
+        } catch (error) {
+            console.log(error);
+            return createContentError("Error al obtener la actividad por id de area", error);
+        }
+    }
+    
     const createActividad = async (id_actividad, bodyActividad) => {
         try {
             await collectionActividades.doc(id_actividad).set(bodyActividad);
@@ -67,8 +109,11 @@ const modelActividades = (() => {
     }
 
     return{
-        getActividadById,
+        getActividadByIdMaestro,
+        getActividadByIdArea,
+        getActividadByIdUser,
         getAllActividades,
+        getActividadById,
         createActividad,
         updateActividad,
         deleteActividad,

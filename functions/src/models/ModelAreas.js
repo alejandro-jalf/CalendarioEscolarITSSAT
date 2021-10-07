@@ -35,6 +35,20 @@ const modelActividades = (() => {
         }
     }
     
+    const getAreaByIdUser = async (idUser) => {
+        try {
+            const documentosCreate = await collectionActividades.where('creada_por_area', '==', idUser).get();
+            const documentosUpdate = await collectionActividades.where('modificada_por_area', '==', idUser).get();
+            if (documentosUpdate.empty && documentosCreate.empty)
+                return createContentError('Area por usuario no fue encontrada');
+
+            return createContentAssert("Area por usuario localizada");
+        } catch (error) {
+            console.log(error);
+            return createContentError("Error al obtener la Area por id de usario", error);
+        }
+    }
+    
     const createArea = async (id_area, bodyAreas) => {
         try {
             await collectionArea.doc(id_area).set(bodyAreas);
@@ -67,6 +81,7 @@ const modelActividades = (() => {
     }
 
     return{
+        getAreaByIdUser,
         getAreaById,
         getAllAreas,
         createArea,

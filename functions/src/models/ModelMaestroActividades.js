@@ -35,6 +35,20 @@ const modelActividades = (() => {
         }
     }
     
+    const getMaestroActividadByIdUser = async (idUser) => {
+        try {
+            const documentosCreate = await collectionActividades.where('creada_por_master_task', '==', idUser).get();
+            const documentosUpdate = await collectionActividades.where('modificada_por_master_task', '==', idUser).get();
+            if (documentosUpdate.empty && documentosCreate.empty)
+                return createContentError('Maestro Actividades por usuario no fue encontrada');
+
+            return createContentAssert("Maestro Actividades por usuario localizada");
+        } catch (error) {
+            console.log(error);
+            return createContentError("Error al obtener la Maestro Actividades por id de usario", error);
+        }
+    }
+    
     const createMaestroActividades = async (id_maestro_actividades, bodyMaestroActividades) => {
         try {
             await collectionMaestroActividades.doc(id_maestro_actividades).set(bodyMaestroActividades);
@@ -67,6 +81,7 @@ const modelActividades = (() => {
     }
 
     return{
+        getMaestroActividadByIdUser,
         getAreaById,
         getAllMaestroActividades,
         createMaestroActividades,

@@ -35,6 +35,20 @@ const modelUsuarios = (() => {
         }
     }
     
+    const getUserByIdUser = async (idUser) => {
+        try {
+            const documentosCreate = await collectionActividades.where('creada_por_master_task', '==', idUser).get();
+            const documentosUpdate = await collectionActividades.where('modificada_por_master_task', '==', idUser).get();
+            if (documentosUpdate.empty && documentosCreate.empty)
+                return createContentError('Usuario por usuario no fue encontrada');
+
+            return createContentAssert("Usuario por usuario localizada");
+        } catch (error) {
+            console.log(error);
+            return createContentError("Error al obtener la Usuario por id de usario", error);
+        }
+    }
+    
     const getUserByCorreo = async (correo_user) => {
         try {
             const documentos = await collectionUser.where('correo_user', '==', correo_user).get();
@@ -84,6 +98,7 @@ const modelUsuarios = (() => {
     }
 
     return{
+        getUserByIdUser,
         getUserByCorreo,
         getUserById,
         getAllUsers,

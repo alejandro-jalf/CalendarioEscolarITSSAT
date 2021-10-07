@@ -52,7 +52,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - fecha_modificacion_user
     - modificado_por_user
     
-**Coleccion de areas**
+**Coleccion de MaestroActividades**
 - **UUID_master_task**
     - UUID_master_task
     - titulo_master_task
@@ -66,6 +66,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 
 - **UUID_task**
     - UUID_task
+    - id_master_task
     - year_task
     - rango_fechas_task
     - fecha_inicial_task
@@ -136,6 +137,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 
 {
     UUID_task: String,
+    id_master_task: String,
     year_task: int,
     rango_fechas_task: Boolean,
     fecha_inicial_task: String,
@@ -207,6 +209,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | Campo | Tipo | Descripcion |
 |-------|------|-------------|
 | UUID_task | String | Id para la actividad |
+| id_master_task | String | Id del maestro actividad |
 | year_task | int | Corresponde al año de la actividad 2021 |
 | rango_fechas_task | Boolean | Se especifica si tiene fecha establecida o se desconoce la fecha |
 | fecha_inicial_task | String | la fecha inicial de la actividad |

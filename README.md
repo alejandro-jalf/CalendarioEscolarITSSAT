@@ -76,7 +76,6 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - mes_task
     - dias_task
     - para_area_task
-    - activa_task
     - estatus_task
     - fecha_creada_task
     - creada_por_task
@@ -148,7 +147,6 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     mes_task: Array,
     dias_task: Array,
     para_area_task: String,
-    activa_task: Boolean,
     estatus_task: String,
     fecha_creada_task: String,
     creada_por_task: String,
@@ -221,7 +219,6 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | mes_task | String | Mes o meses en los que se realizara la actividad |
 | dias_task | String | Dias en que se llevara a cabo la actividad |
 | para_area_task | String | relacionada con el id de area a que va dirijido |
-| activa_task | Boolean | Indica si esta activa la actividad |
 | activa_task | String | Indica Indica el estatus de la actividad, [Pendiente, Realizada, Cancelada] |
 | fecha_creada_task | String |  |
 | creada_por_task | String | Id del usuario que la creo |
@@ -294,6 +291,5 @@ Aunado a ello se a continuacion se muestran las rutas que estaran disponibles pa
 | **GET** | api/v1/actividades/:id_actividad | | Obtiene una actividad determinada |
 | **POST** | api/v1/actividades | { year_task: int, rango_fechas_task: '', fecha_inicial_task: '', fecha_final_task: '', descripcion_task: '', mes_task: [], dias_task: [], para_area_task: '', activa_task: true || false, fecha_creada_task: '', creada_por_task: '', fecha_modificada_task: '', modificada_por_task: '' } | Crea una nueva actividad |
 | **PUT** | api/v1/actividades/:id_actividad | { year_task?: int, rango_fechas_task?: '', fecha_inicial_task?: '', fecha_final_task?: '', descripcion_task?: '', mes_task?: [], dias_task?: [], para_area_task?: '', activa_task?: true || false, fecha_modificada_task: '', modificada_por_task: '' } | Modifica los datos de una actividad determinada |
-| **PUT** | api/v1/actividades/:id_actividad/activa | { activa_task: true } | Cambia el estatus de la actividad puede enviar true o false |
 | **PUT** | api/v1/actividades/:id_actividad/estatus | { activa_task: true } | Cambia el estatus de la actividad puede enviar 'Pendiente', 'Realizada', 'Cancelada' |
 | **DELETE** | api/v1/actividades/:id_actividad | | Elimina una actividad en especifico |

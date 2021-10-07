@@ -1,5 +1,5 @@
 const { createResponse, createContentError, encriptData, sendEmail, createUUID } = require("../utils");
-const { getAllUsers, createUser, updateUser, deleteUser, getUserByCorreo } = require("../models");
+const { getAllUsers, createUser, updateUser, deleteUser, getUserByCorreo, getUserById } = require("../models");
 const {
     validateCreateUsuario,
     validateLogin,
@@ -9,6 +9,8 @@ const {
     validateUpdatePassword,
     validateUpdateActivo
 } = require("../validations");
+const { getActividadByIdUser } = require("../models/ModelActividades");
+const { getAreaByIdUser } = require("../models/ModelAreas");
 
 const servicesUsuarios =  (() => {
 
@@ -24,18 +26,41 @@ const servicesUsuarios =  (() => {
         return createResponse(200, response);
     }
 
+    const verifyExistId = async (uuid) => {
+        const existUser = await getUserById(uuid);
+        if (existUser.message === "Error al obtener usuario por correo") {
+            existUser.message = "Error al crear el uuid del usuario"
+            return createResponse(400, existUser);
+        }
+        
+        if (existUser.success) return true;
+        return false;
+    }
+
     const createUsuario = async (bodyUsuarios) => {
         const resultValidate = validateCreateUsuario(bodyUsuarios);
         if (!resultValidate.success) return createResponse(400, resultValidate);
 
-        const existUser = await getUserByCorreo(bodyUsuarios.correo_user);
+        let existUser = await getUserByCorreo(bodyUsuarios.correo_user);
         if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
 
         if (existUser.success)
             return createResponse(200, createContentError(`El correo ${bodyUsuarios.correo_user} ya esta registrado`, {}));
 
-        const uuid = createUUID();
+        let uuid = createUUID();
+        
+        existUser = await verifyExistId(uuid);
+        if (existUser.status) return existUser;
+        if (existUser) {
+            uuid = createUUID();
+            existUser = await verifyExistId(uuid);
+            if (existUser.status) return existUser;
+            if (existUser) return createResponse(
+                200,
+                createContentError('Error al crear el uuid del usuario, intentelo de nuevo')
+            );
+        }
 
         bodyUsuarios.UUID_user = uuid;
         bodyUsuarios.activo_user = true;
@@ -253,6 +278,30 @@ const servicesUsuarios =  (() => {
             return createResponse(400, existUser);
         
         if (!existUser.success) return createResponse(200, existUser);
+
+        const existsRegisterTask = await getActividadByIdUser(existUser.data[0].UUID_user);
+        if (existsRegisterTask.message === "Error al obtener la actividad por id de usario")
+            return createResponse(400, existsRegisterTask);
+        if (existsRegisterTask.success) {
+            existsRegisterTask.message = 'No se puede eliminar al usuario de forma permanente, debido a que tiene registros en actividades'
+            return createResponse(200, existsRegisterTask);
+        }
+        
+        const existsRegisterArea = await getAreaByIdUser(existUser.data[0].UUID_user);
+        if (existsRegisterArea.message === "Error al obtener la Area por id de usario")
+            return createResponse(400, existsRegisterArea);
+        if (existsRegisterArea.success) {
+            existsRegisterArea.message = 'No se puede eliminar al usuario de forma permanente, debido a que tiene registros en areas'
+            return createResponse(200, existsRegisterArea);
+        }
+        
+        const existsRegisterMaster = await getAreaByIdUser(existUser.data[0].UUID_user);
+        if (existsRegisterMaster.message === "Error al obtener la Maestro Actividades por id de usario")
+            return createResponse(400, existsRegisterMaster);
+        if (existsRegisterMaster.success) {
+            existsRegisterMaster.message = 'No se puede eliminar al usuario de forma permanente, debido a que tiene registros en maestro actividades'
+            return createResponse(200, existsRegisterMaster);
+        }
         
         const responseDelete = await deleteUser(existUser.data[0].UUID_user);
         if(!responseDelete.success) return createResponse(400, responseDelete);

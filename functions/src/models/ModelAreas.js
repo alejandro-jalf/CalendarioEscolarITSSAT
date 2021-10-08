@@ -69,7 +69,7 @@ const modelActividades = (() => {
         }
     }
     
-    const deleteUser = async (id_area) => {
+    const deleteArea = async (id_area) => {
         try {
             await collectionArea.doc(id_area).delete();
         
@@ -86,7 +86,7 @@ const modelActividades = (() => {
         getAllAreas,
         createArea,
         updateArea,
-        deleteUser,
+        deleteArea,
     }
 })();
 

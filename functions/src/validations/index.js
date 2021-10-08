@@ -1,7 +1,9 @@
 const validationUsuarios = require('./ValidateUsuarios')
+const validateAreas = require('./ValidateAreas')
 
 const validates = {
-    ...validationUsuarios
+    ...validationUsuarios,
+    ...validateAreas,
 }
 
 module.exports = validates;

@@ -1,45 +1,49 @@
+const {
+    getAreas,
+    getArea,
+    createNewArea,
+    updateDataArea,
+    updateAreaActiva,
+    deleteOldArea,
+} = require("../services/ServicesAreas");
+
 const router = require("express").Router();
 
 router.route("/v1/areas").get(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Obtiene todas las areas en base de datos',
-    });
+    const { status, response } = await getAreas();
+    res.status(status).json(response);
 });
 
 router.route("/v1/areas/:id_area").get(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Obtiene un area determinada',
-    });
+    const { id_area } = req.params
+    const { status, response } = await getArea(id_area);
+    res.status(status).json(response);
 });
 
 router.route("/v1/areas").post(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Crea una nueva area',
-    });
+    const bodyArea = req.body
+    const { status, response } = await createNewArea(bodyArea);
+    res.status(status).json(response);
 });
 
-router.route("/v1/areas/:id_area").post(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Modifica los datos de un area determinada',
-    });
+router.route("/v1/areas/:id_area").put(async (req, res) => {
+    const bodyArea = req.body;
+    const { id_area } = req.params;
+    const { status, response } = await updateDataArea(id_area, bodyArea);
+    res.status(status).json(response);
 });
 
 router.route("/v1/areas/:id_area/activa").put(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Modifica los datos de un area determinada',
-    });
+    const bodyArea = req.body;
+    const { id_area } = req.params;
+    const { status, response } = await updateAreaActiva(id_area, bodyArea);
+    res.status(status).json(response);
 });
 
 router.route("/v1/areas/:id_area").delete(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Elimina un area determinada',
-    });
+    const { id_area } = req.params
+    const { status, response } = await deleteOldArea(id_area);
+    res.status(status).json(response);
 });
 
 module.exports = router;

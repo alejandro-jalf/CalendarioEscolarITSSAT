@@ -1,10 +1,16 @@
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-const modelsUsuarios = require('./ModelUsuarios')
+const modelsMaestroActividades = require('./ModelMaestroActividades');
+const modelsActividades = require('./ModelActividades');
+const modelsUsuarios = require('./ModelUsuarios');
+const modelsAreas = require('./ModelAreas');
 
 const models = {
-    ...modelsUsuarios
+    ...modelsMaestroActividades,
+    ...modelsActividades,
+    ...modelsUsuarios,
+    ...modelsAreas,
 }
 
 module.exports = models;

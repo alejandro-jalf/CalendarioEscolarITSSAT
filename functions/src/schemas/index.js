@@ -1,7 +1,9 @@
 const schemasUsuarios = require('./SchemasUsuarios')
+const schemasAreas = require('./SchemasAreas')
 
 const schemas = {
-    ...schemasUsuarios
+    ...schemasUsuarios,
+    ...schemasAreas,
 }
 
 module.exports = schemas;

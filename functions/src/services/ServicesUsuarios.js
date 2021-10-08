@@ -1,5 +1,14 @@
 const { createResponse, createContentError, encriptData, sendEmail, createUUID } = require("../utils");
-const { getAllUsers, createUser, updateUser, deleteUser, getUserByCorreo, getUserById } = require("../models");
+const {
+    getAllUsers,
+    createUser,
+    updateUser,
+    deleteUser,
+    getUserByCorreo,
+    getUserById,
+    getActividadByIdUser,
+    getAreaByIdUser,
+} = require("../models");
 const {
     validateCreateUsuario,
     validateLogin,
@@ -7,10 +16,8 @@ const {
     validateUpdateUsuarioGeneral,
     validateUpdateEmail,
     validateUpdatePassword,
-    validateUpdateActivo
+    validateUpdateActivo,
 } = require("../validations");
-const { getActividadByIdUser } = require("../models/ModelActividades");
-const { getAreaByIdUser } = require("../models/ModelAreas");
 
 const servicesUsuarios =  (() => {
 
@@ -277,31 +284,34 @@ const servicesUsuarios =  (() => {
         if (existUser.message === "Error al obtener usuario por correo")
             return createResponse(400, existUser);
         
-        if (!existUser.success) return createResponse(200, existUser);
+        if (!existUser.success) return createResponse(404, existUser);
 
         const existsRegisterTask = await getActividadByIdUser(existUser.data[0].UUID_user);
         if (existsRegisterTask.message === "Error al obtener la actividad por id de usario")
             return createResponse(400, existsRegisterTask);
-        if (existsRegisterTask.success) {
-            existsRegisterTask.message = 'No se puede eliminar al usuario de forma permanente, debido a que tiene registros en actividades'
-            return createResponse(200, existsRegisterTask);
-        }
+        if (existsRegisterTask.success)
+            return createResponse(
+                200,
+                createContentError('No se puede eliminar al usuario de forma permanente, debido a que tiene registros en actividades')
+            );
         
         const existsRegisterArea = await getAreaByIdUser(existUser.data[0].UUID_user);
         if (existsRegisterArea.message === "Error al obtener la Area por id de usario")
             return createResponse(400, existsRegisterArea);
-        if (existsRegisterArea.success) {
-            existsRegisterArea.message = 'No se puede eliminar al usuario de forma permanente, debido a que tiene registros en areas'
-            return createResponse(200, existsRegisterArea);
-        }
+        if (existsRegisterArea.success)
+            return createResponse(
+                200,
+                createContentError('No se puede eliminar al usuario de forma permanente, debido a que tiene registros en areas')
+            );
         
         const existsRegisterMaster = await getAreaByIdUser(existUser.data[0].UUID_user);
         if (existsRegisterMaster.message === "Error al obtener la Maestro Actividades por id de usario")
             return createResponse(400, existsRegisterMaster);
-        if (existsRegisterMaster.success) {
-            existsRegisterMaster.message = 'No se puede eliminar al usuario de forma permanente, debido a que tiene registros en maestro actividades'
-            return createResponse(200, existsRegisterMaster);
-        }
+        if (existsRegisterMaster.success) 
+            return createResponse(
+                200,
+                createContentError('No se puede eliminar al usuario de forma permanente, debido a que tiene registros en maestro actividades')
+            );
         
         const responseDelete = await deleteUser(existUser.data[0].UUID_user);
         if(!responseDelete.success) return createResponse(400, responseDelete);

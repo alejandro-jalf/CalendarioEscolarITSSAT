@@ -21,7 +21,7 @@ const modelActividades = (() => {
         }
     }
     
-    const getAreaById = async (id_maestro_actividades) => {
+    const getMaestroActividadById = async (id_maestro_actividades) => {
         try {
             const areaReferencia = collectionMaestroActividades.doc(id_maestro_actividades);
             const documento = await areaReferencia.get();
@@ -82,7 +82,7 @@ const modelActividades = (() => {
 
     return{
         getMaestroActividadByIdUser,
-        getAreaById,
+        getMaestroActividadById,
         getAllMaestroActividades,
         createMaestroActividades,
         updateMaestro,

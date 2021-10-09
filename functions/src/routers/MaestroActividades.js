@@ -1,45 +1,48 @@
 const router = require("express").Router();
+const {
+    getAllMasterTask,
+    getMasterTaskById,
+    createNewMasterTask,
+    updateDataMasterTask,
+    updateMasterTaskEnabled,
+    deleteOldMasterTask,
+} = require("../services");
 
 router.route("/v1/maestroactividades").get(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Obtiene todas las listas de actividades en base de datos',
-    });
+    const { status, response } = await getAllMasterTask();
+    res.status(status).json(response);
 });
 
 router.route("/v1/maestroactividades/:id_maestro").get(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Obtiene una lista de actividades determinada',
-    });
+    const { id_maestro } = req.params
+    const { status, response } = await getMasterTaskById(id_maestro);
+    res.status(status).json(response);
 });
 
 router.route("/v1/maestroactividades").post(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Crea una nueva lista de actividades',
-    });
+    const bodyMaestro = req.body
+    const { status, response } = await createNewMasterTask(bodyMaestro);
+    res.status(status).json(response);
 });
 
 router.route("/v1/maestroactividades/:id_maestro").post(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Modifica una lista de usuarios determinada',
-    });
+    const bodyMaestro = req.body;
+    const { id_maestro } = req.params;
+    const { status, response } = await updateDataMasterTask(id_maestro, bodyMaestro);
+    res.status(status).json(response);
 });
 
 router.route("/v1/maestroactividades/:id_maestro/publica").put(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Modifica si esta publica o no la lista de actividades',
-    });
+    const bodyMaestro = req.body;
+    const { id_maestro } = req.params;
+    const { status, response } = await updateMasterTaskEnabled(id_maestro, bodyMaestro);
+    res.status(status).json(response);
 });
 
 router.route("/v1/maestroactividades/:id_maestro").delete(async (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'Elimina una lista de usuarios determinada',
-    });
+    const { id_maestro } = req.params
+    const { status, response } = await deleteOldMasterTask(id_maestro);
+    res.status(status).json(response);
 });
 
 module.exports = router;

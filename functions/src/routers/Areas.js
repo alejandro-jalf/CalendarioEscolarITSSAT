@@ -1,3 +1,4 @@
+const router = require("express").Router();
 const {
     getAreas,
     getArea,
@@ -5,9 +6,7 @@ const {
     updateDataArea,
     updateAreaActiva,
     deleteOldArea,
-} = require("../services/ServicesAreas");
-
-const router = require("express").Router();
+} = require("../services");
 
 router.route("/v1/areas").get(async (req, res) => {
     const { status, response } = await getAreas();

@@ -24,6 +24,20 @@ const servicesUsuarios =  (() => {
     const getAllUsuarios = async () => {
         const response = await getAllUsers();
         if (!response.success) return createResponse(400, response);
+        const dataRefactor = response.data.map((user) => {
+            let userFinded = response.data.find((userF) => user.creado_por_user === userF.UUID_user)
+            if (userFinded) user.creado_por_user = {
+                uuid: userFinded.UUID_user,
+                correo: userFinded.correo_user
+            }
+            userFinded = response.data.find((userF) => user.modificado_por_user === userF.UUID_user)
+            if (userFinded) user.modificado_por_user = {
+                uuid: userFinded.UUID_user,
+                correo: userFinded.correo_user
+            }
+            return user
+        })
+        response.data = dataRefactor.sort((a, b) => a.UUID_user > b.UUID_user ? -1 : 1)
         return createResponse(200, response);
     }
 

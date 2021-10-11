@@ -55,7 +55,7 @@ const servicesMaestroActividades =  (() => {
             );
         }
 
-        bodyCreateMaster.UUID_area = uuid;
+        bodyCreateMaster.UUID_master_task = uuid;
 
         const response = await createMaestroActividades(uuid, bodyCreateMaster);
         if(!response.success) return createResponse(400, response);

@@ -26,7 +26,7 @@ const servicesMaestroActividades =  (() => {
 
         const dataRefactor = response[0].data.map((master) => {
             let userFinded = response[1].data.find((user) => master.creada_por_master_task === user.UUID_user)
-            if (userFinded) master.creado_por_user = {
+            if (userFinded) master.creada_por_master_task = {
                 uuid: userFinded.UUID_user,
                 correo: userFinded.correo_user
             }

@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { getActividadById } = require("../models");
 const {
     getAllTask,
     getTaskById,
@@ -7,6 +6,7 @@ const {
     updateDataActividad,
     updateActividadStatus,
     deleteOldActividad,
+    getAllTaskWithoutInfo,
 } = require("../services");
 
 router.route("/v1/actividades").get(async (req, res) => {
@@ -14,9 +14,14 @@ router.route("/v1/actividades").get(async (req, res) => {
     res.status(status).json(response);
 });
 
+router.route("/v1/actividades/sinrelacion").get(async (req, res) => {
+    const { status, response } = await getAllTaskWithoutInfo();
+    res.status(status).json(response);
+});
+
 router.route("/v1/actividades/:id_actividad").get(async (req, res) => {
     const { id_actividad } = req.params
-    const { status, response } = await getActividadById(id_actividad);
+    const { status, response } = await getTaskById(id_actividad);
     res.status(status).json(response);
 });
 

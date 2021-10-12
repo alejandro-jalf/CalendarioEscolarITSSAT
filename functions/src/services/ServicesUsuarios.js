@@ -1,5 +1,6 @@
 const { createResponse, createContentError, encriptData, sendEmail, createUUID } = require("../utils");
 const {
+    getAllAreas,
     getAllUsers,
     createUser,
     updateUser,
@@ -22,18 +23,28 @@ const {
 const servicesUsuarios =  (() => {
 
     const getAllUsuarios = async () => {
-        const response = await getAllUsers();
-        if (!response.success) return createResponse(400, response);
-        const dataRefactor = response.data.map((user) => {
-            let userFinded = response.data.find((userF) => user.creado_por_user === userF.UUID_user)
+        const arrayFunctions = [getAllUsers, getAllAreas]
+        const arrayResponse = arrayFunctions.map(async (functionExe) => await functionExe());
+        const response = await Promise.all(arrayResponse);
+
+        if (!response[0].success || !response[1].success)
+            return createResponse(400, createContentError('Error al obtener los usuarios'));
+
+        const dataRefactor = response[0].data.map((user) => {
+            let userFinded = response[0].data.find((userF) => user.creado_por_user === userF.UUID_user)
             if (userFinded) user.creado_por_user = {
                 uuid: userFinded.UUID_user,
                 correo: userFinded.correo_user
             }
-            userFinded = response.data.find((userF) => user.modificado_por_user === userF.UUID_user)
+            userFinded = response[0].data.find((userF) => user.modificado_por_user === userF.UUID_user)
             if (userFinded) user.modificado_por_user = {
                 uuid: userFinded.UUID_user,
                 correo: userFinded.correo_user
+            }
+            let areaFinded = response[1].data.find((area) => user.area_user === area.UUID_area)
+            if (areaFinded) user.area_user = {
+                uuid: areaFinded.UUID_area,
+                nombre: areaFinded.nombre_area
             }
             return user
         })

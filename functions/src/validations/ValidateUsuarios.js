@@ -82,16 +82,18 @@ const validateUsuarios = (() => {
         }
         
         resultValidate = schemaDate.validate(bodyUsuarios.fecha_modificacion_user);
-        if (resultValidate.error) {
-            return createContentError("La fecha de actualizacion no tiene el formato correcto 0000-00-00T00:00:00.000z", (resultValidate.error));
-        }
+        if (resultValidate.error) return createContentError(
+            "La fecha de actualizacion no tiene el formato correcto 0000-00-00T00:00:00.000z",
+            resultValidate.error
+        );
 
-        if (
-            bodyUsuarios.tipo_user != "administrador" &&
-            bodyUsuarios.tipo_user != "ejecutivo" &&
-            bodyUsuarios.tipo_user != "invitado"
-        ) {
-            return createContentError("El tipo de usuario que mando no es valido");
+
+        if (bodyUsuarios.tipo_user) {
+            if (
+                bodyUsuarios.tipo_user != "administrador" &&
+                bodyUsuarios.tipo_user != "ejecutivo" &&
+                bodyUsuarios.tipo_user != "invitado"
+            ) return createContentError("El tipo de usuario que mando no es valido");
         }
 
         return createContentAssert("Datos validados");

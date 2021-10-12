@@ -22,7 +22,7 @@ const servicesUsuarios =  (() => {
         const response = await Promise.all(arrayResponse);
 
         if (!response[0].success || !response[1].success)
-            return createResponse(400, createContentError('Error al obtner las areas'));
+            return createResponse(400, createContentError('Error al obtener las areas'));
 
         const dataRefactor = response[0].data.map((area) => {
             let userFinded = response[1].data.find((user) => area.creada_por_area === user.UUID_user)

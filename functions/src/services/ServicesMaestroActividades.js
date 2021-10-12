@@ -22,7 +22,7 @@ const servicesMaestroActividades =  (() => {
         const response = await Promise.all(arrayResponse);
 
         if (!response[0].success || !response[1].success)
-            return createResponse(400, createContentError('Error al obtner las listas de actividades'));
+            return createResponse(400, createContentError('Error al obtener las listas de actividades'));
 
         const dataRefactor = response[0].data.map((master) => {
             let userFinded = response[1].data.find((user) => master.creada_por_master_task === user.UUID_user)

@@ -1,6 +1,7 @@
 const { createResponse, createContentError, createUUID } = require("../utils");
-const { 
+const {
     getAllMaestroActividades,
+    getAllUsers,
     getMaestroActividadById,
     createMaestroActividades,
     getActividadByIdMaestro,
@@ -16,9 +17,29 @@ const {
 const servicesMaestroActividades =  (() => {
 
     const getAllMasterTask = async () => {
-        const response = await getAllMaestroActividades();
-        if (!response.success) return createResponse(400, response);
-        return createResponse(200, response);
+        const arrayFunctions = [getAllMaestroActividades, getAllUsers]
+        const arrayResponse = arrayFunctions.map(async (functionExe) => await functionExe());
+        const response = await Promise.all(arrayResponse);
+
+        if (!response[0].success || !response[1].success)
+            return createResponse(400, createContentError('Error al obtner las listas de actividades'));
+
+        const dataRefactor = response[0].data.map((master) => {
+            let userFinded = response[1].data.find((user) => master.creada_por_master_task === user.UUID_user)
+            if (userFinded) master.creado_por_user = {
+                uuid: userFinded.UUID_user,
+                correo: userFinded.correo_user
+            }
+            userFinded = response[1].data.find((user) => master.modificada_por_master_task === user.UUID_user)
+            if (userFinded) master.modificada_por_master_task = {
+                uuid: userFinded.UUID_user,
+                correo: userFinded.correo_user
+            }
+            return master
+        })
+        
+        response[0].data = dataRefactor.sort((a, b) => a.UUID_master_task > b.UUID_master_task ? -1 : 1)
+        return createResponse(200, response[0]);
     }
 
     const getMasterTaskById = async (id_maestro) => {

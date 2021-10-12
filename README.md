@@ -76,7 +76,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - mes_task
     - dias_task
     - para_area_task
-    - ee
+    - estatus_task
     - fecha_creada_task
     - creada_por_task
     - fecha_modificada_task
@@ -147,7 +147,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     mes_task: Array,
     dias_task: Array,
     para_area_task: String,
-    ee: String,
+    estatus_task: String,
     fecha_creada_task: String,
     creada_por_task: String,
     fecha_modificada_task: String,

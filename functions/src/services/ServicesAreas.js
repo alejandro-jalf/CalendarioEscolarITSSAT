@@ -1,6 +1,7 @@
 const { createResponse, createContentError, createUUID } = require("../utils");
 const { 
     getAllAreas,
+    getAllUsers,
     getAreaById,
     createArea,
     updateArea,
@@ -16,9 +17,29 @@ const {
 const servicesUsuarios =  (() => {
 
     const getAreas = async () => {
-        const response = await getAllAreas();
-        if (!response.success) return createResponse(400, response);
-        return createResponse(200, response);
+        const arrayFunctions = [getAllAreas, getAllUsers]
+        const arrayResponse = arrayFunctions.map(async (functionExe) => await functionExe());
+        const response = await Promise.all(arrayResponse);
+
+        if (!response[0].success || !response[1].success)
+            return createResponse(400, createContentError('Error al obtner las areas'));
+
+        const dataRefactor = response[0].data.map((area) => {
+            let userFinded = response[1].data.find((user) => area.creada_por_area === user.UUID_user)
+            if (userFinded) area.creada_por_area = {
+                uuid: userFinded.UUID_user,
+                correo: userFinded.correo_user
+            }
+            userFinded = response[1].data.find((user) => area.modificada_por_area === user.UUID_user)
+            if (userFinded) area.modificada_por_area = {
+                uuid: userFinded.UUID_user,
+                correo: userFinded.correo_user
+            }
+            return area
+        })
+        
+        response[0].data = dataRefactor.sort((a, b) => a.UUID_master_task > b.UUID_master_task ? -1 : 1)
+        return createResponse(200, response[0]);
     }
 
     const getArea = async (id_area) => {

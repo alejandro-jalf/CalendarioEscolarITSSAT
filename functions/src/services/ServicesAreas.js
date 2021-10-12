@@ -38,7 +38,7 @@ const servicesUsuarios =  (() => {
             return area
         })
         
-        response[0].data = dataRefactor.sort((a, b) => a.UUID_master_task > b.UUID_master_task ? -1 : 1)
+        response[0].data = dataRefactor.sort((a, b) => a.UUID_area > b.UUID_area ? -1 : 1)
         return createResponse(200, response[0]);
     }
 

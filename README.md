@@ -76,7 +76,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     - mes_task
     - dias_task
     - para_area_task
-    - estatus_task
+    - ee
     - fecha_creada_task
     - creada_por_task
     - fecha_modificada_task
@@ -147,7 +147,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
     mes_task: Array,
     dias_task: Array,
     para_area_task: String,
-    estatus_task: String,
+    ee: String,
     fecha_creada_task: String,
     creada_por_task: String,
     fecha_modificada_task: String,
@@ -219,7 +219,7 @@ Debido a que la base de datos a utilizar es la proporcionda por firebase, esta e
 | mes_task | String | Mes o meses en los que se realizara la actividad |
 | dias_task | String | Dias en que se llevara a cabo la actividad |
 | para_area_task | String | relacionada con el id de area a que va dirijido |
-| activa_task | String | Indica Indica el estatus de la actividad, [Pendiente, Realizada, Cancelada] |
+| estatus_task | String | Indica Indica el estatus de la actividad, [Pendiente, Realizada, Cancelada] |
 | fecha_creada_task | String |  |
 | creada_por_task | String | Id del usuario que la creo |
 | fecha_modificada_task | Object | Detalles de a que pestaña y acciones puede acceder el usuario |

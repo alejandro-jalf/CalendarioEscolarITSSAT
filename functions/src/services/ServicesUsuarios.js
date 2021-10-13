@@ -49,7 +49,7 @@ const servicesUsuarios =  (() => {
             return user
         })
         response.data = dataRefactor.sort((a, b) => a.UUID_user > b.UUID_user ? -1 : 1)
-        return createResponse(200, response);
+        return createResponse(200, response[0]);
     }
 
     const getUsuario = async (correo_user) => {

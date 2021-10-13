@@ -65,7 +65,7 @@ const servicesUsuarios =  (() => {
 
         let uuid = createUUID();
         
-        existArea = await verifyExistId(uuid);
+        let existArea = await verifyExistId(uuid);
         if (existArea.status) return existArea;
         if (existArea) {
             uuid = createUUID();
@@ -112,7 +112,7 @@ const servicesUsuarios =  (() => {
 
         if (!existArea.success) return createResponse(404, existArea);
         
-        if (existArea.data[0].activa_area === bodyActivo.activa_area) 
+        if (existArea.data[0].activa_area === bodyArea.activa_area) 
             return createResponse(
                 200,
                 createContentError("El estatus de activa_area es igual", {})

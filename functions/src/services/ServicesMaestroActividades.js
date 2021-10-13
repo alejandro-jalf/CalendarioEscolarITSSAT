@@ -64,7 +64,7 @@ const servicesMaestroActividades =  (() => {
 
         let uuid = createUUID();
         
-        existArea = await verifyExistId(uuid);
+        let existArea = await verifyExistId(uuid);
         if (existArea.status) return existArea;
         if (existArea) {
             uuid = createUUID();
@@ -110,7 +110,7 @@ const servicesMaestroActividades =  (() => {
 
         if (!existArea.success) return createResponse(404, existArea);
         
-        if (existArea.data[0].publicada_master_task === bodyActivo.publicada_master_task) 
+        if (existArea.data[0].publicada_master_task === bodyMaestro.publicada_master_task) 
             return createResponse(
                 200,
                 createContentError("El estatus de publica de maestro actividades es igual", {})

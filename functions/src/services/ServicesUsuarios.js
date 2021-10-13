@@ -266,7 +266,7 @@ const servicesUsuarios =  (() => {
 
         const caracteres = "abcdefghijkmnpqrtuvwxyzABCDEFGHJKMNPQRTUVWXYZ012346789";
         let codigo = "";
-        for (i=0; i<13; i++) codigo +=caracteres.charAt(Math.floor(Math.random()*caracteres.length));
+        for (let i = 0; i<13; i++) codigo +=caracteres.charAt(Math.floor(Math.random()*caracteres.length));
 
         let response = await updateUser(existUser.data[0].UUID_user, { recovery_code_user: codigo })
         if(!response.success) {

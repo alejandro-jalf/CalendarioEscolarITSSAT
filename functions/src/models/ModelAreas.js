@@ -37,8 +37,8 @@ const modelActividades = (() => {
     
     const getAreaByIdUser = async (idUser) => {
         try {
-            const documentosCreate = await collectionActividades.where('creada_por_area', '==', idUser).get();
-            const documentosUpdate = await collectionActividades.where('modificada_por_area', '==', idUser).get();
+            const documentosCreate = await collectionArea.where('creada_por_area', '==', idUser).get();
+            const documentosUpdate = await collectionArea.where('modificada_por_area', '==', idUser).get();
             if (documentosUpdate.empty && documentosCreate.empty)
                 return createContentError('Area por usuario no fue encontrada');
 

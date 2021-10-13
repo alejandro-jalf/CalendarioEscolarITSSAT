@@ -86,7 +86,7 @@ const servicesActividades =  (() => {
 
         let uuid = createUUID();
         
-        existActividad = await verifyExistId(uuid);
+        let existActividad = await verifyExistId(uuid);
         if (existActividad.status) return existActividad;
         if (existActividad) {
             uuid = createUUID();
@@ -132,7 +132,7 @@ const servicesActividades =  (() => {
 
         if (!existActividad.success) return createResponse(404, existActividad);
         
-        if (existActividad.data[0].estatus_task === bodyActivo.estatus_task) 
+        if (existActividad.data[0].estatus_task === bodyActividad.estatus_task) 
             return createResponse(
                 200,
                 createContentError("El estatus de la actividad es igual", {})

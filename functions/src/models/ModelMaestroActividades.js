@@ -37,8 +37,8 @@ const modelActividades = (() => {
     
     const getMaestroActividadByIdUser = async (idUser) => {
         try {
-            const documentosCreate = await collectionActividades.where('creada_por_master_task', '==', idUser).get();
-            const documentosUpdate = await collectionActividades.where('modificada_por_master_task', '==', idUser).get();
+            const documentosCreate = await collectionMaestroActividades.where('creada_por_master_task', '==', idUser).get();
+            const documentosUpdate = await collectionMaestroActividades.where('modificada_por_master_task', '==', idUser).get();
             if (documentosUpdate.empty && documentosCreate.empty)
                 return createContentError('Maestro Actividades por usuario no fue encontrada');
 

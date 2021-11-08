@@ -12,69 +12,102 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://kit.fontawesome.com/4217f0f46b.js" crossorigin="anonymous"></script>
   </head>
   <body class="bg-dark">
-    <section>
-      <div class="row g-0">
-        <div class="col-lg-7">
-          <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li>
-            </ol>
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="./images/marty.jpg" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="./images/brooke.jpg" class="d-block w-100" alt="...">
-              </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
+    <div  id="app">
+      <div v-if="loading" class="container-spinner">
+        <div class="spinner-border spinner-general" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
-        <div class="col-lg-5 d-flex flex-column align-items-end min-vh-100">
-          <div class="px-lg-5 pt-lg-4pb-lg-3 p-4 w-100">
-            <img src="./images/calendario.png" alt="img-fluid" width="100" height="60">
-          </div>
-          <div class="px-lg-5 py-lg-4 p-4 w-100 align--self-center">
-            <h1 class="font-weight-bold mb-4">BIENVENIDO</h1>
-            <form class="mb-5">   
-              <div class="mb-4">
-                <label for="exampleInputEmail1" class="form-label font-weight-bold">Direccion Email</label>
-                <input type="email" class="form-control bg-dark-x border-0" placeholder="Ingrese su email" id="exampleInputEmail1" aria-describedby="emailHelp">
-              </div>
-              <div class="mb-4">
-                <label for="exampleInputPassword1" class="form-label font-weight-bold">Contraseña</label>
-                <input type="password" class="form-control bg-dark-x border-0 mb-2" placeholder="Ingrese su contraseña" id="exampleInputPassword1">
-                <a href="#" id="emailHelp" class="form-text text-muted text-decoration-none">¿Olvidaste tu Contraseña?</a>
-              </div>
-              <button type="submit" class="btn btn-primary" w-100>Iniciar Sesion</button>
-            </form>
-
-            <p class="font-weight-bold text-center text-muted" > o iniciar con</p>
-            <div class="d-flex justify-content-around">
-              <button type="submit" class="btn btn-outline-light flex-grow-1 mr-2"><i class="fab fa-google lead mr-2"></i> Google</button>
-              <button type="submit" class="btn btn-outline-light flex-grow-1 ml-2"><i class="fab fa-facebook-f lead mr-2"></i> Facebook</button>
-            </div>
-            <div class="text-center px-lg-5 pt-lg-3 pb-lg-4 p-4 w-100 mt-auto">
-              <p class="d-inline-block mb-0">¿Todavia no tienes cuenta?</p><a href="#" class="text-light font-weight-bold text-decoration-none">Crea ahora</a>
-            </div>
-          </div>
-        </div>
-        
-
       </div>
-    </section>
-    
+
+      <section>
+        <div class="row g-0">
+          <div class="col-lg-7">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li>
+              </ol>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="./images/itssat.jpeg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                  <img src="./images/itssat.jpeg" class="d-block w-100" alt="...">
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-5 d-flex flex-column align-items-end min-vh-100">
+            <div class="px-lg-5 pt-lg-4pb-lg-3 p-4 w-100">
+              <img src="./images/calendario.png" alt="img-fluid" width="100" height="60">
+            </div>
+            <div class="px-lg-5 py-lg-4 p-4 w-100 align--self-center">
+              <h1 class="font-weight-bold mb-4">BIENVENIDO</h1>
+              <div class="mb-5">   
+                <div class="mb-4">
+                  <label for="exampleInputEmail1" class="form-label font-weight-bold">Direccion Email</label>
+                  <input type="email" class="form-control bg-dark-x border-0" v-model="user_login" placeholder="Ingrese su email" id="exampleInputEmail1" aria-describedby="emailHelp" @keyup.enter="$refs.passLogin.focus()">
+                </div>
+                <div class="mb-4">
+                  <label for="exampleInputPassword1" class="form-label font-weight-bold">Contraseña</label>
+                  <input type="password" ref="passLogin" class="form-control bg-dark-x border-0 mb-2" v-model="password_login" placeholder="Ingrese su contraseña" id="exampleInputPassword1" @keyup.enter="loginUser">
+                  <a href="#" id="emailHelp" class="form-text text-muted text-decoration-none">¿Olvidaste tu Contraseña?</a>
+                </div>
+                <button type="submit" class="btn btn-primary" w-100 @click="loginUser">Iniciar Sesion</button>
+              </div>
+  
+              <!-- <p class="font-weight-bold text-center text-muted" > o iniciar con</p>
+              <div class="d-flex justify-content-around">
+                <button type="submit" class="btn btn-outline-light flex-grow-1 mr-2"><i class="fab fa-google lead mr-2"></i> Google</button>
+                <button type="submit" class="btn btn-outline-light flex-grow-1 ml-2"><i class="fab fa-facebook-f lead mr-2"></i> Facebook</button>
+              </div>
+              <div class="text-center px-lg-5 pt-lg-3 pb-lg-4 p-4 w-100 mt-auto">
+                <p class="d-inline-block mb-0">¿Todavia no tienes cuenta?</p><a href="#" class="text-light font-weight-bold text-decoration-none">Crea ahora</a>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <button ref="btnAlert" type="button" class="btn btn-primary invisible" data-bs-toggle="modal" data-bs-target="#modalAlert">
+        Launch demo modal
+      </button>
+
+      <div id="modalAlert" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-white" :class="backgroundHeader">
+              <h5 class="modal-title">{{ alert.title }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-dark">
+              <p>{{ alert.message }}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script> -->
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="./scripts/login.js"></script>
   </body>
 </html>

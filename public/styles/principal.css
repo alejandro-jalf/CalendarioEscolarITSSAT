@@ -1,3 +1,9 @@
+.userIconPerfil {
+    border: 2px solid #fff;
+    border-radius: 100%;
+    padding: 5px;
+}
+
 .containerPerfil {
     position: relative;
 }

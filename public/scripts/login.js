@@ -18,9 +18,18 @@ var appLogin = new Vue({
                 component: null,
             },
             loading: false,
+            colorUser: 'text-light',
+            colorPass: 'text-light',
+            colorURec: 'text-light',
+            viewPass: false,
+            terminos: false,
+            recuperandoCuenta: false,
         }
     },
     computed: {
+        typePass() {
+            return this.viewPass ? 'plain' : 'password'
+        },
         backgroundHeader() {
             if (this.alert.type === 'warning') return 'bg-warning';
             if (this.alert.type === 'info') return 'bg-info';
@@ -35,6 +44,14 @@ var appLogin = new Vue({
         if (this.login) window.location.href = './views/principal.html';
     },
     methods: {
+        olvideMiPass() { this.recuperandoCuenta = true },
+        backLogin() { this.recuperandoCuenta = false },
+        focusUser() { this.colorUser = 'text-dark' },
+        blurUser() { this.colorUser = 'text-light' },
+        focusPass() { this.colorPass = 'text-dark' },
+        blurPass() { this.colorPass = 'text-light' },
+        focusURec() { this.colorURec = 'text-dark' },
+        blurURec() { this.colorURec = 'text-light' },
         isLogin() {
             if (typeof localStorage.getItem('calendario_p_login') === 'string')
                 return localStorage.getItem('calendario_p_login') === 'true'
@@ -78,7 +95,6 @@ var appLogin = new Vue({
 
                     this.loading = false;
 
-                    console.log(response);
                     if (response.data.success) {
                         this.showAlert(response.data.message, 'Exito', 'success');
                         this.login = true;
@@ -94,6 +110,46 @@ var appLogin = new Vue({
                         this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                     else
                         this.showAlert('Fallo al intentar iniciar sesion intentelo mas tarde', 'Error inesperado', 'danger');
+                }
+            }
+        },
+        validateDataRecovery() {
+            if (this.user_recovery.trim() === '') {
+                this.showAlert('Nombre de usuario no puede quedar vacio');
+                return false;
+            }
+            return true;
+        },
+        async recoveryCount() {
+            if (this.validateDataRecovery()) {
+                try {
+                    const url =
+                    'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' +
+                    this.user_recovery.trim() +
+                    '/recovery';
+
+                    this.loading = true;
+
+                    const response = await axios({
+                        method: 'put',
+                        url,
+                    })
+
+                    this.loading = false;
+
+                    console.log(response);
+                    if (response.data.success) {
+                        this.showAlert(response.data.message, 'Exito', 'success');
+                        this.recuperandoCuenta = false;
+                    } else {
+                        this.showAlert(response.data.message, 'Fallo en recuperacion de cuenta', 'warning')
+                    }
+                } catch (error) {
+                    this.loading = false;
+                    if (error.response !== undefined)
+                        this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                    else
+                        this.showAlert('Fallo al intentar recuperar su cuenta, intentelo mas tarde', 'danger');
                 }
             }
         },

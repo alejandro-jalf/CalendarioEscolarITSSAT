@@ -105,6 +105,7 @@ var appLogin = new Vue({
 
                     }
                 } catch (error) {
+                    console.log(error, error.response);
                     this.loading = false;
                     if (error.response !== undefined)
                         this.showAlert(error.response.data.message, 'Error inesperado', 'danger');

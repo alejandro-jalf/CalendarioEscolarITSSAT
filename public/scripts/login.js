@@ -24,6 +24,9 @@ var appLogin = new Vue({
             viewPass: false,
             terminos: false,
             recuperandoCuenta: false,
+            dataUser: localStorage.getItem('calendario_data_user') ?
+                JSON.parse(localStorage.getItem('calendario_data_user')) :
+                { data: {}, empty: true },
         }
     },
     computed: {
@@ -99,10 +102,13 @@ var appLogin = new Vue({
                         this.showAlert(response.data.message, 'Exito', 'success');
                         this.login = true;
                         localStorage.setItem('calendario_p_login', true)
+                        localStorage.setItem(
+                            'calendario_data_user',
+                            JSON.stringify(response.data)
+                        )
                         window.location.href = './views/principal.html';
                     } else {
                         this.showAlert(response.data.message, 'Fallo en el inicio de sesion', 'warning')
-
                     }
                 } catch (error) {
                     console.log(error, error.response);

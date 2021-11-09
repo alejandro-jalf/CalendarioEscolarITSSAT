@@ -1,0 +1,27 @@
+.containerPerfil {
+    position: relative;
+}
+
+.subPerfil {
+    position: absolute;
+    top: 45px;
+    right: 5px;
+    width: 300px;
+}
+
+.btnPerfil {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btnClose {
+    cursor: pointer;
+    margin-top: 20px;
+    color: rgb(0, 26, 255);
+    float: right;
+    width: 60px;
+}
+
+.btnClose:hover {
+    color: rgb(1, 6, 58);
+}

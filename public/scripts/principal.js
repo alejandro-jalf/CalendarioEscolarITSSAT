@@ -17,7 +17,6 @@ var appPrincipal = new Vue({
     },
     mounted() {
         if (!this.login) window.location.href = '../index.html';
-        console.log(this.dataUser)
     },
     methods: {
         closeSession() {

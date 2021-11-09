@@ -1,3 +1,10 @@
+.logo-header {
+    width: 30px;
+    background: #fff;
+    padding: 2px;
+    border-radius: 5px;
+}
+
 .userIconPerfil {
     border: 2px solid #fff;
     border-radius: 100%;

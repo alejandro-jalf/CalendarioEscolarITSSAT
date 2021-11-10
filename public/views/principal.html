@@ -71,13 +71,21 @@
                 </div>
             </div>
             <div id="navbarSupportedContent" class="collapse slider-menu">
-                <div class="background-slider"></div>
+                <div class="background-slider"  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"></div>
 
-                <h3>Calendario escolar</h3>
-                <span class="icofont-close-circled close-slider"></span>
+                <h4 class="font-weight-bold">Calendario escolar</h4>
+                <span class="icofont-close-circled close-slider"  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"></span>
                 <div class="icofont-user-alt-3 logo-slider"></div>
-                <div class="text-center fs-5 font-weight-bold mb-5">{{ apodo }}</div>
+                <div class="text-center fs-5 font-weight-bold">{{ apodo }}</div>
 
+                <div class="text-center mb-5">
+                    <button class="btn btn-outline-success" type="button">
+                        <span class="icofont-refresh"></span>
+                    </button>
+                    <button class="btn btn-outline-warning" type="button">
+                        <span class="icofont-pencil-alt-2"></span>
+                    </button>
+                </div>
                 <div class="list-group">
                     <a href="#" class="list-group-item list-group-item-action active">
                         <span class="icofont-home"></span>

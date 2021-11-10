@@ -14,63 +14,91 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1b5702;">
             <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="../images/Logo_calendario.png" alt="" class="logo-header">
-                Calendario Escolar
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
-                            <span class="icofont-home"></span>
-                            Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span class="icofont-automation"></span>
-                            Administracion
-                        </a>
-                    </li>
-                </ul>
-                <form class="d-flex">
-                    <div class="nav-item dropdown containerPerfil">
-                        <div class="dropdown-toggle text-light" data-bs-toggle="collapse" href="#collapsePerfil" role="button" aria-expanded="false" aria-controls="collapsePerfil">
-                            <span class="icofont-user-alt-7 userIconPerfil"></span>
-                            {{ apodo }}
-                        </div>
-                    </div>
-                    <div class="collapse subPerfil" id="collapsePerfil">
-                        <div class="card card-body">
-                            <div>
-                                <span class="icofont-user-alt-4"></span>
-                                <span>{{ apodo }}</span>
-                            </div>
-                            <hr>
-                            <button class="btn btn-outline-success btnPerfil" type="button">
-                                <span class="icofont-refresh"></span>
-                                Refrescar perfil
-                            </button>
-                            <button class="btn btn-outline-warning btnPerfil" type="button">
-                                <span class="icofont-pencil-alt-2"></span>
-                                Editar perfil
-                            </button>
-                            <button class="btn btn-outline-danger btnPerfil" type="button" @click="closeSession">
-                                <span class="icofont-power"></span>
-                                Cerrar Sesion
-                            </button>
-                            <div>
-                                <div class="btnClose" data-bs-toggle="collapse" href="#collapsePerfil" role="button" aria-expanded="false" aria-controls="collapsePerfil">Cerrar</div>
+                <a class="navbar-brand" href="#">
+                    <img src="../images/logo500t.png" alt="" class="logo-header">
+                    Calendario Escolar
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">
+                                <span class="icofont-home"></span>
+                                Inicio
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="icofont-automation"></span>
+                                Administracion
+                            </a>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <div class="nav-item dropdown containerPerfil">
+                            <div class="dropdown-toggle text-light" data-bs-toggle="collapse" href="#collapsePerfil" role="button" aria-expanded="false" aria-controls="collapsePerfil">
+                                <span class="icofont-user-alt-7 userIconPerfil"></span>
+                                {{ apodo }}
                             </div>
                         </div>
-                    </div>
-                </form>
+                        <div class="collapse subPerfil" id="collapsePerfil">
+                            <div class="card card-body">
+                                <div>
+                                    <span class="icofont-user-alt-4"></span>
+                                    <span>{{ apodo }}</span>
+                                </div>
+                                <hr>
+                                <button class="btn btn-outline-success btnPerfil" type="button">
+                                    <span class="icofont-refresh"></span>
+                                    Refrescar perfil
+                                </button>
+                                <button class="btn btn-outline-warning btnPerfil" type="button">
+                                    <span class="icofont-pencil-alt-2"></span>
+                                    Editar perfil
+                                </button>
+                                <button class="btn btn-outline-danger btnPerfil" type="button" @click="closeSession">
+                                    <span class="icofont-power"></span>
+                                    Cerrar Sesion
+                                </button>
+                                <div>
+                                    <div class="btnClose" data-bs-toggle="collapse" href="#collapsePerfil" role="button" aria-expanded="false" aria-controls="collapsePerfil">Cerrar</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
+            <div id="navbarSupportedContent" class="collapse slider-menu">
+                <div class="background-slider"></div>
+
+                <h3>Calendario escolar</h3>
+                <span class="icofont-close-circled close-slider"></span>
+                <div class="icofont-user-alt-3 logo-slider"></div>
+                <div class="text-center fs-5 font-weight-bold mb-5">{{ apodo }}</div>
+
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active">
+                        <span class="icofont-home"></span>
+                        Inicio
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <span class="icofont-automation"></span>
+                        Administracion
+                    </a>
+                </div>
+                
+                <div class="container-close">
+                    <button class="btn btn-outline-danger btnPerfil" type="button" @click="closeSession">
+                        <span class="icofont-power"></span>
+                        Cerrar Sesion
+                    </button>
+                </div>
             </div>
         </nav>
+
+        <div></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

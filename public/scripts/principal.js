@@ -20,6 +20,8 @@ var appPrincipal = new Vue({
             loading: false,
             diasMesActual: [],
             heightItemDia: 111,
+            monthAndYear: 'Noviembre 2021',
+            monthActual: null,
         }
     },
     computed: {
@@ -38,37 +40,52 @@ var appPrincipal = new Vue({
         styleHeight() {
             return 'height: ' + this.heightItemDia + 'px;'
         },
+        refactorDays() {
+            return this.diasMesActual
+        }
     },
     mounted() {
         if (!this.login) window.location.href = '../index.html';
         else {
             if (this.listTask.data.length === 0) this.loadTask();
-            // else console.log(this.listTask);
-            // console.log(moment().local(true).format('DD/MM/YYYY HH:MM:SS'));
-            this.setDates();
-            this.setHeightDia();
+            this.changeMonth();
         }
         window.addEventListener('resize', (evt) => {
             this.setHeightDia();
         });
     },
     methods: {
-        setDates() {
-            const startOfMonth = moment().local(true).startOf('month');
-            const endOfMonth   = moment().local(true).endOf('month');
+        arrayMonths() {
+            return [
+                'Enero',
+                'Febrero',
+                'Marzo',
+                'Abril',
+                'Mayo',
+                'Junio',
+                'Julio',
+                'Agosto',
+                'Septiembre',
+                'Octubre',
+                'Noviembre',
+                'Diciembre',
+            ]
+        },
+        setDates(start, end) {
+            const startOfMonth = new moment(start);
+            const endOfMonth = new moment(end);
+            this.diasMesActual = [];
             const diaSemanaStart = startOfMonth.format('d');
             const diaSemanaEnd = parseInt(endOfMonth.format('d'));
             const diaMesEnd = parseInt(endOfMonth.format('DD'));
             let diaEndFor = parseInt(endOfMonth.format('DD'));
 
-            // console.log(diaEndFor, diaSemanaEnd);
             if (diaSemanaStart > 0) startOfMonth.add(-diaSemanaStart, 'days');
             if (diaSemanaEnd < 6) {
                 endOfMonth.add((6 - diaSemanaEnd), 'days');
                 diaEndFor += (6 - diaSemanaEnd)
             }
             
-            // console.log(startOfMonth.date(), endOfMonth.date(), diaEndFor);
             let diaActual = startOfMonth;
             let semana =  []
             for (let dias = 0 - diaSemanaStart; dias < diaEndFor; dias++) {
@@ -83,8 +100,6 @@ var appPrincipal = new Vue({
                 if (diaActual.format('d') === '6') this.diasMesActual.push(semana);
                 diaActual = diaActual.add(1, 'days')
             }
-
-            // console.log(this.diasMesActual, this.diasMesActual.length / 7);
         },
         setHeightDia() {
             const nav = document.querySelector('.navbar');
@@ -94,13 +109,28 @@ var appPrincipal = new Vue({
             const heightTotal = nav.clientHeight + headerTime.clientHeight + headerDia.clientHeight;
             const heightWindow = window.innerHeight;
             const heightItemDia = (heightWindow - heightTotal) / this.diasMesActual.length;
-            // console.log(nav.clientHeight, headerTime.clientHeight, headerDia.clientHeight, heightWindow, heightTotal, heightItemDia);
-            
-            // console.log(itemDia);
             this.heightItemDia = heightItemDia;
+        },
+        changeMonth(month) {
+            if (!month) this.monthActual = moment().local(true);
+            else this.monthActual = this.monthActual.add(month, 'M');
+
+            const startOfMonth = this.monthActual.startOf('month');
+            const endOfMonth   = this.monthActual.endOf('month');
+
+            const months = this.arrayMonths();
+            this.monthAndYear = 
+                months[startOfMonth.format('M') - 1] +
+                ' ' +
+                startOfMonth.format('YYYY');
+            this.setDates(startOfMonth, endOfMonth);
+            this.setHeightDia();
         },
         colorDia(dias, diaEnd) {
             return (dias < 0 || dias >= diaEnd) ? 'text-black-50' : 'text-dark fw-bold'
+        },
+        bgDia(dias, diaEnd) {
+            return (dias < 0 || dias >= diaEnd) ? 'bg-light bg-opacity-75' : ''
         },
         showAlert(message, title = 'Advertencia', type = 'warning') {
             this.alert.title = title;

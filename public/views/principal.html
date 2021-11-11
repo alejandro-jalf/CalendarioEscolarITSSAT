@@ -133,14 +133,14 @@
         </div>
         <div class="containerCalendar">
             <div class="time-date bg-light">
-                <button class="btn btn-primary" type="button">Hoy</button>
-                <button class="btn btn-light btn-arrow-time" type="button">
+                <button class="btn btn-primary" type="button" @click="changeMonth()">Hoy</button>
+                <button class="btn btn-light btn-arrow-time" type="button" @click="changeMonth(-1)">
                     <div class="icofont-circled-left"></div>
                 </button>
-                <button class="btn btn-light btn-arrow-time" type="button">
+                <button class="btn btn-light btn-arrow-time" type="button" @click="changeMonth(1)">
                     <div class="icofont-circled-right"></div>
                 </button>
-                <span class="fw-bold">Noviembre 2021</span>
+                <span class="fw-bold">{{ monthAndYear }}</span>
             </div>
             <div class="calendar-dias">
                 <div class="container-fluid">
@@ -153,8 +153,8 @@
                         <div class="col headerDia">Viernes</div>
                         <div class="col headerDia">Sabado</div>
                     </div>
-                    <div v-for="(semana, indexS) in diasMesActual" :key="indexS" class="row">
-                        <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia diaItma" :style="styleHeight">
+                    <div v-for="(semana, indexS) in refactorDays" :key="indexS" class="row">
+                        <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia diaItma" :class="bgDia(dia.dias, dia.diaMesEnd)" :style="styleHeight">
                             <span :class="colorDia(dia.dias, dia.diaMesEnd)">{{ dia.dia }}</span>
                         </div>
                     </div>

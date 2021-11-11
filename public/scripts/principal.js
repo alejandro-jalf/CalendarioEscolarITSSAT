@@ -115,8 +115,8 @@ var appPrincipal = new Vue({
             if (!month) this.monthActual = moment().local(true);
             else this.monthActual = this.monthActual.add(month, 'M');
 
-            const startOfMonth = this.monthActual.startOf('month');
-            const endOfMonth   = this.monthActual.endOf('month');
+            const startOfMonth = new moment(this.monthActual).startOf('month');
+            const endOfMonth = new moment(this.monthActual).endOf('month');
 
             const months = this.arrayMonths();
             this.monthAndYear = 

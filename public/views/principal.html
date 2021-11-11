@@ -143,19 +143,19 @@
                 <span class="fw-bold">Noviembre 2021</span>
             </div>
             <div class="calendar-dias">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row">
-                        <div class="col text-center p-1">Domingo</div>
-                        <div class="col text-center p-1">Lunes</div>
-                        <div class="col text-center p-1">Martes</div>
-                        <div class="col text-center p-1">Miercoles</div>
-                        <div class="col text-center p-1">Jueves</div>
-                        <div class="col text-center p-1">Viernes</div>
-                        <div class="col text-center p-1">Sabado</div>
+                        <div class="col headerDia">Domingo</div>
+                        <div class="col headerDia">Lunes</div>
+                        <div class="col headerDia">Martes</div>
+                        <div class="col headerDia">Miercoles</div>
+                        <div class="col headerDia">Jueves</div>
+                        <div class="col headerDia">Viernes</div>
+                        <div class="col headerDia">Sabado</div>
                     </div>
                     <div v-for="(semana, indexS) in diasMesActual" :key="indexS" class="row">
-                        <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia">
-                            {{ dia.dia }}
+                        <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia diaItma" :style="styleHeight">
+                            <span :class="colorDia(dia.dias, dia.diaMesEnd)">{{ dia.dia }}</span>
                         </div>
                     </div>
                 </div>

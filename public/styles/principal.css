@@ -60,8 +60,14 @@
     height: 100%;
 }
 
+.headerDia {
+    padding: 5px;
+    text-align: center;
+    background: rgb(230, 252, 229);
+    border: 0.5px solid rgb(255, 255, 255);
+}
+
 .itemDia {
     border: 0.5px solid rgb(230, 252, 229);
     height: 144px;
-    /* border-left: 1px solid rgb(232, 248, 250); */
 }

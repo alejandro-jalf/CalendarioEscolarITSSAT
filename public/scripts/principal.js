@@ -19,6 +19,7 @@ var appPrincipal = new Vue({
             },
             loading: false,
             diasMesActual: [],
+            heightItemDia: 111,
         }
     },
     computed: {
@@ -34,6 +35,9 @@ var appPrincipal = new Vue({
             if (this.alert.type === 'dark') return 'bg-dark';
             return 'bg-warning';
         },
+        styleHeight() {
+            return 'height: ' + this.heightItemDia + 'px;'
+        },
     },
     mounted() {
         if (!this.login) window.location.href = '../index.html';
@@ -42,7 +46,11 @@ var appPrincipal = new Vue({
             // else console.log(this.listTask);
             // console.log(moment().local(true).format('DD/MM/YYYY HH:MM:SS'));
             this.setDates();
+            this.setHeightDia();
         }
+        window.addEventListener('resize', (evt) => {
+            this.setHeightDia();
+        });
     },
     methods: {
         setDates() {
@@ -50,6 +58,7 @@ var appPrincipal = new Vue({
             const endOfMonth   = moment().local(true).endOf('month');
             const diaSemanaStart = startOfMonth.format('d');
             const diaSemanaEnd = parseInt(endOfMonth.format('d'));
+            const diaMesEnd = parseInt(endOfMonth.format('DD'));
             let diaEndFor = parseInt(endOfMonth.format('DD'));
 
             // console.log(diaEndFor, diaSemanaEnd);
@@ -69,12 +78,29 @@ var appPrincipal = new Vue({
                     dias,
                     date: diaActual,
                     diaSemana: diaActual.format('d'),
+                    diaMesEnd,
                 });
                 if (diaActual.format('d') === '6') this.diasMesActual.push(semana);
                 diaActual = diaActual.add(1, 'days')
             }
 
             // console.log(this.diasMesActual, this.diasMesActual.length / 7);
+        },
+        setHeightDia() {
+            const nav = document.querySelector('.navbar');
+            const headerTime = document.querySelector('.time-date');
+            const headerDia = document.querySelector('.headerDia');
+
+            const heightTotal = nav.clientHeight + headerTime.clientHeight + headerDia.clientHeight;
+            const heightWindow = window.innerHeight;
+            const heightItemDia = (heightWindow - heightTotal) / this.diasMesActual.length;
+            // console.log(nav.clientHeight, headerTime.clientHeight, headerDia.clientHeight, heightWindow, heightTotal, heightItemDia);
+            
+            // console.log(itemDia);
+            this.heightItemDia = heightItemDia;
+        },
+        colorDia(dias, diaEnd) {
+            return (dias < 0 || dias >= diaEnd) ? 'text-black-50' : 'text-dark fw-bold'
         },
         showAlert(message, title = 'Advertencia', type = 'warning') {
             this.alert.title = title;

@@ -1,90 +1,67 @@
-.logo-header {
-    width: 30px;
-    background: #fff;
-    padding: 2px;
-    border-radius: 5px;
-}
-
-.userIconPerfil {
-    border: 2px solid #fff;
-    border-radius: 100%;
-    padding: 5px;
-}
-
-.containerPerfil {
-    position: relative;
-}
-
-.subPerfil {
+.taskNext {
     position: absolute;
-    top: 45px;
-    right: 5px;
-    width: 320px;
-}
-
-.btnPerfil {
-    width: 100%;
-    margin-top: 10px;
-}
-
-.btnClose {
-    cursor: pointer;
-    margin-top: 20px;
-    color: rgb(0, 26, 255);
-    float: right;
-    width: 60px;
-}
-
-.btnClose:hover {
-    color: rgb(1, 6, 58);
-}
-
-.background-slider {
-    /* display: block; */
-    position: fixed;
-    top: 0px;
-    left: 300px;
-    width: calc(100% - 300px);
-    height: 100%;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.568);
-}
-
-.slider-menu {
-    position: fixed;
-    top: 0px;
+    top: 58px;
     left: 0px;
-    padding: 10px;
-    width: 300px;
-    height: 100%;
-    background: #fff;
-    z-index: 9;
+    width: 245px;
+    height: calc(100% - 58px);
+    border-right: 1px solid rgb(182, 182, 182);
 }
 
-.close-slider {
+
+.title-tasks {
+    text-align: center;
+    padding: 13px 0px;
+    padding-top: 13px;
+    margin-bottom: 0px;
+    box-shadow: -1px 0px 8px 0px rgb(182, 182, 182);
+}
+
+.container-task {
+    overflow-y: auto;
+    height: calc(100% - 87px);
+}
+
+.container-task-list {
+    padding: 5px 10px;
+    border-bottom: 1px solid rgb(189, 189, 189);
+}
+
+.date-task {
+    font-size: 13px;
+    font-style: italic;
+    text-align: end;
+    color: rgb(65, 65, 65);
+}
+
+.title-task {
+    font-weight: 500;
+}
+
+.containerCalendar {
     position: absolute;
-    right: 10px;
-    top: 10px;
+    top: 58px;
+    left: 245px;
+    width: calc(100% - 245px);
+    height: calc(100% - 118px);
+    background: rgb(255, 255, 255);
+}
+
+.time-date {
+    padding: 11px;
+}
+
+.btn-arrow-time {
+    padding: 3px;
     font-size: 30px;
 }
 
-.logo-slider {
-    margin: auto;
-    margin-top: 50px;
-    font-size: 50px;
-    padding: 10px;
-    border: 2px solid #000;
-    border-radius: 100%;
-    width: 80px;
-    height: 80px;
-    text-align: center;
+.calendar-dias {
+    width: 100%;
+    height: 100%;
 }
 
-.container-close {
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
-    left: 0px;
-    padding: 10px;
-    box-shadow: -6px 1px 10px 1px #000;
+.itemDia {
+    border: 0.5px solid rgb(230, 252, 229);
+    height: 144px;
+    /* border-left: 1px solid rgb(232, 248, 250); */
 }

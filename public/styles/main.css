@@ -1,0 +1,113 @@
+.container-spinner {
+    position: fixed;
+    background: #ffffff83;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.spinner-general {
+    width: 30px;
+    height: 30px;
+    margin-left: calc(50% - 15px);
+    margin-top: calc(50% - 15px);
+}
+
+body{
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    color: var(--light);
+}
+
+.logo-header {
+    width: 30px;
+    background: #fff;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.userIconPerfil {
+    border: 2px solid #fff;
+    border-radius: 100%;
+    padding: 5px;
+}
+
+.containerPerfil {
+    position: relative;
+}
+
+.subPerfil {
+    position: absolute;
+    top: 45px;
+    right: 5px;
+    width: 320px;
+    z-index: 9;
+}
+
+.btnPerfil {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btnClose {
+    cursor: pointer;
+    margin-top: 20px;
+    color: rgb(0, 26, 255);
+    float: right;
+    width: 60px;
+}
+
+.btnClose:hover {
+    color: rgb(1, 6, 58);
+}
+
+.background-slider {
+    /* display: block; */
+    position: fixed;
+    top: 0px;
+    left: 300px;
+    width: calc(100% - 300px);
+    height: 100%;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.568);
+}
+
+.slider-menu {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    padding: 10px;
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    z-index: 9;
+}
+
+.close-slider {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 30px;
+}
+
+.logo-slider {
+    margin: auto;
+    margin-top: 50px;
+    font-size: 50px;
+    padding: 10px;
+    border: 2px solid #000;
+    border-radius: 100%;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+}
+
+.container-close {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
+    padding: 10px;
+    box-shadow: -6px 1px 10px 1px #000;
+}
+

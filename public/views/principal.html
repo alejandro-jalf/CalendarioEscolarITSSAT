@@ -113,7 +113,8 @@
             </div>
         </nav>
 
-        <div class="taskNext">
+        <div ref="taskNext" class="taskNext" @click="showTaskNext">
+            <div class="arrow-task" :class="isShowed"></div>
             <h5 class="title-tasks bg-light">
                 Actividades proximas
                 <button class="btn btn-outline-success p-1" type="button">
@@ -133,7 +134,7 @@
         </div>
         <div class="containerCalendar">
             <div class="time-date bg-light">
-                <button class="btn btn-primary" type="button" @click="changeMonth()">Hoy</button>
+                <button class="btn btn-primary todaybtn" type="button" @click="changeMonth()">Hoy</button>
                 <button class="btn btn-light btn-arrow-time" type="button" @click="changeMonth(-1)">
                     <div class="icofont-circled-left"></div>
                 </button>
@@ -145,13 +146,13 @@
             <div class="calendar-dias">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col headerDia">Domingo</div>
-                        <div class="col headerDia">Lunes</div>
-                        <div class="col headerDia">Martes</div>
-                        <div class="col headerDia">Miercoles</div>
-                        <div class="col headerDia">Jueves</div>
-                        <div class="col headerDia">Viernes</div>
-                        <div class="col headerDia">Sabado</div>
+                        <div class="col headerDia">{{ sunday }}</div>
+                        <div class="col headerDia">{{ monday }}</div>
+                        <div class="col headerDia">{{ tuesday }}</div>
+                        <div class="col headerDia">{{ wednesday }}</div>
+                        <div class="col headerDia">{{ thursday }}</div>
+                        <div class="col headerDia">{{ friday }}</div>
+                        <div class="col headerDia">{{ saturday }}</div>
                     </div>
                     <div v-for="(semana, indexS) in refactorDays" :key="indexS" class="row">
                         <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia diaItma" :class="bgDia(dia.dias, dia.diaMesEnd)" :style="styleHeight">

@@ -5,8 +5,28 @@
     width: 245px;
     height: calc(100% - 58px);
     border-right: 1px solid rgb(182, 182, 182);
+    transition-property: left;
+    transition-duration: 1s;
+    z-index: 8;
+    background: #fff;
 }
 
+.arrow-task {
+    position: absolute;
+    top: 10px;
+    right: -50px;
+    width: 50px;
+    height: 40px;
+    padding-right: 5px;
+    text-align: end;
+    font-size: 40px;
+    color: #fff;
+    background: rgb(1, 82, 78);
+    border-radius: 0px 20px 20px 0px;
+    border: 2px solid rgb(3, 194, 98);
+    border-left: 0px;
+    box-shadow: 2px 0px 3px 2px #c7c7c7cb;
+}
 
 .title-tasks {
     text-align: center;
@@ -70,4 +90,43 @@
 .itemDia {
     border: 0.5px solid rgb(230, 252, 229);
     height: 144px;
+}
+
+@media screen and (max-width: 991px) {
+    .taskNext {
+        left: -250px;
+        box-shadow: -2px 7px 3px 6px #c7c7c7;
+    }
+
+    .containerCalendar {
+        left: 0px;
+        width: 100%;
+    }
+
+    .time-date {
+        padding-left: 60px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .title-tasks {
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .title-task {
+        font-size: 14px;
+    }
+
+    .date-task {
+        font-size: 12px;
+    }
+
+    .containerCalendar {
+        font-size: 13px;
+    }
+
+    .todaybtn {
+        font-size: 12px;
+    }
 }

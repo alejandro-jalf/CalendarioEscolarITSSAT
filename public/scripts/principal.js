@@ -22,6 +22,8 @@ var appPrincipal = new Vue({
             heightItemDia: 111,
             monthAndYear: 'Noviembre 2021',
             monthActual: null,
+            showedTaskNext: false,
+            widthWindow: 0,
         }
     },
     computed: {
@@ -42,9 +44,20 @@ var appPrincipal = new Vue({
         },
         refactorDays() {
             return this.diasMesActual
-        }
+        },
+        isShowed() {
+            return this.showedTaskNext ? 'icofont-bubble-left' : 'icofont-bubble-right'
+        },
+        sunday() {return this.widthWindow > 700 ? 'Domingo' : 'dom.'},
+        monday() {return this.widthWindow > 700 ? 'Lunes' : 'lun.'},
+        tuesday() {return this.widthWindow > 700 ? 'Martes' : 'mar.'},
+        wednesday() {return this.widthWindow > 700 ? 'Miercoles' : 'mie.'},
+        thursday() {return this.widthWindow > 700 ? 'Jueves' : 'jue.'},
+        friday() {return this.widthWindow > 700 ? 'Viernes' : 'vie.'},
+        saturday() {return this.widthWindow > 700 ? 'Sabado' : 'sab.'},
     },
     mounted() {
+        this.widthWindow = window.innerWidth;
         if (!this.login) window.location.href = '../index.html';
         else {
             if (this.listTask.data.length === 0) this.loadTask();
@@ -52,9 +65,15 @@ var appPrincipal = new Vue({
         }
         window.addEventListener('resize', (evt) => {
             this.setHeightDia();
+            this.widthWindow = window.innerWidth;
         });
     },
     methods: {
+        showTaskNext() {
+            if (!this.showedTaskNext) this.$refs.taskNext.style.left = '0px';
+            else this.$refs.taskNext.style.left = '-250px';
+            this.showedTaskNext = !this.showedTaskNext;
+        },
         arrayMonths() {
             return [
                 'Enero',

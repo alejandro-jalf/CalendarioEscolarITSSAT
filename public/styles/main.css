@@ -62,7 +62,6 @@ body{
 }
 
 .background-slider {
-    /* display: block; */
     position: fixed;
     top: 0px;
     left: 300px;
@@ -110,4 +109,3 @@ body{
     padding: 10px;
     box-shadow: -6px 1px 10px 1px #000;
 }
-

@@ -158,7 +158,7 @@
                         <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia" :class="bgDia(dia.dias, dia.diaMesEnd)" :style="styleHeight">
                             <span :class="colorDia(dia.dias, dia.diaMesEnd)">{{ dia.dia }}</span>
                             <div v-for="(task, indexT) in filterTasks(dia.actividades)" class="taskItem">
-                                {{ task + '....' }}
+                                {{ task + '...' }}
                             </div>
                             <div v-if="dia.actividades.length > 3" class="countTask">+{{ dia.actividades.length - 3 }}</div>
                         </div>

@@ -107,7 +107,7 @@ var appPrincipal = new Vue({
     },
     methods: {
         filterTasks(actividades) {
-            const totalLetters = this.widthWindow < 530 ? 3 : 10;
+            const totalLetters = this.widthWindow < 530 ? 4 : 10;
             if (actividades.length > 3) {
                 const tasks = [];
                 for (let index = 0; index < 3; index++) {

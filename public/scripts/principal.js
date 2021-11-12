@@ -104,20 +104,19 @@ var appPrincipal = new Vue({
                 widthBefore = window.innerWidth;
             });
         }
-        // console.log(this.listTask.data);
     },
     methods: {
         filterTasks(actividades) {
+            const totalLetters = this.widthWindow < 530 ? 3 : 10;
             if (actividades.length > 3) {
                 const tasks = [];
                 for (let index = 0; index < 3; index++) {
                     // console.log(actividades[index]);
-                    tasks.push(actividades[index].descripcion_task.slice(0, 30));
+                    tasks.push(actividades[index].descripcion_task.slice(0, totalLetters));
                 }
                 return task;
             }
-            // console.log(actividades);
-            return actividades.map((task) => task.descripcion_task.slice(0, 10));
+            return actividades.map((task) => task.descripcion_task.slice(0, totalLetters));
         },
         showTaskNext() {
             if (!this.showedTaskNext) this.$refs.taskNext.style.left = '0px';

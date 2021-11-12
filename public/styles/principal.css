@@ -88,6 +88,7 @@
 }
 
 .itemDia {
+    position: relative;
     border: 0.5px solid rgb(230, 252, 229);
     height: 144px;
 }
@@ -96,6 +97,17 @@
     font-size: 9px;
     background: azure;
     margin-bottom: 2px;
+}
+
+.countTask {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    font-size: 9px;
+    background: #dd0000;
+    color: rgb(255, 255, 255);
+    padding: 3px 3px 3px 2px;
+    border-radius: 100%;
 }
 
 @media screen and (max-width: 991px) {

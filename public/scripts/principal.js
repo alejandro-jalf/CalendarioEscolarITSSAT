@@ -63,9 +63,23 @@ var appPrincipal = new Vue({
             if (this.listTask.data.length === 0) this.loadTask();
             this.changeMonth();
         }
+        let widthBefore = window.innerWidth;
         window.addEventListener('resize', (evt) => {
             this.setHeightDia();
             this.widthWindow = window.innerWidth;
+            if (
+                (this.widthWindow < 992 && widthBefore >= 992) ||
+                (this.widthWindow >= 992 && widthBefore < 992)
+            ) {
+                if (this.widthWindow < 992) {
+                    this.$refs.taskNext.style.left = '-250px';
+                    this.showedTaskNext = false;
+                } else {
+                    this.$refs.taskNext.style.left = '0px';
+                    this.showedTaskNext = true;
+                }
+            }
+            widthBefore = window.innerWidth;
         });
     },
     methods: {

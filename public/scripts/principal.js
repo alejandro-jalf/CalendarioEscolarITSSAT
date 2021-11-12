@@ -24,6 +24,8 @@ var appPrincipal = new Vue({
             monthActual: null,
             showedTaskNext: false,
             widthWindow: 0,
+            dateStart: null,
+            dateEnd: null,
         }
     },
     computed: {
@@ -42,8 +44,29 @@ var appPrincipal = new Vue({
         styleHeight() {
             return 'height: ' + this.heightItemDia + 'px;'
         },
-        refactorDays() {
-            return this.diasMesActual
+        refactorTasks() {
+            const listTask = this.listTask.data.map((task) => {
+                if (task.rango_fechas_task) {
+                    task.fechas = [task.fecha_inicial_task]
+                } else {
+                    const fechas = []
+                    task.mes_task.forEach((mes) => {
+                        task.dias_task.forEach((dia) => {
+                            fechas.push(
+                                task.year_task +
+                                '-' +
+                                this.completeDateHour(mes) +
+                                '-' +
+                                this.completeDateHour(dia) +
+                                'T00:00:00.000'
+                            )
+                        })
+                    });
+                    task.fechas = fechas;
+                }
+                return task;
+            })
+            return listTask;
         },
         isShowed() {
             return this.showedTaskNext ? 'icofont-bubble-left' : 'icofont-bubble-right'
@@ -62,27 +85,40 @@ var appPrincipal = new Vue({
         else {
             if (this.listTask.data.length === 0) this.loadTask();
             this.changeMonth();
-        }
-        let widthBefore = window.innerWidth;
-        window.addEventListener('resize', (evt) => {
-            this.setHeightDia();
-            this.widthWindow = window.innerWidth;
-            if (
-                (this.widthWindow < 992 && widthBefore >= 992) ||
-                (this.widthWindow >= 992 && widthBefore < 992)
-            ) {
-                if (this.widthWindow < 992) {
-                    this.$refs.taskNext.style.left = '-250px';
-                    this.showedTaskNext = false;
-                } else {
-                    this.$refs.taskNext.style.left = '0px';
-                    this.showedTaskNext = true;
+            let widthBefore = window.innerWidth;
+            window.addEventListener('resize', (evt) => {
+                this.setHeightDia();
+                this.widthWindow = window.innerWidth;
+                if (
+                    (this.widthWindow < 992 && widthBefore >= 992) ||
+                    (this.widthWindow >= 992 && widthBefore < 992)
+                ) {
+                    if (this.widthWindow < 992) {
+                        this.$refs.taskNext.style.left = '-250px';
+                        this.showedTaskNext = false;
+                    } else {
+                        this.$refs.taskNext.style.left = '0px';
+                        this.showedTaskNext = true;
+                    }
                 }
-            }
-            widthBefore = window.innerWidth;
-        });
+                widthBefore = window.innerWidth;
+            });
+        }
+        // console.log(this.listTask.data);
     },
     methods: {
+        filterTasks(actividades) {
+            if (actividades.length > 3) {
+                const tasks = [];
+                for (let index = 0; index < 3; index++) {
+                    // console.log(actividades[index]);
+                    tasks.push(actividades[index].descripcion_task.slice(0, 30));
+                }
+                return task;
+            }
+            // console.log(actividades);
+            return actividades.map((task) => task.descripcion_task.slice(0, 10));
+        },
         showTaskNext() {
             if (!this.showedTaskNext) this.$refs.taskNext.style.left = '0px';
             else this.$refs.taskNext.style.left = '-250px';
@@ -104,6 +140,12 @@ var appPrincipal = new Vue({
                 'Diciembre',
             ]
         },
+        completeDateHour(number) {
+            if (!number) return number
+            const numberString = number.toString()
+            if (numberString.length < 2) return '0' + number
+            return number
+        },
         setDates(start, end) {
             const startOfMonth = new moment(start);
             const endOfMonth = new moment(end);
@@ -113,6 +155,13 @@ var appPrincipal = new Vue({
             const diaMesEnd = parseInt(endOfMonth.format('DD'));
             let diaEndFor = parseInt(endOfMonth.format('DD'));
 
+            const taskForMonth = this.refactorTasks.filter((task) => {
+                return !!task.fechas.find((fecha) => {
+                    const now = new moment(fecha);
+                    return now >= startOfMonth && now <= endOfMonth;
+                })
+            });
+            // console.log(taskForMonth);
             if (diaSemanaStart > 0) startOfMonth.add(-diaSemanaStart, 'days');
             if (diaSemanaEnd < 6) {
                 endOfMonth.add((6 - diaSemanaEnd), 'days');
@@ -123,12 +172,18 @@ var appPrincipal = new Vue({
             let semana =  []
             for (let dias = 0 - diaSemanaStart; dias < diaEndFor; dias++) {
                 if (diaActual.format('d') === '0') semana = [];
+                const actividades = taskForMonth.filter((task) => {
+                    const dateFinded = task.fechas.find((dateN) => dateN.split('T')[0] === diaActual.format('YYYY-MM-DD'));
+                    // console.log(dateFinded, diaActual.format('YYYY-MM-DD'), !!dateFinded);
+                    return !!dateFinded;
+                })
                 semana.push({
                     dia: diaActual.format('DD'),
                     dias,
                     date: diaActual,
                     diaSemana: diaActual.format('d'),
                     diaMesEnd,
+                    actividades,
                 });
                 if (diaActual.format('d') === '6') this.diasMesActual.push(semana);
                 diaActual = diaActual.add(1, 'days')
@@ -148,8 +203,8 @@ var appPrincipal = new Vue({
             if (!month) this.monthActual = moment().local(true);
             else this.monthActual = this.monthActual.add(month, 'M');
 
-            const startOfMonth = new moment(this.monthActual).startOf('month');
-            const endOfMonth = new moment(this.monthActual).endOf('month');
+            const startOfMonth = new moment(this.monthActual.format('YYYY-MM-DD') + 'T00:00:00.000').startOf('month');
+            const endOfMonth = new moment(this.monthActual.format('YYYY-MM-DD') + 'T23:59:59.999').endOf('month');
 
             const months = this.arrayMonths();
             this.monthAndYear = 

@@ -92,6 +92,12 @@
     height: 144px;
 }
 
+.taskItem {
+    font-size: 9px;
+    background: azure;
+    margin-bottom: 2px;
+}
+
 @media screen and (max-width: 991px) {
     .taskNext {
         left: -250px;

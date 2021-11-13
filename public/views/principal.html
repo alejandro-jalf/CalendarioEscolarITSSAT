@@ -113,11 +113,11 @@
             </div>
         </nav>
 
-        <div ref="taskNext" class="taskNext" @click="showTaskNext">
-            <div v-if="widthWindow < 992" class="arrow-task" :class="isShowed"></div>
+        <div ref="taskNext" class="taskNext">
+            <div v-if="widthWindow < 992" class="arrow-task" :class="isShowed" @click="showTaskNext"></div>
             <h5 class="title-tasks bg-light">
                 Actividades proximas
-                <button class="btn btn-outline-success p-1" type="button">
+                <button class="btn btn-outline-success p-1" type="button" @click="loadTask">
                     <span class="icofont-refresh"></span>
                 </button>
             </h5>

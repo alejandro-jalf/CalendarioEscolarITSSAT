@@ -93,6 +93,18 @@
     height: 144px;
 }
 
+.backgroundToday {
+    background: #129c000a;
+}
+
+.dateToday {
+    margin-top: 15px;
+    border: 2px solid #129c00;
+    padding: 3px;
+    border-radius: 100%;
+    background: #129c00;
+}
+
 .taskItem {
     font-size: 9px;
     background: azure;

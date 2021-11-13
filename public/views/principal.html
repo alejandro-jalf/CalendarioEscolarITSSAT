@@ -155,8 +155,8 @@
                         <div class="col headerDia">{{ saturday }}</div>
                     </div>
                     <div v-for="(semana, indexS) in diasMesActual" :key="indexS" class="row">
-                        <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia" :class="bgDia(dia.dias, dia.diaMesEnd)" :style="styleHeight">
-                            <span :class="colorDia(dia.dias, dia.diaMesEnd)">{{ dia.dia }}</span>
+                        <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia" :class="bgDia(dia.dias, dia.diaMesEnd, dia.date)" :style="styleHeight">
+                            <span :class="colorDia(dia.dias, dia.diaMesEnd, dia.date)">{{ dia.dia }}</span>
                             <div v-for="(task, indexT) in filterTasks(dia.actividades)" class="taskItem">
                                 {{ task + '...' }}
                             </div>

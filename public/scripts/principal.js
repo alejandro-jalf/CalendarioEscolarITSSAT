@@ -24,8 +24,7 @@ var appPrincipal = new Vue({
             monthActual: null,
             showedTaskNext: false,
             widthWindow: 0,
-            dateStart: null,
-            dateEnd: null,
+            dateNow: new moment().local(true),
         }
     },
     computed: {
@@ -107,11 +106,19 @@ var appPrincipal = new Vue({
     },
     methods: {
         filterTasks(actividades) {
-            const totalLetters = this.widthWindow < 530 ? 4 : 10;
+            const totalLetters = this.widthWindow > 1500 ?
+                80 :
+                this.widthWindow > 1300 ?
+                    30 :
+                    this.widthWindow > 742 ?
+                        20 : this.widthWindow > 644 ?
+                            15 :
+                            this.widthWindow > 530 ?
+                                10 :
+                                4;
             if (actividades.length > 3) {
                 const tasks = [];
                 for (let index = 0; index < 3; index++) {
-                    // console.log(actividades[index]);
                     tasks.push(actividades[index].descripcion_task.slice(0, totalLetters));
                 }
                 return task;
@@ -160,7 +167,6 @@ var appPrincipal = new Vue({
                     return now >= startOfMonth && now <= endOfMonth;
                 })
             });
-            // console.log(taskForMonth);
             if (diaSemanaStart > 0) startOfMonth.add(-diaSemanaStart, 'days');
             if (diaSemanaEnd < 6) {
                 endOfMonth.add((6 - diaSemanaEnd), 'days');
@@ -173,13 +179,12 @@ var appPrincipal = new Vue({
                 if (diaActual.format('d') === '0') semana = [];
                 const actividades = taskForMonth.filter((task) => {
                     const dateFinded = task.fechas.find((dateN) => dateN.split('T')[0] === diaActual.format('YYYY-MM-DD'));
-                    // console.log(dateFinded, diaActual.format('YYYY-MM-DD'), !!dateFinded);
                     return !!dateFinded;
                 })
                 semana.push({
                     dia: diaActual.format('DD'),
                     dias,
-                    date: diaActual,
+                    date: diaActual.format('DD/MM/YYYY'),
                     diaSemana: diaActual.format('d'),
                     diaMesEnd,
                     actividades,
@@ -213,11 +218,13 @@ var appPrincipal = new Vue({
             this.setDates(startOfMonth, endOfMonth);
             this.setHeightDia();
         },
-        colorDia(dias, diaEnd) {
-            return (dias < 0 || dias >= diaEnd) ? 'text-black-50' : 'text-dark fw-bold'
+        colorDia(dias, diaEnd, date) {
+            const classToday = this.dateNow.format('DD/MM/YYYY') === date ? 'dateToday text-white' : '';
+            return (dias < 0 || dias >= diaEnd) ? `text-black-50 ${classToday}` : `text-dark fw-bold ${classToday}`;
         },
-        bgDia(dias, diaEnd) {
-            return (dias < 0 || dias >= diaEnd) ? 'bg-light bg-opacity-75' : ''
+        bgDia(dias, diaEnd, date) {
+            const backgroundToday = this.dateNow.format('DD/MM/YYYY') === date ? 'backgroundToday' : '';
+            return (dias < 0 || dias >= diaEnd) ? 'bg-light bg-opacity-75' : backgroundToday;
         },
         showAlert(message, title = 'Advertencia', type = 'warning') {
             this.alert.title = title;

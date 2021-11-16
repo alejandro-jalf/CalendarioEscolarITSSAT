@@ -43,6 +43,20 @@ var appPrincipal = new Vue({
         styleHeight() {
             return 'height: ' + this.heightItemDia + 'px;'
         },
+        taskProximas() {
+            const now = this.dateNow;
+            const dateEnd = new moment(now).add(25, 'days');
+            const tasks =  this.refactorTasks.filter((task) => {
+                const dateValid = task.fechas.find((fecha) => {
+                    const fechaMoment = new moment(fecha.replace('z', ''));
+                    return fechaMoment >= now && fechaMoment <= dateEnd;
+                })
+                task.next = new moment(dateValid).format('DD/MM/YYYY');
+                task.nextLetters = dateValid;
+                return !!dateValid;
+            });
+            return tasks.sort((a, b) => new moment(a.nextLetters) < new moment(b.nextLetters) ? -1 : 1);
+        },
         refactorTasks() {
             const listTask = this.listTask.data.map((task) => {
                 if (task.rango_fechas_task) {
@@ -163,7 +177,7 @@ var appPrincipal = new Vue({
 
             const taskForMonth = this.refactorTasks.filter((task) => {
                 return !!task.fechas.find((fecha) => {
-                    const now = new moment(fecha);
+                    const now = new moment(fecha.replace('z', ''));
                     return now >= startOfMonth && now <= endOfMonth;
                 })
             });

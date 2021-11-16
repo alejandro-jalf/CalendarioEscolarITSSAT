@@ -122,13 +122,9 @@
                 </button>
             </h5>
             <div class="container-task">
-                <div class="container-task-list">
-                    <div class="title-task">Actividad 1</div>
-                    <div class="date-task">14/11/2021</div>
-                </div>
-                <div class="container-task-list">
-                    <div class="title-task">Actividad 2</div>
-                    <div class="date-task">14/11/2021</div>
+                <div v-for="(taskNext, nextIndex) in taskProximas" class="container-task-list">
+                    <div class="title-task">{{ taskNext.descripcion_task }}</div>
+                    <div class="date-task">{{ taskNext.next }}</div>
                 </div>
             </div>
         </div>

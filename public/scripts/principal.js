@@ -25,6 +25,8 @@ var appPrincipal = new Vue({
             showedTaskNext: false,
             widthWindow: 0,
             dateNow: new moment().local(true),
+            detailsTask: {},
+            showDetails: false,
         }
     },
     computed: {
@@ -78,7 +80,7 @@ var appPrincipal = new Vue({
                     task.fechas = fechas;
                 }
                 return task;
-            })
+            });
             return listTask;
         },
         isShowed() {
@@ -119,6 +121,16 @@ var appPrincipal = new Vue({
         }
     },
     methods: {
+        formatDate(dateString) {
+            return new moment(dateString.replace('z', '')).format('DD/MM/YYYY');
+        },
+        closeDetails() {
+            this.showDetails = false;
+        },
+        setDetails(task) {
+            this.showDetails = true;
+            this.detailsTask = task;
+        },
         filterTasks(actividades) {
             const totalLetters = this.widthWindow > 1500 ?
                 80 :

@@ -122,6 +122,65 @@
     border-radius: 100%;
 }
 
+.container-details {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: #042500a2;
+    z-index: 8;
+}
+
+.card-details {
+    width: 95%;
+    max-width: 1500px;
+    height: min-content;
+    max-height: 90%;
+    margin: auto;
+    margin-top: 2%;
+}
+
+.closeDetails {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+}
+
+.card-details-body {
+    position: relative;
+    overflow-y: auto;
+}
+
+.fechas-predeterminadas {
+    display: inline-block;
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.container-box {
+    position: relative;
+    border: 1px solid #0b6200;
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.title-box {
+    position: absolute;
+    top: -13px;
+    left: 10px;
+    background: #ffffff;
+    font-weight: bold;
+}
+
+.status-task {
+    font-size: 19px;
+    font-style: italic;
+    float: right;
+}
+
 @media screen and (max-width: 991px) {
     .taskNext {
         left: -250px;

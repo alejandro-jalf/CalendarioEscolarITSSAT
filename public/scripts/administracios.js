@@ -48,7 +48,7 @@ var appAdministracion = new Vue({
         },
         masterTaskRefactor() {
             return this.masterTask.data.sort((a, b) => {
-                return new moment(a.fecha_creada_master_task.replace('z', '')) <= new moment(b.fecha_creada_master_task.replace('z', ''))
+                return new moment(a.fecha_creada_master_task.replace('z', '')) <= new moment(b.fecha_creada_master_task.replace('z', '')) ? 1 : -1;
             });
         },
     },
@@ -57,6 +57,7 @@ var appAdministracion = new Vue({
         if (!this.login) window.location.href = '../index.html';
         else {
             this.loadListTasks();
+            console.log(this.masterTask.data);
             // let widthBefore = window.innerWidth;
             // window.addEventListener('resize', (evt) => {
             //     this.setHeightDia();
@@ -95,9 +96,11 @@ var appAdministracion = new Vue({
         },
         editMasterTask(task) {
             this.masterTaskActual = task;
+            const uuid = this.masterTaskActual.UUID_master_task;
             const title = this.masterTaskActual.titulo_master_task;
             const state = this.masterTaskActual.publicada_master_task;
             
+            this.masterTaskActualEdit.UUID_master_task = uuid;
             this.masterTaskActualEdit.titulo_master_task = title;
             this.masterTaskActualEdit.publicada_master_task = state;
             this.statusMasterTask = 3;
@@ -105,7 +108,7 @@ var appAdministracion = new Vue({
         setLoading(visible = false) {
             if (visible) this.loadingCount ++;
             else this.loadingCount --;
-            if (this.loadingCount) this.loadingCount = 0;
+            if (this.loadingCount < 0) this.loadingCount = 0;
         },
         showAlert(message, title = 'Advertencia', type = 'warning') {
             this.alert.title = title;
@@ -123,7 +126,7 @@ var appAdministracion = new Vue({
             return status ? 'Publicada' : 'Privada';
         },
         formatDate(dateString, hours = false) {
-            const formatHours = hours ? ' HH:MM:SS' : '';
+            const formatHours = hours ? ' HH:MM:ss' : '';
             const dateFromat = dateString.replace('z', '');
             const datef = new moment(dateFromat);
             const formatApply = datef.format(`DD/MM/YYYY ${formatHours}`);
@@ -139,6 +142,7 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'get',
                     url,
+                    
                 })
 
                 this.setLoading(false);
@@ -175,16 +179,19 @@ var appAdministracion = new Vue({
                 'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/maestroactividades';
 
                 this.setLoading(true);
+                const dateAction = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
+                console.log(dateAction);
 
                 const response = await axios({
                     method: 'post',
                     url,
+                    
                     data: {
                         titulo_master_task: this.masterTaskActualEdit.titulo_master_task,
                         publicada_master_task: this.masterTaskActualEdit.publicada_master_task,
-                        fecha_creada_master_task: this.getDateNow().format('YYYY-MM-DDTHH:MM:SS') + '.000z',
+                        fecha_creada_master_task: dateAction,
                         creada_por_master_task: this.dataUser.data[0].UUID_user,
-                        fecha_modificada_master_task: this.getDateNow().format('YYYY-MM-DDTHH:MM:SS') + '.000z',
+                        fecha_modificada_master_task: dateAction,
                         modificada_por_master_task: this.dataUser.data[0].UUID_user,
                     },
                 })
@@ -207,6 +214,82 @@ var appAdministracion = new Vue({
                     this.showAlert('Fallo al crear maestro actividad intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
+        async updateMasterTask() {
+            if (!this.validateNewMasterTask()) return false;
+            try {
+                const url =
+                    'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/maestroactividades/' + 
+                    this.masterTaskActualEdit.UUID_master_task;
+
+                this.setLoading(true);
+
+                const response = await axios({
+                    method: 'put',
+                    url,
+                    
+                    data: {
+                        titulo_master_task: this.masterTaskActualEdit.titulo_master_task,
+                        publicada_master_task: this.masterTaskActualEdit.publicada_master_task,
+                        fecha_modificada_master_task: this.getDateNow().format('YYYY-MM-DDTHH:MM:ss.SSS') + 'z',
+                        modificada_por_master_task: this.dataUser.data[0].UUID_user,
+                    },
+                })
+
+                this.setLoading(false);
+
+                if (response.data.success) {
+                    this.showAlert(response.data.message, 'Exito', 'success');
+                    this.loadListTasks();
+                    this.listMasterTask();
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al actualizar maestro actividad', 'warning')
+                }
+            } catch (error) {
+                console.log(error, error.response);
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                else
+                    this.showAlert('Fallo al actualizar maestro actividad intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+        async updatePublicaMasterTask(task) {
+            console.log(task);
+            try {
+                const url =
+                    'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/maestroactividades/' + 
+                    task.UUID_master_task +
+                    '/publica';
+
+                this.setLoading(true);
+
+                const response = await axios({
+                    method: 'put',
+                    url,
+                    
+                    data: {
+                        publicada_master_task: !task.publicada_master_task,
+                    },
+                })
+
+                this.setLoading(false);
+
+                if (response.data.success) {
+                    this.showAlert(response.data.message, 'Exito', 'success');
+                    this.loadListTasks();
+                    this.listMasterTask();
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al actualizar maestro actividad', 'warning')
+                }
+            } catch (error) {
+                console.log(error, error.response);
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                else
+                    this.showAlert('Fallo al actualizar maestro actividad intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
         async deleteMasterTask(uuid_master_task) {
             try {
                 const url =
@@ -217,6 +300,7 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'delete',
                     url,
+                    
                 })
 
                 this.setLoading(false);

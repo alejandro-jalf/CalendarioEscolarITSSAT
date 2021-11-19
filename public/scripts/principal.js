@@ -1,3 +1,6 @@
+if (!sessionStorage.getItem('calendario_firts_session'))
+    sessionStorage.setItem('calendario_firts_session', 'SI');
+
 var appPrincipal = new Vue({
     el: '#app',
     data() {
@@ -27,6 +30,7 @@ var appPrincipal = new Vue({
             dateNow: new moment().local(true),
             detailsTask: {},
             showDetails: false,
+            firtsSession: sessionStorage.getItem('calendario_firts_session'),
         }
     },
     computed: {
@@ -98,7 +102,10 @@ var appPrincipal = new Vue({
         this.widthWindow = window.innerWidth;
         if (!this.login) window.location.href = '../index.html';
         else {
-            if (this.listTask.data.length === 0) this.loadTask();
+            if (this.firtsSession === 'SI') {
+                this.loadTask();
+                sessionStorage.setItem('calendario_firts_session', 'NO');
+            }
             this.changeMonth();
             let widthBefore = window.innerWidth;
             window.addEventListener('resize', (evt) => {

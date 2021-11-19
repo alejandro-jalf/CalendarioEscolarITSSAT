@@ -25,7 +25,7 @@ router.route("/v1/maestroactividades").post(async (req, res) => {
     res.status(status).json(response);
 });
 
-router.route("/v1/maestroactividades/:id_maestro").post(async (req, res) => {
+router.route("/v1/maestroactividades/:id_maestro").put(async (req, res) => {
     const bodyMaestro = req.body;
     const { id_maestro } = req.params;
     const { status, response } = await updateDataMasterTask(id_maestro, bodyMaestro);

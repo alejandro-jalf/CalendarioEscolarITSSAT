@@ -64,13 +64,13 @@ const servicesMaestroActividades =  (() => {
 
         let uuid = createUUID();
         
-        let existArea = await verifyExistId(uuid);
-        if (existArea.status) return existArea;
-        if (existArea) {
+        let existMaster = await verifyExistId(uuid);
+        if (existMaster.status) return existMaster;
+        if (existMaster) {
             uuid = createUUID();
-            existArea = await verifyExistId(uuid);
-            if (existArea.status) return existArea;
-            if (existArea) return createResponse(
+            existMaster = await verifyExistId(uuid);
+            if (existMaster.status) return existMaster;
+            if (existMaster) return createResponse(
                 200,
                 createContentError('Error al crear el uuid del Maestro actividades, intentelo de nuevo')
             );
@@ -88,11 +88,11 @@ const servicesMaestroActividades =  (() => {
         const resultValidate = validateUpdateMaestro(bodyMaestro);
         if (!resultValidate.success) return createResponse(400, resultValidate);
 
-        const existArea = await getMaestroActividadById(id_maestro);
-        if (existArea.message === "Error al obtener la lista de actividades")
-            return createResponse(400, existArea);
+        const existMaster = await getMaestroActividadById(id_maestro);
+        if (existMaster.message === "Error al obtener la lista de actividades")
+            return createResponse(400, existMaster);
 
-        if (!existArea.success) return createResponse(404, existArea);
+        if (!existMaster.success) return createResponse(404, existMaster);
 
         const response = await updateMaestro(id_maestro, bodyMaestro);
         if(!response.success) return createResponse(400, response);
@@ -104,13 +104,13 @@ const servicesMaestroActividades =  (() => {
         const resultValidate = validateUpdateActivoMaestro(bodyMaestro);
         if (!resultValidate.success) return createResponse(400, resultValidate);
 
-        const existArea = await getMaestroActividadById(id_maestro);
-        if (existArea.message === "Error al obtener la lista de actividades")
-            return createResponse(400, existArea);
+        const existMaster = await getMaestroActividadById(id_maestro);
+        if (existMaster.message === "Error al obtener la lista de actividades")
+            return createResponse(400, existMaster);
 
-        if (!existArea.success) return createResponse(404, existArea);
+        if (!existMaster.success) return createResponse(404, existMaster);
         
-        if (existArea.data[0].publicada_master_task === bodyMaestro.publicada_master_task) 
+        if (existMaster.data.publicada_master_task === bodyMaestro.publicada_master_task) 
             return createResponse(
                 200,
                 createContentError("El estatus de publica de maestro actividades es igual", {})
@@ -118,16 +118,16 @@ const servicesMaestroActividades =  (() => {
 
         const response = await updateMaestro(id_maestro, bodyMaestro);
         if(!response.success) return createResponse(400, response);
-        
+
         return createResponse(200, response);
     }
 
     const deleteOldMasterTask = async (id_maestro) => {
-        const existArea = await getMaestroActividadById(id_maestro);
-        if (existArea.message === "Error al obtener la lista de actividades")
-            return createResponse(400, existArea);
+        const existMaster = await getMaestroActividadById(id_maestro);
+        if (existMaster.message === "Error al obtener la lista de actividades")
+            return createResponse(400, existMaster);
         
-        if (!existArea.success) return createResponse(404, existArea);
+        if (!existMaster.success) return createResponse(404, existMaster);
 
         const existsRegisterTask = await getActividadByIdMaestro(id_maestro);
         if (existsRegisterTask.message === "Error al obtener la actividad por id de Maestro Actividades")
@@ -135,13 +135,13 @@ const servicesMaestroActividades =  (() => {
         if (existsRegisterTask.success)
             return createResponse(
                 200,
-                createContentError('No se puede eliminar el area de forma permanente, debido a que tiene registros en actividades')
+                createContentError('No se puede eliminar la lista de actividades de forma permanente, debido a que tiene registros en actividades')
             );
         
         const responseDelete = await deleteMaestro(id_maestro);
         if(!responseDelete.success) return createResponse(400, responseDelete);
         
-        responseDelete.message = 'El area ha sido eliminada de forma permanente';
+        responseDelete.message = 'La lista de actividades ha sido eliminada de forma permanente';
         return createResponse(200, responseDelete);
     }
 

@@ -7,6 +7,7 @@ const {
     updateActividadStatus,
     deleteOldActividad,
     getAllTaskWithoutInfo,
+    getAllTaskEnabled,
 } = require("../services");
 
 router.route("/v1/actividades").get(async (req, res) => {
@@ -16,6 +17,11 @@ router.route("/v1/actividades").get(async (req, res) => {
 
 router.route("/v1/actividades/sinrelacion").get(async (req, res) => {
     const { status, response } = await getAllTaskWithoutInfo();
+    res.status(status).json(response);
+});
+
+router.route("/v1/actividades/activas").get(async (req, res) => {
+    const { status, response } = await getAllTaskEnabled();
     res.status(status).json(response);
 });
 

@@ -274,7 +274,7 @@ var appPrincipal = new Vue({
         async loadTask() {
             try {
                 const url =
-                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/actividades';
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/actividades/activas';
 
                 this.loading = true;
 

@@ -116,16 +116,28 @@
         <div class="container-xxl">
             <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="listtasks-tab" data-bs-toggle="tab" data-bs-target="#listtasks" type="button" role="tab" aria-controls="listtasks" aria-selected="true">Lista de actividades</button>
+                    <button class="nav-link active" id="listtasks-tab" data-bs-toggle="tab" data-bs-target="#listtasks" type="button" role="tab" aria-controls="listtasks" aria-selected="true">
+                        <span class="icofont-tasks-alt"></span>
+                        Lista de actividades
+                    </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab" aria-controls="tasks" aria-selected="false">Actividades</button>
+                    <button class="nav-link" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab" aria-controls="tasks" aria-selected="false">
+                        <span class="icofont-sub-listing"></span>
+                        Actividades
+                    </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="areas-tab" data-bs-toggle="tab" data-bs-target="#areas" type="button" role="tab" aria-controls="areas" aria-selected="false">Areas</button>
+                    <button class="nav-link" id="areas-tab" data-bs-toggle="tab" data-bs-target="#areas" type="button" role="tab" aria-controls="areas" aria-selected="false">
+                        <span class="icofont-ui-clip-board"></span>
+                        Areas
+                    </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="false">Usuarios</button>
+                    <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="false">
+                        <span class="icofont-ui-user-group"></span>
+                        Usuarios
+                    </button>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -153,9 +165,9 @@
                                 <tr v-for="(master, indexMaster) in masterTaskRefactor" :key="indexMaster">
                                     <td>{{ master.titulo_master_task }}</td>
                                     <td>
-                                        <div class="form-check form-switch" @click="updatePublicaMasterTask(master)">
-                                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" :checked="master.publicada_master_task">
-                                            <label class="form-check-label" for="flexSwitchCheckChecked">{{ refactorStatus(master.publicada_master_task) }}</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" :id="'publicaMaster' + indexMaster" :checked="master.publicada_master_task" @click="updatePublicaMasterTask(master)">
+                                            <label class="form-check-label" :for="'publicaMaster' + indexMaster">{{ refactorStatus(master.publicada_master_task) }}</label>
                                         </div>
                                     </td>
                                     <td>{{ formatDate(master.fecha_creada_master_task, true) }}</td>
@@ -190,7 +202,7 @@
                                 <input type="text" v-model="masterTaskActualEdit.titulo_master_task" class="form-control" id="exampleFormControlInput1" placeholder="Ingrese titulo de lista">
                             </div>
                             <div class="form-check form-switch d-inline-block">
-                                <input class="form-check-input" type="checkbox" role="switch" id="checkPublicaNew" :checked="masterTaskActualEdit.publicada_master_task">
+                                <input class="form-check-input" v-model="masterTaskActualEdit.publicada_master_task" type="checkbox" role="switch" id="checkPublicaNew">
                                 <label class="form-check-label" for="checkPublicaNew">Publica</label>
                             </div>
                             <button class="btn btn-info text-white p-0 fs-5 px-2 ms-2" type="button">

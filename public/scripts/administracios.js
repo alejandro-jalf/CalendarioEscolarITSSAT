@@ -1,3 +1,6 @@
+if (!sessionStorage.getItem('calendario_firts_session'))
+    sessionStorage.setItem('calendario_firts_session', 'SI')
+
 var appAdministracion = new Vue({
     el: '#app',
     data() {
@@ -22,6 +25,7 @@ var appAdministracion = new Vue({
             statusMasterTask: 0,
             masterTaskActual: {},
             masterTaskActualEdit: {},
+            firtsSession: sessionStorage.getItem('calendario_firts_session'),
         }
     },
     computed: {
@@ -56,26 +60,11 @@ var appAdministracion = new Vue({
         this.widthWindow = window.innerWidth;
         if (!this.login) window.location.href = '../index.html';
         else {
-            this.loadListTasks();
-            console.log(this.masterTask.data);
-            // let widthBefore = window.innerWidth;
-            // window.addEventListener('resize', (evt) => {
-            //     this.setHeightDia();
-            //     this.widthWindow = window.innerWidth;
-            //     if (
-            //         (this.widthWindow < 992 && widthBefore >= 992) ||
-            //         (this.widthWindow >= 992 && widthBefore < 992)
-            //     ) {
-            //         if (this.widthWindow < 992) {
-            //             this.$refs.taskNext.style.left = '-250px';
-            //             this.showedTaskNext = false;
-            //         } else {
-            //             this.$refs.taskNext.style.left = '0px';
-            //             this.showedTaskNext = true;
-            //         }
-            //     }
-            //     widthBefore = window.innerWidth;
-            // });
+            console.log(this.firtsSession);
+            if (this.firtsSession === 'SI') {
+                this.loadListTasks();
+                sessionStorage.setItem('calendario_firts_session', 'NO')
+            }
         }
     },
     methods: {
@@ -180,7 +169,6 @@ var appAdministracion = new Vue({
 
                 this.setLoading(true);
                 const dateAction = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
-                console.log(dateAction);
 
                 const response = await axios({
                     method: 'post',
@@ -230,7 +218,7 @@ var appAdministracion = new Vue({
                     data: {
                         titulo_master_task: this.masterTaskActualEdit.titulo_master_task,
                         publicada_master_task: this.masterTaskActualEdit.publicada_master_task,
-                        fecha_modificada_master_task: this.getDateNow().format('YYYY-MM-DDTHH:MM:ss.SSS') + 'z',
+                        fecha_modificada_master_task: this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z',
                         modificada_por_master_task: this.dataUser.data[0].UUID_user,
                     },
                 })
@@ -254,7 +242,6 @@ var appAdministracion = new Vue({
             }
         },
         async updatePublicaMasterTask(task) {
-            console.log(task);
             try {
                 const url =
                     'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/maestroactividades/' + 
@@ -262,13 +249,14 @@ var appAdministracion = new Vue({
                     '/publica';
 
                 this.setLoading(true);
+                const newPublic = !task.publicada_master_task;
 
                 const response = await axios({
                     method: 'put',
                     url,
                     
                     data: {
-                        publicada_master_task: !task.publicada_master_task,
+                        publicada_master_task: newPublic,
                     },
                 })
 
@@ -277,7 +265,6 @@ var appAdministracion = new Vue({
                 if (response.data.success) {
                     this.showAlert(response.data.message, 'Exito', 'success');
                     this.loadListTasks();
-                    this.listMasterTask();
                 } else {
                     this.showAlert(response.data.message, 'Fallo al actualizar maestro actividad', 'warning')
                 }

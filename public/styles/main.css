@@ -109,3 +109,43 @@ body{
     padding: 10px;
     box-shadow: -6px 1px 10px 1px #000;
 }
+
+.float-button {
+    position: fixed;
+    bottom: 15pt;
+    right: 15pt;
+    z-index: 7;
+    width: 45pt;
+    height: 45pt;
+    background: rgb(1, 112, 16);
+    color: #fff;
+    font-size: 25pt;
+    border-radius: 100%;
+    padding: 10pt 0pt 0pt 14px;
+    cursor: pointer;
+    box-shadow: 1px 3px 5px 1px rgb(112, 112, 112);
+    transition-property: all;
+    transition-duration: 0.3s;
+}
+
+.float-btn-load {
+    bottom: 70pt;
+    right: 20pt;
+    width: 33pt;
+    height: 33pt;
+    font-size: 18pt;
+    padding: 8pt 0pt 0pt 7pt;
+    background: rgb(2, 138, 21);
+    opacity: 1.0;
+}
+
+.float-btn-second {
+    bottom: 110pt;
+    right: 20pt;
+    width: 33pt;
+    height: 33pt;
+    font-size: 18pt;
+    padding: 8pt 0pt 0pt 7pt;
+    background: rgb(0, 55, 138);
+    opacity: 1.0;
+}

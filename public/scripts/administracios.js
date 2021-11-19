@@ -14,6 +14,7 @@ var appAdministracion = new Vue({
             masterTask: localStorage.getItem('calendario_master_task') ?
                 JSON.parse(localStorage.getItem('calendario_master_task')) :
                 { data: [] },
+            showOptionsMaster: false,
             alert: {
                 title: 'Advertencia',
                 message: 'Any massage',
@@ -29,6 +30,12 @@ var appAdministracion = new Vue({
         }
     },
     computed: {
+        styleFloatMaster() {
+            return this.showOptionsMaster ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
+        },
+        iconMasterTaskFloat() {
+            return this.showOptionsMaster ? 'icofont-close-circled' : 'icofont-tasks-alt';
+        },
         descriptionActionMasterTask() {
             return this.statusMasterTask === 1 ? 'Creando nueva lista maestro' : 'Editando lista maestro';
         },
@@ -68,6 +75,10 @@ var appAdministracion = new Vue({
         }
     },
     methods: {
+        showOptionsMasterClick() {
+            this.showOptionsMaster = !this.showOptionsMaster;
+            console.log('Entra');
+        },
         getDateNow() {
             return new moment().local(true)
         },
@@ -75,6 +86,7 @@ var appAdministracion = new Vue({
             this.statusMasterTask = 0;
         },
         newMasterTask() {
+            this.showOptionsMaster = false;
             this.statusMasterTask = 1;
             this.masterTaskActualEdit.titulo_master_task = '';
             this.masterTaskActualEdit.publicada_master_task = false;
@@ -123,6 +135,8 @@ var appAdministracion = new Vue({
         },
         async loadListTasks() {
             try {
+                this.showOptionsMaster = false;
+                this.listMasterTask();
                 const url =
                 'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/maestroactividades';
 
@@ -189,7 +203,6 @@ var appAdministracion = new Vue({
                 if (response.data.success) {
                     this.showAlert(response.data.message, 'Exito', 'success');
                     this.loadListTasks();
-                    this.listMasterTask();
                 } else {
                     this.showAlert(response.data.message, 'Fallo al crear maestro actividad', 'warning')
                 }
@@ -228,7 +241,6 @@ var appAdministracion = new Vue({
                 if (response.data.success) {
                     this.showAlert(response.data.message, 'Exito', 'success');
                     this.loadListTasks();
-                    this.listMasterTask();
                 } else {
                     this.showAlert(response.data.message, 'Fallo al actualizar maestro actividad', 'warning')
                 }

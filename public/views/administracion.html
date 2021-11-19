@@ -143,14 +143,6 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane mt-3 fade show active" id="listtasks" role="tabpanel" aria-labelledby="listtasks-tab">
                     <div v-if="statusMasterTask === 0">
-                        <button class="btn btn-success mb-2" type="button" @click="newMasterTask">
-                            <span class="icofont-plus-circle fs-5"></span>
-                            Crear nueva lista
-                        </button>
-                        <button class="btn btn-info mb-2 text-white" type="button" @click="loadListTasks()">
-                            <span class="icofont-ui-reply fs-5"></span>
-                            Refrescar
-                        </button>
                         <table class="table table-striped table-bordered ">
                             <thead class="thead-dark">
                                 <tr class="table-dark">
@@ -274,6 +266,10 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <span class="icofont-refresh float-button float-btn-second"  :style="styleFloatMaster" @click="loadListTasks"></span>
+                    <span class="icofont-ui-add float-button float-btn-load" :style="styleFloatMaster" @click="newMasterTask"></span>
+                    <span class="float-button" :class="iconMasterTaskFloat" @click="showOptionsMasterClick"></span>
                 </div>
                 <div class="tab-pane mt-2 fade" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">Actividades</div>
                 <div class="tab-pane mt-2 fade" id="areas" role="tabpanel" aria-labelledby="areas-tab">Areas</div>

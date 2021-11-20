@@ -11,10 +11,6 @@ var appAdministracion = new Vue({
             dataUser: localStorage.getItem('calendario_data_user') ?
                 JSON.parse(localStorage.getItem('calendario_data_user')) :
                 { data: {}, empty: true },
-            masterTask: localStorage.getItem('calendario_master_task') ?
-                JSON.parse(localStorage.getItem('calendario_master_task')) :
-                { data: [] },
-            showOptionsMaster: false,
             alert: {
                 title: 'Advertencia',
                 message: 'Any massage',
@@ -23,25 +19,25 @@ var appAdministracion = new Vue({
             },
             loadingCount: 0,
             widthWindow: 0,
+            firtsSession: sessionStorage.getItem('calendario_firts_session'),
+            // Para maestro actividades
+            masterTask: localStorage.getItem('calendario_master_task') ?
+                JSON.parse(localStorage.getItem('calendario_master_task')) :
+                { data: [] },
+            showOptionsMaster: false,
             statusMasterTask: 0,
             masterTaskActual: {},
             masterTaskActualEdit: {},
-            firtsSession: sessionStorage.getItem('calendario_firts_session'),
+
+            // Para actividades
+            idMasterSelected: null,
+            showOptionsTasks: false,
+            listTaskByIdMaster: localStorage.getItem('calendario_task_id_master') ?
+                JSON.parse(localStorage.getItem('calendario_task_id_master')) :
+                { data: [] },
         }
     },
     computed: {
-        styleFloatMaster() {
-            return this.showOptionsMaster ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
-        },
-        iconMasterTaskFloat() {
-            return this.showOptionsMaster ? 'icofont-close-circled' : 'icofont-tasks-alt';
-        },
-        descriptionActionMasterTask() {
-            return this.statusMasterTask === 1 ? 'Creando nueva lista maestro' : 'Editando lista maestro';
-        },
-        createEditMasterTask() {
-            return this.statusMasterTask === 1 || this.statusMasterTask === 3
-        },
         loading() {
             return this.loadingCount > 0
         },
@@ -57,10 +53,32 @@ var appAdministracion = new Vue({
             if (this.alert.type === 'dark') return 'bg-dark';
             return 'bg-warning';
         },
+
+        // Para maestro actividades
+        styleFloatMaster() {
+            return this.showOptionsMaster ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
+        },
+        iconMasterTaskFloat() {
+            return this.showOptionsMaster ? 'icofont-close' : 'icofont-tasks-alt';
+        },
+        descriptionActionMasterTask() {
+            return this.statusMasterTask === 1 ? 'Creando nueva lista maestro' : 'Editando lista maestro';
+        },
+        createEditMasterTask() {
+            return this.statusMasterTask === 1 || this.statusMasterTask === 3
+        },
         masterTaskRefactor() {
             return this.masterTask.data.sort((a, b) => {
                 return new moment(a.fecha_creada_master_task.replace('z', '')) <= new moment(b.fecha_creada_master_task.replace('z', '')) ? 1 : -1;
             });
+        },
+
+        // Para actividades
+        iconTasksFloat() {
+            return this.showOptionsTasks ? 'icofont-close-circled' : 'icofont-sub-listing';
+        },
+        styleFloatTasks() {
+            return this.showOptionsTasks ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
         },
     },
     mounted() {
@@ -75,13 +93,36 @@ var appAdministracion = new Vue({
         }
     },
     methods: {
-        showOptionsMasterClick() {
-            this.showOptionsMaster = !this.showOptionsMaster;
-            console.log('Entra');
+        formatDate(dateString, hours = false) {
+            const formatHours = hours ? ' HH:MM:ss' : '';
+            const dateFromat = dateString.replace('z', '');
+            const datef = new moment(dateFromat);
+            const formatApply = datef.format(`DD/MM/YYYY ${formatHours}`);
+            return formatApply;
+        },
+        closeSession() {
+            this.login = false;
+            localStorage.setItem('calendario_p_login', false);
+            window.location.href = '../index.html';
         },
         getDateNow() {
             return new moment().local(true)
         },
+        setLoading(visible = false) {
+            if (visible) this.loadingCount ++;
+            else this.loadingCount --;
+            if (this.loadingCount < 0) this.loadingCount = 0;
+        },
+        showAlert(message, title = 'Advertencia', type = 'warning') {
+            this.alert.title = title;
+            this.alert.message = message;
+            this.alert.type = type;
+
+            this.$refs.btnAlert.click()
+        },
+
+        // Para maestro actividades
+        showOptionsMasterClick() { this.showOptionsMaster = !this.showOptionsMaster; },
         listMasterTask() {
             this.statusMasterTask = 0;
         },
@@ -106,32 +147,8 @@ var appAdministracion = new Vue({
             this.masterTaskActualEdit.publicada_master_task = state;
             this.statusMasterTask = 3;
         },
-        setLoading(visible = false) {
-            if (visible) this.loadingCount ++;
-            else this.loadingCount --;
-            if (this.loadingCount < 0) this.loadingCount = 0;
-        },
-        showAlert(message, title = 'Advertencia', type = 'warning') {
-            this.alert.title = title;
-            this.alert.message = message;
-            this.alert.type = type;
-
-            this.$refs.btnAlert.click()
-        },
-        closeSession() {
-            this.login = false;
-            localStorage.setItem('calendario_p_login', false);
-            window.location.href = '../index.html';
-        },
         refactorStatus(status) {
             return status ? 'Publicada' : 'Privada';
-        },
-        formatDate(dateString, hours = false) {
-            const formatHours = hours ? ' HH:MM:ss' : '';
-            const dateFromat = dateString.replace('z', '');
-            const datef = new moment(dateFromat);
-            const formatApply = datef.format(`DD/MM/YYYY ${formatHours}`);
-            return formatApply;
         },
         async loadListTasks() {
             try {
@@ -145,7 +162,6 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'get',
                     url,
-                    
                 })
 
                 this.setLoading(false);
@@ -187,7 +203,6 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'post',
                     url,
-                    
                     data: {
                         titulo_master_task: this.masterTaskActualEdit.titulo_master_task,
                         publicada_master_task: this.masterTaskActualEdit.publicada_master_task,
@@ -227,7 +242,6 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'put',
                     url,
-                    
                     data: {
                         titulo_master_task: this.masterTaskActualEdit.titulo_master_task,
                         publicada_master_task: this.masterTaskActualEdit.publicada_master_task,
@@ -266,7 +280,6 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'put',
                     url,
-                    
                     data: {
                         publicada_master_task: newPublic,
                     },
@@ -299,7 +312,6 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'delete',
                     url,
-                    
                 })
 
                 this.setLoading(false);
@@ -317,6 +329,51 @@ var appAdministracion = new Vue({
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                 else
                     this.showAlert('Fallo al eliminar maestro actividad intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+        
+        // Para actividades
+        showOptionsTasksClick() { this.showOptionsTasks = !this.showOptionsTasks;},
+        searchListTaskByIdMaster() {
+            if(this.idMasterSelected === null)
+                this.showAlert('Necesita seleccionar una lista de actividades');
+            else
+                this.loadTasksByIdMaster(this.idMasterSelected)
+        },
+        async loadTasksByIdMaster(idMasterSelected) {
+            try {
+                this.showOptionsMaster = false;
+                this.listMasterTask();
+                const url =
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/actividades/maestroactividades/' +
+                idMasterSelected;
+
+                this.setLoading(true);
+
+                const response = await axios({
+                    method: 'get',
+                    url,
+                })
+
+                this.setLoading(false);
+
+                console.log(response);
+                if (response.data.success) {
+                    localStorage.setItem(
+                        'calendario_task_id_master',
+                        JSON.stringify(response.data)
+                    )
+                    this.listTaskByIdMaster = response.data;
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al cargar las actividades', 'warning')
+                }
+            } catch (error) {
+                console.log(error, error.response);
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                else
+                    this.showAlert('Fallo cargar actividades intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
     },

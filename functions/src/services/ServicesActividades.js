@@ -5,6 +5,7 @@ const {
     getAllUsers,
     getAllActividades,
     getActividadById,
+    getActividadByIdMaestro,
     createActividad,
     updateActividad,
     deleteActividad,
@@ -76,6 +77,62 @@ const servicesActividades =  (() => {
             !response[3].success
         )
             return createResponse(400, createContentError('Error al obtener las actividades'));
+
+        const dataRefactor = response[0].data.map((actividad) => {
+            let masterFinded = response[1].data.find((master) => actividad.id_master_task === master.UUID_master_task)
+            if (masterFinded) actividad.id_master_task = {
+                uuid: masterFinded.UUID_master_task,
+                titulo: masterFinded.titulo_master_task,
+                publica: masterFinded.publicada_master_task
+            }
+            let areaFinded = response[2].data.find((areas) => actividad.para_area_task === areas.UUID_area)
+            if (areaFinded) actividad.para_area_task = {
+                uuid: areaFinded.UUID_area,
+                nombre: areaFinded.nombre_area
+            }
+            let userFinded = response[3].data.find((user) => actividad.creada_por_task === user.UUID_user)
+            if (userFinded) actividad.creada_por_task = {
+                uuid: userFinded.UUID_user,
+                correo: userFinded.correo_user
+            }
+            userFinded = response[3].data.find((user) => actividad.modificada_por_task === user.UUID_user)
+            if (userFinded) actividad.modificada_por_task = {
+                uuid: userFinded.UUID_user,
+                correo: userFinded.correo_user
+            }
+            return actividad
+        })
+
+        const dataFilter = dataRefactor.filter((task) => task.id_master_task.publica && task.estatus_task.trim().toUpperCase() !== 'CANCELADA');
+        response[0].data = dataFilter.sort((a, b) => a.UUID_area > b.UUID_area ? -1 : 1);
+        return createResponse(200, response[0]);
+    }
+
+    const getAllTaskByUuidMaster = async (uuid_master_task) => {
+        const arrayFunctions = [
+            {
+                fctn: getActividadByIdMaestro,
+                value: uuid_master_task,
+            },
+            { fctn: getAllMaestroActividades },
+            { fctn: getAllAreas },
+            { fctn: getAllUsers }
+        ]
+        const arrayResponse = arrayFunctions.map(async (functionExe) => {
+            return !functionExe.value ? await functionExe.fctn() : await functionExe.fctn(functionExe.value);
+        });
+        const response = await Promise.all(arrayResponse);
+
+        if (
+            !response[0].success ||
+            !response[1].success ||
+            !response[2].success ||
+            !response[3].success
+        ) {
+            if (!response[0].success) return createResponse(200, response[0]);
+            const failedFinded = response.find((res) => !res.success)
+            return createResponse(400, failedFinded);
+        }
 
         const dataRefactor = response[0].data.map((actividad) => {
             let masterFinded = response[1].data.find((master) => actividad.id_master_task === master.UUID_master_task)
@@ -202,6 +259,7 @@ const servicesActividades =  (() => {
     }
 
     return {
+        getAllTaskByUuidMaster,
         getAllTaskWithoutInfo,
         getAllTaskEnabled,
         getAllTask,

@@ -54,12 +54,15 @@ const modelActividades = (() => {
             const documentMaster =
                 await collectionActividades.where('id_master_task', '==', idMaestro).get();
             if (documentMaster.empty)
-                return createContentError('Actividad por Maestro actividad no fue encontrada');
+                return createContentError('Actividades por Maestro actividad no fueron encontrada');
+            
+            const data = [];
+            documentMaster.forEach(doc => { data.push(doc.data()); });
 
-            return createContentAssert("Actividad por Maestro actividad localizada");
+            return createContentAssert("Actividades por Maestro actividad localizadas", data);
         } catch (error) {
             console.log(error);
-            return createContentError("Error al obtener la actividad por id de Maestro Actividades", error);
+            return createContentError("Error al obtener las actividades por id de Maestro Actividades", error);
         }
     }
     

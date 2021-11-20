@@ -8,6 +8,7 @@ const {
     deleteOldActividad,
     getAllTaskWithoutInfo,
     getAllTaskEnabled,
+    getAllTaskByUuidMaster,
 } = require("../services");
 
 router.route("/v1/actividades").get(async (req, res) => {
@@ -28,6 +29,12 @@ router.route("/v1/actividades/activas").get(async (req, res) => {
 router.route("/v1/actividades/:id_actividad").get(async (req, res) => {
     const { id_actividad } = req.params
     const { status, response } = await getTaskById(id_actividad);
+    res.status(status).json(response);
+});
+
+router.route("/v1/actividades/maestroactividades/:id_maestro").get(async (req, res) => {
+    const { id_maestro } = req.params
+    const { status, response } = await getAllTaskByUuidMaster(id_maestro);
     res.status(status).json(response);
 });
 

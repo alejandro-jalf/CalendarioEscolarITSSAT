@@ -1,5 +1,7 @@
 if (!sessionStorage.getItem('calendario_firts_session'))
     sessionStorage.setItem('calendario_firts_session', 'SI')
+if (!localStorage.getItem('calendario_id_master_selected'))
+    localStorage.setItem('calendario_id_master_selected', '')
 
 var appAdministracion = new Vue({
     el: '#app',
@@ -31,10 +33,17 @@ var appAdministracion = new Vue({
 
             // Para actividades
             idMasterSelected: null,
+            idMasterTaskSearch: localStorage.getItem('calendario_id_master_selected'),
             showOptionsTasks: false,
             listTaskByIdMaster: localStorage.getItem('calendario_task_id_master') ?
                 JSON.parse(localStorage.getItem('calendario_task_id_master')) :
                 { data: [] },
+            arrayYearTasks: [],
+            taskNew: {
+                idMaster: null,
+                year: null,
+                rangoFechas: true,
+            },
         }
     },
     computed: {
@@ -80,6 +89,14 @@ var appAdministracion = new Vue({
         styleFloatTasks() {
             return this.showOptionsTasks ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
         },
+        listTaskByIdMasterRefactor() {
+            return this.listTaskByIdMaster.data;
+        },
+        nameMasterTask() {
+            return (this.listTaskByIdMaster.data.length > 0) ?
+                'Lista maestro: ' + this.listTaskByIdMaster.data[0].id_master_task.titulo :
+                'Lista vacia'
+        },
     },
     mounted() {
         this.widthWindow = window.innerWidth;
@@ -90,6 +107,9 @@ var appAdministracion = new Vue({
                 this.loadListTasks();
                 sessionStorage.setItem('calendario_firts_session', 'NO')
             }
+            const dateActual = this.getDateNow();
+            const yearInitial = parseInt(dateActual.format('YYYY'));
+            for (let index = 0; index < 5; index++) this.arrayYearTasks.push(yearInitial + index);
         }
     },
     methods: {
@@ -340,10 +360,14 @@ var appAdministracion = new Vue({
             else
                 this.loadTasksByIdMaster(this.idMasterSelected)
         },
+        reloadListTaskByIdMaster() {
+            this.showOptionsTasks = false;
+            if (this.idMasterTaskSearch.trim() !== '')
+                this.loadTasksByIdMaster(this.idMasterTaskSearch);
+        },
         async loadTasksByIdMaster(idMasterSelected) {
             try {
-                this.showOptionsMaster = false;
-                this.listMasterTask();
+                this.showOptionsTasks = false;
                 const url =
                 'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/actividades/maestroactividades/' +
                 idMasterSelected;
@@ -357,13 +381,14 @@ var appAdministracion = new Vue({
 
                 this.setLoading(false);
 
-                console.log(response);
                 if (response.data.success) {
                     localStorage.setItem(
                         'calendario_task_id_master',
                         JSON.stringify(response.data)
                     )
                     this.listTaskByIdMaster = response.data;
+                    this.idMasterTaskSearch = idMasterSelected;
+                    localStorage.setItem('calendario_id_master_selected', idMasterSelected);
                 } else {
                     this.showAlert(response.data.message, 'Fallo al cargar las actividades', 'warning')
                 }
@@ -375,6 +400,9 @@ var appAdministracion = new Vue({
                 else
                     this.showAlert('Fallo cargar actividades intentelo mas tarde', 'Error inesperado', 'danger');
             }
+        },
+        newTask() {
+            this.showOptionsTasks = false;
         },
     },
 })

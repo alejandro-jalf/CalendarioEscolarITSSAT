@@ -110,6 +110,10 @@ body{
     box-shadow: -6px 1px 10px 1px #000;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .float-button {
     position: fixed;
     bottom: 15pt;

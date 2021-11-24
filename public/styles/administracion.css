@@ -1,3 +1,23 @@
+.container-box {
+    position: relative;
+    border: 1px solid #0b6200;
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.title-box {
+    position: absolute;
+    top: -13px;
+    left: 10px;
+    background: #ffffff;
+    font-weight: bold;
+}
+
+.select-day {
+    width: min-content;
+}
+
 @media screen and (max-width: 700px) {
     .col-dates {
         width: 100%;

@@ -59,8 +59,8 @@ router.route("/v1/actividades/:id_actividad/status").put(async (req, res) => {
 });
 
 router.route("/v1/actividades/:id_actividad").delete(async (req, res) => {
-    const { id_area } = req.params
-    const { status, response } = await deleteOldActividad(id_area);
+    const { id_actividad } = req.params
+    const { status, response } = await deleteOldActividad(id_actividad);
     res.status(status).json(response);
 });
 

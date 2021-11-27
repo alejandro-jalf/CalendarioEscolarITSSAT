@@ -179,7 +179,17 @@
                         <td>{{ task.descripcion_task }}</td>
                         <td>{{ task.estatus_task }}</td>
                         <td>{{ task.observaciones_task }}</td>
-                        <td></td>
+                        <td>
+                            <button class="btn btn-primary mb-1" type="button" @click="dontAviable">
+                                <span class="icofont-eye-alt"></span>
+                            </button>
+                            <button class="btn btn-warning mb-1" type="button" @click="dontAviable">
+                                <span class="icofont-pencil-alt-2"></span>
+                            </button>
+                            <button class="btn btn-danger mb-1" type="button" @click="deleteTask(task.UUID_task)">
+                                <span class="icofont-ui-delete"></span>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -211,13 +221,13 @@
                                     <div class="col col-dates">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Inicio</span>
-                                            <input type="date" class="form-control" placeholder="FechaInit" aria-label="FechaInit" aria-describedby="basic-addon1">
+                                            <input v-model="taskNew.dateInit" type="date" class="form-control" placeholder="FechaInit" aria-label="FechaInit" aria-describedby="basic-addon1">
                                         </div>
                                     </div>
                                     <div class="col col-dates">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Termino</span>
-                                            <input type="date" class="form-control" placeholder="FechaInit" aria-label="FechaInit" aria-describedby="basic-addon1">
+                                            <input v-model="taskNew.dateEnd" type="date" class="form-control" placeholder="FechaInit" aria-label="FechaInit" aria-describedby="basic-addon1">
                                         </div>
                                     </div>
                                 </div>
@@ -248,7 +258,7 @@
                                 </span>
                             </div>
                         </div>
-                    </div>masterTaskRefacto
+                    </div>
                     
                     <div class="input-group mb-2">
                         <span class="input-group-text">Area</span>
@@ -259,26 +269,31 @@
                     </div>
                     <div class="mb-2">
                         <label for="exampleFormControlTextarea1" class="form-label">Descripcion de la actividad:</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Titulo o descripcion de la actividad"></textarea>
+                        <textarea v-model="taskNew.titulo" class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Titulo o descripcion de la actividad"></textarea>
                     </div>
                     <div class="mb-2">
                         <label for="exampleFormControlTextarea1" class="form-label">Observaciones:</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Observaciones extras de la actividad"></textarea>
+                        <textarea v-model="taskNew.observaciones" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Observaciones extras de la actividad"></textarea>
                     </div>
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Actividad activa</label>
+                        <input v-model="taskNew.publica" class="form-check-input" type="checkbox" role="switch" id="checkPublicaTask">
+                        <label class="form-check-label" for="checkPublicaTask">{{ publicTask }}</label>
                     </div>
 
                     <div>
-                        <button class="btn btn-primary float-end" type="button">Agregar</button>
+                        <button class="btn btn-primary float-end" type="button" @click="createNewTask()">
+                            <span class="icofont-plus-circle"></span>
+                            Agregar
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <span class="icofont-refresh float-button float-btn-second"  :style="styleFloatTasks" @click="reloadListTaskByIdMaster"></span>
-            <span class="icofont-ui-add float-button float-btn-load" :style="styleFloatTasks" @click="newTask"></span>
-            <span class="float-button" :class="iconTasksFloat" @click="showOptionsTasksClick"></span>
+            <div style="transition-property: all; transition-duration: 1s;" :style="styleFloat">
+                <span class="icofont-refresh float-button float-btn-second"  :style="styleFloatTasks" @click="reloadListTaskByIdMaster"></span>
+                <span class="icofont-ui-add float-button float-btn-load" :style="styleFloatTasks" @click="newTask"></span>
+                <span class="float-button" :class="iconTasksFloat" @click="showOptionsTasksClick"></span>
+            </div>
         </div>
 
         <button ref="btnAlert" type="button" class="btn btn-primary invisible" data-bs-toggle="modal" data-bs-target="#modalAlert">

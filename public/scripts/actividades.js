@@ -38,14 +38,18 @@ var appAdministracion = new Vue({
             taskNew: {
                 idMaster: null,
                 rangoFechas: true,
+                dateInit: '',
+                dateEnd: '',
                 year: null,
+                area: null,
                 meses: [],
                 dias: [],
-                area: null,
                 titulo: '',
                 observaciones: '',
                 publica: true,
             },
+            dateInitTaskNew: '',
+            dateEndTaskNew: '',
             dias: [
                 { day: 1, select: false }, { day: 2, select: false }, { day: 3, select: false }, { day: 4, select: false }, 
                 { day: 5, select: false }, { day: 6, select: false }, { day: 7, select: false }, { day: 8, select: false }, 
@@ -77,7 +81,6 @@ var appAdministracion = new Vue({
                     const response = await axios({
                         method: 'get',
                         url,
-                        
                     })
 
                     this.setLoading(false);
@@ -124,6 +127,9 @@ var appAdministracion = new Vue({
             return 'bg-warning';
         },
         // Para actividades
+        styleFloat() {
+            return this.statusTask === 0 ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
+        },
         iconTasksFloat() {
             return this.showOptionsTasks ? 'icofont-close' : 'icofont-sub-listing';
         },
@@ -131,7 +137,8 @@ var appAdministracion = new Vue({
             return this.showOptionsTasks ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
         },
         listTaskByIdMasterRefactor() {
-            return this.listTaskByIdMaster.data;
+            return this.listTaskByIdMaster.data
+                .sort((a, b) => new moment(a.fecha_creada_task.replace('z', '')) < new moment(b.fecha_creada_task.replace('z', '')) ? 1 : -1);;
         },
         nameMasterTask() {
             return (this.listTaskByIdMaster.data.length > 0) ?
@@ -145,6 +152,9 @@ var appAdministracion = new Vue({
             return this.masterTask.data.sort((a, b) => {
                 return new moment(a.fecha_creada_master_task.replace('z', '')) <= new moment(b.fecha_creada_master_task.replace('z', '')) ? 1 : -1;
             });
+        },
+        publicTask() {
+            return this.taskNew.publica ? 'Actividad pendiente(Visible)' : 'Actividad cancelada(No visible)';
         },
 
         // Para areas
@@ -165,6 +175,7 @@ var appAdministracion = new Vue({
             const dateActual = this.getDateNow();
             const yearInitial = parseInt(dateActual.format('YYYY'));
             for (let index = 0; index < 5; index++) this.arrayYearTasks.push(yearInitial + index);
+            this.taskNew.year = yearInitial;
             
             window.addEventListener('keyup', (evt) => {
                 if (evt.key === 'Shift') this.shiftSelected = false;
@@ -254,6 +265,7 @@ var appAdministracion = new Vue({
         },
         reloadListTaskByIdMaster() {
             this.loadListTasks();
+            this.loadAreas();
             this.showOptionsTasks = false;
             this.statusTask = 0;
             if (this.idMasterTaskSearch.trim() !== '')
@@ -271,7 +283,6 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'get',
                     url,
-                    
                 })
 
                 this.setLoading(false);
@@ -300,7 +311,155 @@ var appAdministracion = new Vue({
             this.showOptionsTasks = false;
             this.statusTask = 1
         },
+        validateDataNewTask() {
+            if (this.taskNew.idMaster === null) {
+                this.showAlert('Se necesita elejir una lista maestro');
+                return false;
+            }
+            if (this.taskNew.rangoFechas) {
+                if (this.taskNew.dateInit === '') {
+                    this.showAlert('Debe elejir la fecha de inicio');
+                    return false;
+                }
+                if (this.taskNew.dateEnd === '') {
+                    this.showAlert('Debe elejir la fecha de termino');
+                    return false;
+                }
+                this.dateInitTaskNew = this.taskNew.dateInit + 'T12:00:00.000z';
+                this.dateEndTaskNew = this.taskNew.dateEnd + 'T12:00:00.000z';
+                this.taskNew.meses = [];
+                this.taskNew.dias = [];
+                this.taskNew.year = parseInt(this.getDateNow().format('YYYY'));
+            } else {
+                const daysSelected = this.dias.filter((dia) => dia.select);
+                if (daysSelected.length === 0) {
+                    this.showAlert('Falta seleccionar dia(s) de la actividad');
+                    return false;
+                }
+                const monthsSelected = this.meses.filter((mes) => mes.select);
+                if (monthsSelected.length === 0) {
+                    this.showAlert('Falta seleccionar mes(es) de la actividad');
+                    return false;
+                }
+                const dateActual = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
+                const mesesArray = this.meses.reduce((acumMes, mes) => {
+                    if (mes.select) acumMes.push(mes.mes);
+                    return acumMes;
+                }, []);
+                const dayArray = this.dias.reduce((dayAcum, dia) => {
+                    if (dia.select) dayAcum.push(dia.day);
+                    return dayAcum;
+                }, []);
 
+                this.taskNew.meses = mesesArray;
+                this.taskNew.dias = dayArray;
+                this.dateInitTaskNew = dateActual;
+                this.dateEndTaskNew = dateActual;
+            }
+            if (this.taskNew.area === null) {
+                this.showAlert('Debe elejir un area');
+                return false;
+            }
+            if (this.taskNew.titulo.trim() === '') {
+                this.showAlert('Titulo de actividad necesario');
+                return false;
+            }
+            return true;
+        },
+        async createNewTask() {
+            if (!this.validateDataNewTask()) return false;
+            try {
+                this.showOptionsTasks = false;
+
+                this.setLoading(true);
+                const infoExtra = this.taskNew.observaciones.trim() === '' ?
+                    'Sin observaciones' :
+                    this.taskNew.observaciones;
+                const dateAction = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
+                const response = await axios({
+                    method: 'post',
+                    url: 'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/actividades',
+                    data: {
+                        id_master_task: this.taskNew.idMaster,
+                        year_task: this.taskNew.year,
+                        rango_fechas_task: this.taskNew.rangoFechas,
+                        fecha_inicial_task: this.dateInitTaskNew,
+                        fecha_final_task: this.dateEndTaskNew,
+                        descripcion_task: this.taskNew.titulo,
+                        observaciones_task: infoExtra,
+                        mes_task: this.taskNew.meses,
+                        dias_task: this.taskNew.dias,
+                        para_area_task: this.taskNew.area,
+                        estatus_task: this.taskNew.publica ? 'Pendiente' : 'Cancelada',
+                        fecha_creada_task: dateAction,
+                        creada_por_task: this.dataUser.data[0].UUID_user,
+                        fecha_modificada_task: dateAction,
+                        modificada_por_task: this.dataUser.data[0].UUID_user,
+                    }
+                })
+
+                this.setLoading(false);
+                console.log(response);
+
+                if (response.data.success) {
+                    this.reloadListTaskByIdMaster();
+                    this.taskNew = {
+                        idMaster: null,
+                        rangoFechas: true,
+                        dateInit: '',
+                        dateEnd: '',
+                        year: null,
+                        area: null,
+                        meses: [],
+                        dias: [],
+                        titulo: '',
+                        observaciones: '',
+                        publica: true,
+                    }
+                    this.showAlert(response.data.message, 'Exito', 'success');
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al crear nueva actividad', 'warning');
+                }
+            } catch (error) {
+                console.log(error, error.response);
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                else
+                    this.showAlert('Fallo al crear actividad intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+        async deleteTask(idTask) {
+            try {
+                const url =
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/actividades/' + idTask;
+
+                this.setLoading(true);
+
+                const response = await axios({
+                    method: 'delete',
+                    url,
+                })
+
+                this.setLoading(false);
+
+                if (response.data.success) {
+                    this.reloadListTaskByIdMaster();
+                    this.showAlert(response.data.message, 'Exito', 'success')
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al eliminar actividad', 'warning')
+                }
+            } catch (error) {
+                console.log(error, error.response);
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                else
+                    this.showAlert('Fallo al eliminar actividad intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+
+        dontAviable() { this.showAlert('Accion no habilitada por el momento'); },
         // Methodos para areas
         async loadAreas() {
             try {
@@ -313,9 +472,7 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'get',
                     url,
-                    
                 })
-                console.log(response);
 
                 this.setLoading(false);
 
@@ -329,12 +486,11 @@ var appAdministracion = new Vue({
                     this.showAlert(response.data.message, 'Fallo al cargar las areas', 'warning')
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined)
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                 else
-                    this.showAlert('Fallo cargar areas intentelo mas tarde', 'Error inesperado', 'danger');
+                    this.showAlert('Fallo al cargar areas intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
     },

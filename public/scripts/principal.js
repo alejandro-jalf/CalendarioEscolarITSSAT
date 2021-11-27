@@ -290,6 +290,7 @@ var appPrincipal = new Vue({
                         'calendario_list_task',
                         JSON.stringify(response.data)
                     )
+                    this.listTask = response.data;
                 } else {
                     this.showAlert(response.data.message, 'Fallo en el inicio de sesion', 'warning')
                 }

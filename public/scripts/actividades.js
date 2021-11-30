@@ -24,6 +24,7 @@ var appAdministracion = new Vue({
             firtsSession: sessionStorage.getItem('calendario_firts_session'),
             shiftSelected: false,
 
+            detailsTask: {},
             masterTask: localStorage.getItem('calendario_master_task') ?
                 JSON.parse(localStorage.getItem('calendario_master_task')) :
                 { data: [] },
@@ -34,7 +35,7 @@ var appAdministracion = new Vue({
                 JSON.parse(localStorage.getItem('calendario_task_id_master')) :
                 { data: [] },
             arrayYearTasks: [],
-            statusTask: 0, //0 = lista, 1 = creando, 2 = Editando,
+            statusTask: 0, //0 = lista, 1 = creando, 2 = Editando, 3 = Visualizar
             taskNew: {
                 idMaster: null,
                 rangoFechas: true,
@@ -127,6 +128,9 @@ var appAdministracion = new Vue({
             return 'bg-warning';
         },
         // Para actividades
+        editandoCreandoTask() {
+            return this.statusTask === 1 || this.statusTask === 2;
+        },
         styleFloat() {
             return this.statusTask === 0 ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
         },
@@ -213,8 +217,67 @@ var appAdministracion = new Vue({
 
             this.$refs.btnAlert.click()
         },
+        arrayMonths() {
+            return [
+                'Enero',
+                'Febrero',
+                'Marzo',
+                'Abril',
+                'Mayo',
+                'Junio',
+                'Julio',
+                'Agosto',
+                'Septiembre',
+                'Octubre',
+                'Noviembre',
+                'Diciembre',
+            ]
+        },
 
         // Para actividades
+        setDataForEdit(data) {
+            console.log(data);
+            const {
+                UUID_task, descripcion_task, dias_task,
+                estatus_task, fecha_final_task, fecha_inicial_task,
+                id_master_task, mes_task,
+                observaciones_task, para_area_task, rango_fechas_task, year_task
+            } = data;
+
+            this.meses.map((mes) => {
+                const mesFinded = mes_task.find((month) => month === mes.mes);
+                if (mesFinded) mes.select = true;
+                return mes
+            });
+
+            this.dias.map((dia) => {
+                const diaFinded = dias_task.find((day) => day === dia.day);
+                if (diaFinded) dia.select = true;
+                return dia;
+            });
+
+            console.log(fecha_final_task.slice(0, 10));
+            
+            this.taskNew = {
+                UUID_task,
+                idMaster: id_master_task.uuid,
+                rangoFechas: rango_fechas_task,
+                dateInit: fecha_inicial_task.slice(0, 10),
+                dateEnd: fecha_final_task.slice(0, 10),
+                year: year_task,
+                area: para_area_task.uuid,
+                meses: mes_task,
+                dias: dias_task,
+                titulo: descripcion_task,
+                observaciones: observaciones_task,
+                publica: estatus_task
+            }
+            this.statusTask = 2;
+        },
+        viewTask(task) {
+            this.statusTask = 3;
+            this.detailsTask = { ...task }
+        },
         daySelected(dia) {
             return dia.select ? 'bg-primary' : 'bg-light text-dark';
         },

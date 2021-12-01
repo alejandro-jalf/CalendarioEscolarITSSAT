@@ -275,17 +275,27 @@
                         <label for="exampleFormControlTextarea1" class="form-label">Observaciones:</label>
                         <textarea v-model="taskNew.observaciones" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Observaciones extras de la actividad"></textarea>
                     </div>
-                    <div class="form-check form-switch">
+                    <div v-if="statusTask === 1" class="form-check form-switch">
                         <input v-model="taskNew.publica" class="form-check-input" type="checkbox" role="switch" id="checkPublicaTask">
                         <label class="form-check-label" for="checkPublicaTask">{{ publicTask }}</label>
                     </div>
 
-                    <div>
+                    <div v-else class="form-group mb-3">
+                        <label for="selectStatusTask">Estatus</label>
+                        <select v-model="taskNew.status" id="selectStatusTask" class="form-control" name="">
+                            <option value="null">Seleccione estatus</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Realizada">Realizada</option>
+                            <option value="Cancelada">Cancelada</option>
+                        </select>
+                    </div>
+
+                    <div mb-2>
                         <button v-if="statusTask === 1" class="btn btn-primary float-end" type="button" @click="createNewTask()">
                             <span class="icofont-plus-circle"></span>
                             Agregar
                         </button>
-                        <button v-else class="btn btn-primary float-end" type="button">Guardar cambios</button>
+                        <button v-else class="btn btn-primary float-end" type="button" @click="updateTask">Guardar cambios</button>
                     </div>
                 </div>
             </div>

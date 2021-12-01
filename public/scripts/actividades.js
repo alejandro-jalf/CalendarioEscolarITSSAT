@@ -1,5 +1,5 @@
-if (!sessionStorage.getItem('calendario_firts_session'))
-    sessionStorage.setItem('calendario_firts_session', 'SI')
+if (!sessionStorage.getItem('actividades_firts_session'))
+    sessionStorage.setItem('actividades_firts_session', 'SI')
 if (!localStorage.getItem('calendario_id_master_selected'))
     localStorage.setItem('calendario_id_master_selected', '')
 
@@ -21,7 +21,7 @@ var appAdministracion = new Vue({
             },
             loadingCount: 0,
             widthWindow: 0,
-            firtsSession: sessionStorage.getItem('calendario_firts_session'),
+            firtsSession: sessionStorage.getItem('actividades_firts_session'),
             shiftSelected: false,
 
             detailsTask: {},
@@ -48,6 +48,7 @@ var appAdministracion = new Vue({
                 titulo: '',
                 observaciones: '',
                 publica: true,
+                status: null,
             },
             dateInitTaskNew: '',
             dateEndTaskNew: '',
@@ -173,7 +174,7 @@ var appAdministracion = new Vue({
             if (this.firtsSession === 'SI') {
                 this.loadAreas();
                 this.loadTasksByIdMaster(this.idMasterTaskSearch);
-                sessionStorage.setItem('calendario_firts_session', 'NO');
+                sessionStorage.setItem('actividades_firts_session', 'NO');
             }
             
             const dateActual = this.getDateNow();
@@ -245,9 +246,19 @@ var appAdministracion = new Vue({
             } = data;
 
             this.meses.map((mes) => {
+                mes.select = false;
+                return mes;
+            });
+
+            this.meses.map((mes) => {
                 const mesFinded = mes_task.find((month) => month === mes.mes);
                 if (mesFinded) mes.select = true;
                 return mes
+            });
+
+            this.dias.map((dia) => {
+                dia.select = false;
+                return dia;
             });
 
             this.dias.map((dia) => {
@@ -270,7 +281,8 @@ var appAdministracion = new Vue({
                 dias: dias_task,
                 titulo: descripcion_task,
                 observaciones: observaciones_task,
-                publica: estatus_task
+                publica: estatus_task,
+                status: estatus_task,
             }
             this.statusTask = 2;
         },
@@ -427,6 +439,12 @@ var appAdministracion = new Vue({
                 this.showAlert('Titulo de actividad necesario');
                 return false;
             }
+            if (this.statusTask === 2) {
+                if (this.taskNew.status === null) {
+                    this.showAlert('Falta seleccionar estado de la actividad');
+                    return false;
+                }
+            }
             return true;
         },
         async createNewTask() {
@@ -484,12 +502,73 @@ var appAdministracion = new Vue({
                     this.showAlert(response.data.message, 'Fallo al crear nueva actividad', 'warning');
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined)
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                 else
                     this.showAlert('Fallo al crear actividad intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+        async updateTask() {
+            if (!this.validateDataNewTask()) return false;
+            try {
+                this.showOptionsTasks = false;
+
+                this.setLoading(true);
+                const infoExtra = this.taskNew.observaciones.trim() === '' ?
+                    'Sin observaciones' :
+                    this.taskNew.observaciones;
+                const dateAction = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
+                const response = await axios({
+                    method: 'put',
+                    url: 'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/actividades/' + this.taskNew.UUID_task,
+                    data: {
+                        id_master_task: this.taskNew.idMaster,
+                        year_task: this.taskNew.year,
+                        rango_fechas_task: this.taskNew.rangoFechas,
+                        fecha_inicial_task: this.dateInitTaskNew,
+                        fecha_final_task: this.dateEndTaskNew,
+                        descripcion_task: this.taskNew.titulo,
+                        observaciones_task: infoExtra,
+                        mes_task: this.taskNew.meses,
+                        dias_task: this.taskNew.dias,
+                        para_area_task: this.taskNew.area,
+                        estatus_task: this.taskNew.status,
+                        fecha_modificada_task: dateAction,
+                        modificada_por_task: this.dataUser.data[0].UUID_user,
+                    }
+                })
+
+                this.setLoading(false);
+                console.log(response);
+
+                if (response.data.success) {
+                    this.reloadListTaskByIdMaster();
+                    this.taskNew = {
+                        idMaster: null,
+                        rangoFechas: true,
+                        dateInit: '',
+                        dateEnd: '',
+                        year: null,
+                        area: null,
+                        meses: [],
+                        dias: [],
+                        titulo: '',
+                        observaciones: '',
+                        publica: true,
+                        status: null,
+                    }
+                    this.showAlert(response.data.message, 'Exito', 'success');
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al actualizar la actividad', 'warning');
+                }
+            } catch (error) {
+                console.log(error, error.response);
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                else
+                    this.showAlert('Fallo al actualizar la actividad intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
         async deleteTask(idTask) {

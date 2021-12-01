@@ -1,5 +1,5 @@
-if (!sessionStorage.getItem('calendario_firts_session'))
-    sessionStorage.setItem('calendario_firts_session', 'SI')
+if (!sessionStorage.getItem('master_firts_session'))
+    sessionStorage.setItem('master_firts_session', 'SI')
 if (!localStorage.getItem('calendario_id_master_selected'))
     localStorage.setItem('calendario_id_master_selected', '')
 
@@ -21,7 +21,7 @@ var appAdministracion = new Vue({
             },
             loadingCount: 0,
             widthWindow: 0,
-            firtsSession: sessionStorage.getItem('calendario_firts_session'),
+            firtsSession: sessionStorage.getItem('master_firts_session'),
             shiftSelected: false,
             arrayYearTasks: [],
 
@@ -75,7 +75,7 @@ var appAdministracion = new Vue({
         else {
             if (this.firtsSession === 'SI') {
                 this.loadListTasks();
-                sessionStorage.setItem('calendario_firts_session', 'NO');
+                sessionStorage.setItem('master_firts_session', 'NO');
             }
 
             const dateActual = this.getDateNow();

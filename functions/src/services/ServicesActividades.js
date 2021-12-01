@@ -159,8 +159,7 @@ const servicesActividades =  (() => {
             return actividad
         })
 
-        const dataFilter = dataRefactor.filter((task) => task.id_master_task.publica && task.estatus_task.trim().toUpperCase() !== 'CANCELADA');
-        response[0].data = dataFilter.sort((a, b) => a.UUID_area > b.UUID_area ? -1 : 1);
+        response[0].data = dataRefactor.sort((a, b) => a.UUID_area > b.UUID_area ? -1 : 1);
         return createResponse(200, response[0]);
     }
 

@@ -72,6 +72,7 @@ body{
 }
 
 .slider-menu {
+    overflow: auto;
     position: fixed;
     top: 0px;
     left: 0px;
@@ -80,6 +81,7 @@ body{
     height: 100%;
     background: #fff;
     z-index: 9;
+    padding-bottom: 100px;
 }
 
 .close-slider {
@@ -102,12 +104,14 @@ body{
 }
 
 .container-close {
-    position: absolute;
-    width: 100%;
+    position: fixed;
+    width: 300px;
     bottom: 0px;
     left: 0px;
     padding: 10px;
     box-shadow: -6px 1px 10px 1px #000;
+    background: #fff;
+    z-index: 10;
 }
 
 .cursor-pointer {

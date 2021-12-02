@@ -2,6 +2,7 @@ const joi = require("joi");
 
 const schemasAreas = (() => {
     const schemaCreateArea = joi.object({
+        maestro_area: joi.string().min(3).required(),
         nombre_area: joi.string().min(3).required(),
         fecha_creada_area: joi.string().min(5).required(),
         creada_por_area: joi.string().min(5).required(),
@@ -10,6 +11,7 @@ const schemasAreas = (() => {
     });
 
     const schemaUpdateArea = joi.object({
+        maestro_area: joi.string().min(3),
         nombre_area: joi.string().min(3),
         fecha_modificada_area: joi.string().min(5).required(),
         modificada_por_area: joi.string().min(5).required(),

@@ -15,53 +15,47 @@ const { createContentAssert, createContentError } = require("../utils");
 
 const validateUsuarios = (() => {
     
-    const validateCreateUsuario = (bodyUsuarios) => {
+    const validateCreateUsuario = (bodyUsuarios) => { //@itssat.edu.mx
         let resultValidate = schemaCreateUser.validate(bodyUsuarios);
-        if (resultValidate.error) {
+        if (resultValidate.error)
             return createContentError("Algun dato fue enviado de manera equivocada", (resultValidate.error));
-        }
 
         resultValidate = schemaEmail.validate(bodyUsuarios.correo_user);
-        if (resultValidate.error) {
+        if (resultValidate.error)
             return createContentError("El formato del correo no es valido", (resultValidate.error));
-        }
 
-        if (bodyUsuarios.password_user.length < 7) {
+        const emailSplited = bodyUsuarios.correo_user.trim().split('@');
+        if (emailSplited[1].trim() !== 'itssat.edu.mx')
+            return createContentError(`El correo ${bodyUsuarios.correo_user} no pertenece a un dominio autorizado`, {})
+
+        if (bodyUsuarios.password_user.length < 7)
             return createContentError("La contraseña debe tener como minimo 7 caracteres", {})
-        }
 
         resultValidate = schemaContentLetters.validate(bodyUsuarios.password_user);
-        if (resultValidate.error) {
+        if (resultValidate.error)
             return createContentError("La contraseña debe contener letras", (resultValidate.error));
-        }
 
         resultValidate = schemaContentNumbers.validate(bodyUsuarios.password_user);
-        if (resultValidate.error) {
+        if (resultValidate.error)
             return createContentError("La contraseña debe contener numeros", (resultValidate.error));
-        }
 
         resultValidate = schemaDate.validate(bodyUsuarios.fecha_alta_user);
-        if (resultValidate.error) {
+        if (resultValidate.error)
             return createContentError("La fecha de alta no tiene el formato correcto 0000-00-00T00:00:00.000z", (resultValidate.error));
-        }
 
         resultValidate = schemaDate.validate(bodyUsuarios.fecha_modificacion_user);
-        if (resultValidate.error) {
+        if (resultValidate.error)
             return createContentError("La fecha de actualizacion no tiene el formato correcto 0000-00-00T00:00:00.000z", (resultValidate.error));
-        }
 
         resultValidate = schemaNumberPhone.validate(bodyUsuarios.telefono_user);
-        if (resultValidate.error) {
+        if (resultValidate.error)
             return createContentError("El telefono no tiene el formato correcto 0000000000", (resultValidate.error));
-        }
 
         if (
             bodyUsuarios.tipo_user != "administrador" &&
             bodyUsuarios.tipo_user != "ejecutivo" &&
             bodyUsuarios.tipo_user != "invitado"
-        ) {
-            return createContentError("El tipo de usuario que se recibio no es valido");
-        }
+        ) return createContentError("El tipo de usuario que se recibio no es valido");
 
         return createContentAssert("Datos validados");
     }

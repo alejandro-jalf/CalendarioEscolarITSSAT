@@ -17,11 +17,11 @@
     z-index: inherit;
     width: 100%;
     height: calc(100% - 58px);
-    left: 0px;
+    left: -100%;
     bottom: 0px;
-    opacity: 0.0;
     transition-property: all;
     transition-duration: 1s;
+    opacity: 0.0;
 }
 
 .arrow-task {

@@ -166,14 +166,14 @@ var appPrincipal = new Vue({
             } else {
                 this.$refs.taskNext.style.left = '-250px';
                 this.$refs.backgroundTaskNext.style.opacity = '0.0';
-                this.$refs.backgroundTaskNext.style.left = '0px';
+                this.$refs.backgroundTaskNext.style.left = '-100%';
             }
             this.showedTaskNext = !this.showedTaskNext;
         },
         closeTaskNext() {
             this.$refs.taskNext.style.left = '-250px';
             this.$refs.backgroundTaskNext.style.opacity = '0.0';
-            this.$refs.backgroundTaskNext.style.left = '0px';
+            this.$refs.backgroundTaskNext.style.left = '-100%';
             this.showedTaskNext = false;
         },
         arrayMonths() {

@@ -154,6 +154,7 @@
         </nav>
 
         <div ref="taskNext" class="taskNext">
+            <div ref="backgroundTaskNext" class="backgroundTaskNext" @click="closeTaskNext"></div>
             <div v-if="widthWindow < 992" class="arrow-task" :class="isShowed" @click="showTaskNext"></div>
             <h5 class="title-tasks bg-light">
                 Actividades proximas

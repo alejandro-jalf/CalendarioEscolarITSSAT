@@ -11,6 +11,19 @@
     background: #fff;
 }
 
+.backgroundTaskNext {
+    background: rgba(0, 32, 8, 0.418);
+    position: fixed;
+    z-index: inherit;
+    width: 100%;
+    height: calc(100% - 58px);
+    left: 0px;
+    bottom: 0px;
+    opacity: 0.0;
+    transition-property: all;
+    transition-duration: 1s;
+}
+
 .arrow-task {
     position: absolute;
     top: 10px;
@@ -26,6 +39,7 @@
     border: 2px solid rgb(3, 194, 98);
     border-left: 0px;
     box-shadow: 2px 0px 3px 2px #c7c7c7cb;
+    z-index: inherit;
 }
 
 .title-tasks {

@@ -159,9 +159,22 @@ var appPrincipal = new Vue({
             return actividades.map((task) => task.descripcion_task.slice(0, totalLetters));
         },
         showTaskNext() {
-            if (!this.showedTaskNext) this.$refs.taskNext.style.left = '0px';
-            else this.$refs.taskNext.style.left = '-250px';
+            if (!this.showedTaskNext) {
+                this.$refs.taskNext.style.left = '0px';
+                this.$refs.backgroundTaskNext.style.opacity = '1.0';
+                this.$refs.backgroundTaskNext.style.left = '245px';
+            } else {
+                this.$refs.taskNext.style.left = '-250px';
+                this.$refs.backgroundTaskNext.style.opacity = '0.0';
+                this.$refs.backgroundTaskNext.style.left = '0px';
+            }
             this.showedTaskNext = !this.showedTaskNext;
+        },
+        closeTaskNext() {
+            this.$refs.taskNext.style.left = '-250px';
+            this.$refs.backgroundTaskNext.style.opacity = '0.0';
+            this.$refs.backgroundTaskNext.style.left = '0px';
+            this.showedTaskNext = false;
         },
         arrayMonths() {
             return [

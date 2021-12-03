@@ -186,7 +186,7 @@
                             <button class="btn btn-warning mb-1" type="button" @click="setDataForEdit(task)">
                                 <span class="icofont-pencil-alt-2"></span>
                             </button>
-                            <button class="btn btn-danger mb-1" type="button" @click="deleteTask(task.UUID_task)">
+                            <button class="btn btn-danger mb-1" type="button" @click="setForDelete(task.UUID_task)">
                                 <span class="icofont-ui-delete"></span>
                             </button>
                         </td>
@@ -210,6 +210,12 @@
                             <option v-for="(maestro, indexMaestro) in masterTaskRefactor" :key="indexMaestro" :value="maestro.UUID_master_task">{{ maestro.titulo_master_task }}</option>
                         </select>
                     </div>
+
+                    <div class="mb-2">
+                        <label for="areatitle" class="form-label">Descripcion de la actividad:</label>
+                        <textarea v-model="taskNew.titulo" class="form-control" id="areatitle" rows="2" placeholder="Titulo o descripcion de la actividad"></textarea>
+                    </div>
+
                     <div class="form-check form-switch">
                         <input v-model="taskNew.rangoFechas" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                         <label class="form-check-label" for="flexSwitchCheckDefault">Fecha especifica</label>
@@ -265,16 +271,24 @@
                         <select v-model="taskNew.area" class="form-select">
                             <option value="null">Seleccione area</option>
                             <option v-for="(area, indexArea) in areasRefactor" :key="indexArea" :value="area.UUID_area">{{ area.nombre_area }}</option>
+                            <optgroup label="Area2">
+                                <option value="contabilidad">contabilidad</option>
+                                <option value="Administracion">Administracion</option>
+                            </optgroup>
                         </select>
                     </div>
+
                     <div class="mb-2">
-                        <label for="exampleFormControlTextarea1" class="form-label">Descripcion de la actividad:</label>
-                        <textarea v-model="taskNew.titulo" class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Titulo o descripcion de la actividad"></textarea>
+                        <label for="encargadoTask" class="form-label">Encargado:</label>
+                        <input v-model="taskNew.encargado" type="text" class="form-control" id="encargadoTask" aria-describedby="encargadoHelp" placeholder="Nombre completo" name="nameEncargado" autocomplete="name">
+                        <div id="encargadoHelp" class="form-text">Persona a cargo de la actividad.</div>
                     </div>
+
                     <div class="mb-2">
-                        <label for="exampleFormControlTextarea1" class="form-label">Observaciones:</label>
-                        <textarea v-model="taskNew.observaciones" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Observaciones extras de la actividad"></textarea>
+                        <label for="areaObservaciones" class="form-label">Observaciones:</label>
+                        <textarea v-model="taskNew.observaciones" class="form-control" id="areaObservaciones" rows="3" placeholder="Observaciones extras de la actividad"></textarea>
                     </div>
+
                     <div v-if="statusTask === 1" class="form-check form-switch">
                         <input v-model="taskNew.publica" class="form-check-input" type="checkbox" role="switch" id="checkPublicaTask">
                         <label class="form-check-label" for="checkPublicaTask">{{ publicTask }}</label>
@@ -290,12 +304,20 @@
                         </select>
                     </div>
 
+                    <div v-if="taskCancel" class="mb-2">
+                        <label for="areaCancelTask" class="form-label">Informe de cancelacion:</label>
+                        <textarea v-model="taskNew.informeCancel.informe" class="form-control" id="areaCancelTask" rows="3" placeholder="Informes cancelacion" aria-describedby="cancelHelp"></textarea>
+                        <div id="cancelHelp" class="form-text">Especifique motivos de colocar la actividad como cancelada, y quien autorizo la cancelacion.</div>
+                    </div>
+
                     <div mb-2>
                         <button v-if="statusTask === 1" class="btn btn-primary float-end" type="button" @click="createNewTask()">
                             <span class="icofont-plus-circle"></span>
                             Agregar
                         </button>
-                        <button v-else class="btn btn-primary float-end" type="button" @click="updateTask">Guardar cambios</button>
+                        <button v-else class="btn btn-primary float-end" type="button" @click="setForUpdate">
+                            Guardar cambios
+                        </button>
                     </div>
                 </div>
             </div>
@@ -335,10 +357,48 @@
                     <div class="mt-3">
                         <span class="fw-bold">Area:</span> {{ detailsTask.para_area_task.nombre }}
                     </div>
-                    <div class="mt-3 mb-5">
+                    <div class="mt-3">
+                        <span class="fw-bold">Encargado:</span> {{ detailsTask.encargado_task }}
+                    </div>
+                    <div class="mt-3">
                         <span class="fw-bold">Observaciones:</span> {{ detailsTask.observaciones_task }}
                     </div>
-                    <div class="status-task">{{ detailsTask.estatus_task }}</div>
+
+                    <div class="container-box mt-4 mb-5">
+                        <span class="title-box">Detalles cambio de estatus</span>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Estatus:</span> {{ detailsTask.estatus_task }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Identificador usuario:</span> {{ detailsTask.motivo_cancelado_task.uuid }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Correo:</span> {{ detailsTask.motivo_cancelado_task.correo }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Informe estatus:</span> {{ detailsTask.motivo_cancelado_task.informe }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Fecha modificacion:</span> {{ formatDate(detailsTask.motivo_cancelado_task.date, true, true) }}
+                        </div>
+                    </div>
+
+                    <div class="container-box mt-4 mb-5">
+                        <span class="title-box">Detalles generales</span>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Creada por:</span> {{ detailsTask.creada_por_task.correo }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Fecha creada:</span> {{ formatDate(detailsTask.fecha_creada_task, true, true) }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Actualizada por:</span> {{ detailsTask.modificada_por_task.correo }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Fecha actualizada:</span> {{ formatDate(detailsTask.fecha_modificada_task, true, true) }}
+                        </div>
+                    </div>
+
                     <button class="btn btn-warning float-end" type="button" @click="setDataForEdit(detailsTask)">
                         <span class="icofont-pencil-alt-2"></span>
                         Editar
@@ -361,14 +421,36 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header text-white" :class="backgroundHeader">
-                <h5 class="modal-title">{{ alert.title }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">{{ alert.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-dark">
-                <p>{{ alert.message }}</p>
+                    <p>{{ alert.message }}</p>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <button ref="btnAlertOptions" type="button" class="btn btn-primary invisible" data-bs-toggle="modal" data-bs-target="#modalAlertOptions">
+            Launch demo modal
+        </button>
+
+        <div id="modalAlertOptions" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white" :class="backgroundHeaderOptions">
+                    <h5 class="modal-title">{{ alertOptions.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark">
+                    <p>{{ alertOptions.message }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="alertOptions.callBack">Aceptar</button>
                 </div>
             </div>
             </div>

@@ -19,6 +19,13 @@ var appAdministracion = new Vue({
                 type: 'warning',
                 component: null,
             },
+            alertOptions: {
+                title: 'Advertencia',
+                message: 'Any massage',
+                type: 'warning',
+                component: null,
+                callBack: () => {},
+            },
             loadingCount: 0,
             widthWindow: 0,
             firtsSession: sessionStorage.getItem('actividades_firts_session'),
@@ -49,7 +56,15 @@ var appAdministracion = new Vue({
                 observaciones: '',
                 publica: true,
                 status: null,
+                encargado: '',
+                informeCancel: {
+                    correo: '',
+                    uuid: '',
+                    informe: '',
+                    date: '',
+                },
             },
+            statusTaskActual: '',
             dateInitTaskNew: '',
             dateEndTaskNew: '',
             dias: [
@@ -128,7 +143,21 @@ var appAdministracion = new Vue({
             if (this.alert.type === 'dark') return 'bg-dark';
             return 'bg-warning';
         },
+        backgroundHeaderOptions() {
+            if (this.alertOptions.type === 'warning') return 'bg-warning';
+            if (this.alertOptions.type === 'info') return 'bg-info';
+            if (this.alertOptions.type === 'success') return 'bg-success';
+            if (this.alertOptions.type === 'primary') return 'bg-primary';
+            if (this.alertOptions.type === 'danger') return 'bg-danger';
+            if (this.alertOptions.type === 'dark') return 'bg-dark';
+            return 'bg-warning';
+        },
         // Para actividades
+        taskCancel() {
+            const statusTask = this.statusTask;
+            if (statusTask === 1) return !this.taskNew.publica
+            return this.taskNew.status === 'Cancelada'
+        },
         editandoCreandoTask() {
             return this.statusTask === 1 || this.statusTask === 2;
         },
@@ -191,8 +220,9 @@ var appAdministracion = new Vue({
         }
     },
     methods: {
-        formatDate(dateString, hours = false) {
-            const formatHours = hours ? ' HH:MM:ss' : '';
+        formatDate(dateString, hours = false, am = false) {
+            const formatHours = !hours ? '' :
+                !am ? ' HH:MM' : ' hh:MM a';
             const dateFromat = dateString.replace('z', '');
             const datef = new moment(dateFromat);
             const formatApply = datef.format(`DD/MM/YYYY ${formatHours}`);
@@ -218,6 +248,14 @@ var appAdministracion = new Vue({
 
             this.$refs.btnAlert.click()
         },
+        showAlertOptions(message, title = 'Advertencia', callBack = () => {}, type = 'warning') {
+            this.alertOptions.title = title;
+            this.alertOptions.message = message;
+            this.alertOptions.type = type;
+            this.alertOptions.callBack = callBack;
+
+            this.$refs.btnAlertOptions.click()
+        },
         arrayMonths() {
             return [
                 'Enero',
@@ -239,11 +277,13 @@ var appAdministracion = new Vue({
         setDataForEdit(data) {
             console.log(data);
             const {
-                UUID_task, descripcion_task, dias_task,
-                estatus_task, fecha_final_task, fecha_inicial_task,
-                id_master_task, mes_task,
-                observaciones_task, para_area_task, rango_fechas_task, year_task
+                UUID_task, descripcion_task, dias_task, estatus_task, year_task,
+                fecha_final_task, fecha_inicial_task,id_master_task, mes_task,
+                encargado_task, motivo_cancelado_task, observaciones_task, para_area_task,
+                rango_fechas_task
             } = data;
+
+            this.statusTaskActual = data.estatus_task;
 
             this.meses.map((mes) => {
                 mes.select = false;
@@ -282,11 +322,14 @@ var appAdministracion = new Vue({
                 titulo: descripcion_task,
                 observaciones: observaciones_task,
                 publica: estatus_task,
+                informeCancel: motivo_cancelado_task,
+                encargado: encargado_task,
                 status: estatus_task,
             }
             this.statusTask = 2;
         },
         viewTask(task) {
+            console.log(task);
             this.statusTask = 3;
             this.detailsTask = { ...task }
         },
@@ -404,7 +447,7 @@ var appAdministracion = new Vue({
                 this.dateEndTaskNew = this.taskNew.dateEnd + 'T12:00:00.000z';
                 this.taskNew.meses = [];
                 this.taskNew.dias = [];
-                this.taskNew.year = parseInt(this.getDateNow().format('YYYY'));
+                this.taskNew.year = parseInt(moment(this.dateInitTaskNew.slice(0, -1)).format('YYYY'));
             } else {
                 const daysSelected = this.dias.filter((dia) => dia.select);
                 if (daysSelected.length === 0) {
@@ -444,6 +487,30 @@ var appAdministracion = new Vue({
                     this.showAlert('Falta seleccionar estado de la actividad');
                     return false;
                 }
+            } else {
+                this.taskNew.status = this.taskNew.publica ? 'Pendiente' : 'Cancelada';
+            }
+            if (this.taskNew.status === 'Cancelada') {
+                if (this.taskNew.informeCancel.informe.trim().length < 15) {
+                    this.showAlert('Informe de cancelacion esta vacio o es poco explicito');
+                    return false;
+                }
+                if (this.statusTaskActual !== this.taskNew.status) {
+                    this.taskNew.informeCancel.correo = this.dataUser.data[0].correo_user;
+                    this.taskNew.informeCancel.uuid = this.dataUser.data[0].UUID_user;
+                    this.taskNew.informeCancel.date = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
+                }
+            } else {
+                if (this.statusTaskActual !== this.taskNew.status) {
+                    this.taskNew.informeCancel = {
+                        correo: this.dataUser.data[0].correo_user,
+                        uuid: this.dataUser.data[0].UUID_user,
+                        informe: this.taskNew.status === 'Pendiente' ?
+                            'Actividad pendiente de realizar' :
+                            'Actividad realizada',
+                        date: this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z',
+                    } 
+                }
             }
             return true;
         },
@@ -456,6 +523,9 @@ var appAdministracion = new Vue({
                 const infoExtra = this.taskNew.observaciones.trim() === '' ?
                     'Sin observaciones' :
                     this.taskNew.observaciones;
+                const encargado = this.taskNew.encargado.trim() === '' ?
+                    'No se designo a algun encargado' :
+                    this.taskNew.encargado;
                 const dateAction = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
                 const response = await axios({
                     method: 'post',
@@ -468,10 +538,12 @@ var appAdministracion = new Vue({
                         fecha_final_task: this.dateEndTaskNew,
                         descripcion_task: this.taskNew.titulo,
                         observaciones_task: infoExtra,
+                        encargado_task: encargado,
+                        motivo_cancelado_task: this.taskNew.informeCancel,
                         mes_task: this.taskNew.meses,
                         dias_task: this.taskNew.dias,
                         para_area_task: this.taskNew.area,
-                        estatus_task: this.taskNew.publica ? 'Pendiente' : 'Cancelada',
+                        estatus_task: this.taskNew.status,
                         fecha_creada_task: dateAction,
                         creada_por_task: this.dataUser.data[0].UUID_user,
                         fecha_modificada_task: dateAction,
@@ -480,7 +552,6 @@ var appAdministracion = new Vue({
                 })
 
                 this.setLoading(false);
-                console.log(response);
 
                 if (response.data.success) {
                     this.reloadListTaskByIdMaster();
@@ -496,6 +567,13 @@ var appAdministracion = new Vue({
                         titulo: '',
                         observaciones: '',
                         publica: true,
+                        encargado: '',
+                        informeCancel: {
+                            correo: '',
+                            uuid: '',
+                            informe: '',
+                            date: '',
+                        },
                     }
                     this.showAlert(response.data.message, 'Exito', 'success');
                 } else {
@@ -509,6 +587,13 @@ var appAdministracion = new Vue({
                     this.showAlert('Fallo al crear actividad intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
+        setForUpdate() {
+            this.showAlertOptions(
+                '¿Quiere guardar los cambios realizados en la actividad?',
+                'Guardando cambios',
+                () => { this.updateTask(); }
+            );
+        },
         async updateTask() {
             if (!this.validateDataNewTask()) return false;
             try {
@@ -518,6 +603,9 @@ var appAdministracion = new Vue({
                 const infoExtra = this.taskNew.observaciones.trim() === '' ?
                     'Sin observaciones' :
                     this.taskNew.observaciones;
+                const encargado = this.taskNew.encargado.trim() === '' ?
+                    'No se designo a algun encargado' :
+                    this.taskNew.encargado;
                 const dateAction = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
                 const response = await axios({
                     method: 'put',
@@ -529,6 +617,8 @@ var appAdministracion = new Vue({
                         fecha_inicial_task: this.dateInitTaskNew,
                         fecha_final_task: this.dateEndTaskNew,
                         descripcion_task: this.taskNew.titulo,
+                        encargado_task: encargado,
+                        motivo_cancelado_task: this.taskNew.informeCancel,
                         observaciones_task: infoExtra,
                         mes_task: this.taskNew.meses,
                         dias_task: this.taskNew.dias,
@@ -540,7 +630,6 @@ var appAdministracion = new Vue({
                 })
 
                 this.setLoading(false);
-                console.log(response);
 
                 if (response.data.success) {
                     this.reloadListTaskByIdMaster();
@@ -556,6 +645,13 @@ var appAdministracion = new Vue({
                         titulo: '',
                         observaciones: '',
                         publica: true,
+                        encargado: '',
+                        informeCancel: {
+                            correo: '',
+                            uuid: '',
+                            informe: '',
+                            date: '',
+                        },
                         status: null,
                     }
                     this.showAlert(response.data.message, 'Exito', 'success');
@@ -563,13 +659,19 @@ var appAdministracion = new Vue({
                     this.showAlert(response.data.message, 'Fallo al actualizar la actividad', 'warning');
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined)
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                 else
                     this.showAlert('Fallo al actualizar la actividad intentelo mas tarde', 'Error inesperado', 'danger');
             }
+        },
+        setForDelete(idTask) {
+            this.showAlertOptions(
+                '¿Quiere eliminar esta actividad de manera permanente?',
+                'Eliminando Actividad',
+                () => { this.deleteTask(idTask); }
+            );
         },
         async deleteTask(idTask) {
             try {

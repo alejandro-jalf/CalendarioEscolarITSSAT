@@ -170,9 +170,10 @@
                         <tr v-for="(master, indexMaster) in masterTaskRefactor" :key="indexMaster">
                             <td>{{ master.titulo_master_task }}</td>
                             <td>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" :id="'publicaMaster' + indexMaster" :checked="master.publicada_master_task" @click="updatePublicaMasterTask(master)">
-                                    <label class="form-check-label" :for="'publicaMaster' + indexMaster">{{ refactorStatus(master.publicada_master_task) }}</label>
+                                <div class="cursor-pointer" @click="prepareUpdatePublicaMaster(master, master.publicada_master_task)">
+                                    <span v-if="master.publicada_master_task" class="fs-1 float-start icofont-toggle-on text-success"></span>
+                                    <span v-else class="fs-1 float-start icofont-toggle-off text-danger"></span>
+                                    <span class="p-1 pt-2 float-start">{{ refactorStatus(master.publicada_master_task) }}</span>
                                 </div>
                             </td>
                             <td>{{ formatDate(master.fecha_creada_master_task, true) }}</td>
@@ -184,7 +185,7 @@
                                 <button class="btn btn-warning mb-1" type="button" @click="editMasterTask(master)">
                                     <span class="icofont-pencil-alt-2"></span>
                                 </button>
-                                <button class="btn btn-danger mb-1" type="button" @click="deleteMasterTask(master.UUID_master_task)">
+                                <button class="btn btn-danger mb-1" type="button" @click="prepareDeleteMasterTask(master.UUID_master_task)">
                                     <span class="icofont-ui-delete"></span>
                                 </button>
                             </td>
@@ -210,7 +211,7 @@
                         <input class="form-check-input" v-model="masterTaskActualEdit.publicada_master_task" type="checkbox" role="switch" id="checkPublicaNew">
                         <label class="form-check-label" for="checkPublicaNew">Publica</label>
                     </div>
-                    <button class="btn btn-info text-white p-0 fs-5 px-2 ms-2" type="button">
+                    <button class="btn btn-info text-white p-0 fs-5 px-2 ms-2" type="button" @click="showInfoPublica">
                         <span class="icofont-question-circle"></span>
                     </button>
                     <div v-if="statusMasterTask === 1" class="mt-3">
@@ -220,7 +221,7 @@
                         </button>
                     </div>
                     <div v-else class="mt-3">
-                        <button class="btn btn-primary float-end" type="button" @click="updateMasterTask">
+                        <button class="btn btn-primary float-end" type="button" @click="prepareUpdateMasterTask">
                             <span class="icofont-bubble-right"></span>
                             Guardar cambios
                         </button>
@@ -306,6 +307,29 @@
             </div>
             </div>
         </div>
+
+        <button ref="btnAlertOptions" type="button" class="btn btn-primary invisible" data-bs-toggle="modal" data-bs-target="#modalAlertOptions">
+            Launch demo modal
+        </button>
+
+        <div id="modalAlertOptions" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white" :class="backgroundHeaderOptions">
+                    <h5 class="modal-title">{{ alertOptions.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark">
+                    <p>{{ alertOptions.message }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="alertOptions.callBack">Aceptar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

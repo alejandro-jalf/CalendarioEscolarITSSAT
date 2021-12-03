@@ -19,6 +19,13 @@ var appAdministracion = new Vue({
                 type: 'warning',
                 component: null,
             },
+            alertOptions: {
+                title: 'Advertencia',
+                message: 'Any massage',
+                type: 'warning',
+                component: null,
+                callBack: () => {},
+            },
             loadingCount: 0,
             widthWindow: 0,
             firtsSession: sessionStorage.getItem('master_firts_session'),
@@ -48,6 +55,15 @@ var appAdministracion = new Vue({
             if (this.alert.type === 'primary') return 'bg-primary';
             if (this.alert.type === 'danger') return 'bg-danger';
             if (this.alert.type === 'dark') return 'bg-dark';
+            return 'bg-warning';
+        },
+        backgroundHeaderOptions() {
+            if (this.alertOptions.type === 'warning') return 'bg-warning';
+            if (this.alertOptions.type === 'info') return 'bg-info';
+            if (this.alertOptions.type === 'success') return 'bg-success';
+            if (this.alertOptions.type === 'primary') return 'bg-primary';
+            if (this.alertOptions.type === 'danger') return 'bg-danger';
+            if (this.alertOptions.type === 'dark') return 'bg-dark';
             return 'bg-warning';
         },
 
@@ -118,6 +134,14 @@ var appAdministracion = new Vue({
 
             this.$refs.btnAlert.click()
         },
+        showAlertOptions(message, title = 'Advertencia', callBack = () => {}, type = 'warning') {
+            this.alertOptions.title = title;
+            this.alertOptions.message = message;
+            this.alertOptions.type = type;
+            this.alertOptions.callBack = callBack;
+
+            this.$refs.btnAlertOptions.click()
+        },
 
         showOptionsMasterClick() { this.showOptionsMaster = !this.showOptionsMaster; },
         listMasterTask() {
@@ -146,6 +170,13 @@ var appAdministracion = new Vue({
         },
         refactorStatus(status) {
             return status ? 'Publicada' : 'Privada';
+        },
+        showInfoPublica() {
+            this.showAlert(
+                'El estado de "publica" tiene la finalidad de ocultar o mostrar toda una lista de actividades, por ejemplo si se encuentra como publica, todas las actividades incluidas dentro de esta lista maestro seran visibles en el calendario de actividades, en cambio si se encuentra desactivado ninguna actividad sera mostrada en el calendario, es recomendable dejarlo desactivado al momento de crear la lista maestro y hacerla publica hasta el momento que ya esten todas las actividades cargadas y verficada la informacion',
+                'Informacion',
+                'info'
+            );
         },
         async loadListTasks() {
             try {
@@ -227,6 +258,13 @@ var appAdministracion = new Vue({
                     this.showAlert('Fallo al crear maestro actividad intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
+        prepareUpdateMasterTask() {
+            this.showAlertOptions(
+                '¿Guardar cambios en lista maestro?',
+                'Actualizando lista maestro',
+                () => { this.updateMasterTask(); }
+            );
+        },
         async updateMasterTask() {
             if (!this.validateNewMasterTask()) return false;
             try {
@@ -264,6 +302,16 @@ var appAdministracion = new Vue({
                     this.showAlert('Fallo al actualizar maestro actividad intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
+        prepareUpdatePublicaMaster(task, visible) {
+            const message = visible ?
+                '¿Quiere ocultar la lista de actividades?, Al aceptar la lista se ocultara del calendario de actividades.' :
+                '¿Quiere mostrar la lista de actividades?, Al aceptar la lista se volvera visible en el calendario de actividades.';
+            this.showAlertOptions(
+                message,
+                'Modificando visibilidad',
+                () => { this.updatePublicaMasterTask(task); }
+            );
+        },
         async updatePublicaMasterTask(task) {
             try {
                 const url =
@@ -298,6 +346,13 @@ var appAdministracion = new Vue({
                 else
                     this.showAlert('Fallo al actualizar maestro actividad intentelo mas tarde', 'Error inesperado', 'danger');
             }
+        },
+        prepareDeleteMasterTask(uuid_master_task) {
+            this.showAlertOptions(
+                '¿Quiere eliminar esta lista de actividades de manera permanente?',
+                'Eliminando lista maestro',
+                () => { this.deleteMasterTask(uuid_master_task); }
+            );
         },
         async deleteMasterTask(uuid_master_task) {
             try {

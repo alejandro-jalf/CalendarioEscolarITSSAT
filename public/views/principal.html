@@ -192,13 +192,28 @@
                         <div class="col headerDia">{{ saturday }}</div>
                     </div>
                     <div v-for="(semana, indexS) in diasMesActual" :key="indexS" class="row">
-                        <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia" :class="bgDia(dia.dias, dia.diaMesEnd, dia.date)" :style="styleHeight">
+                        <div v-for="(dia, indexD) in semana" :key="indexD" class="col itemDia" :class="bgDia(dia.dias, dia.diaMesEnd, dia.date)" :style="styleHeight" @click="viewListTask(dia.actividades, dia.date)">
                             <span :class="colorDia(dia.dias, dia.diaMesEnd, dia.date)">{{ dia.dia }}</span>
                             <div v-for="(task, indexT) in filterTasks(dia.actividades)" class="taskItem">
                                 {{ task + '...' }}
                             </div>
                             <div v-if="dia.actividades.length > 3" class="countTask">{{ dia.actividades.length - 3 }}+</div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="showListTask" class="container-listTask">
+            <div class="card h-100">
+                <div>
+                    <h5 class="card-title pt-3 ps-3 float-start">{{ dayListTask }}</h5>
+                    <span class="icofont-close float-end p-1 fs-3 mt-2 me-2 cursor-pointer" @click="showListTask = false"></span>
+                </div>
+                <hr class="m-0">
+                <div class="card-body pt-0 overflow-auto">
+                    <div v-for="(task, indexTaskL) in listTaskForDay" :key="indexTaskL" class="itemListTask" @click="setDetails(task)">
+                        {{ task.descripcion_task }}
                     </div>
                 </div>
             </div>

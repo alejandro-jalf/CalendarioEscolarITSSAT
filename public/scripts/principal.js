@@ -31,6 +31,9 @@ var appPrincipal = new Vue({
             detailsTask: {},
             showDetails: false,
             firtsSession: sessionStorage.getItem('calendario_firts_session'),
+            showListTask: false,
+            listTaskForDay: [],
+            dayListTask: '',
         }
     },
     computed: {
@@ -57,8 +60,8 @@ var appPrincipal = new Vue({
                     const fechaMoment = new moment(fecha.replace('z', ''));
                     return fechaMoment >= now && fechaMoment <= dateEnd;
                 })
-                task.next = new moment(dateValid).format('DD/MM/YYYY');
-                task.nextLetters = dateValid;
+                task.next = new moment(dateValid.replace('z', '')).format('DD/MM/YYYY');
+                task.nextLetters = dateValid.replace('z', '');
                 return !!dateValid;
             });
             return tasks.sort((a, b) => new moment(a.nextLetters) < new moment(b.nextLetters) ? -1 : 1);
@@ -134,7 +137,15 @@ var appPrincipal = new Vue({
         closeDetails() {
             this.showDetails = false;
         },
+        viewListTask(tasks, date) {
+            if (tasks.length > 0) {
+                this.showListTask = true;
+                this.listTaskForDay = tasks;
+                this.dayListTask = date;
+            }
+        },
         setDetails(task) {
+            this.showListTask = false;
             this.showDetails = true;
             this.detailsTask = task;
         },
@@ -304,6 +315,7 @@ var appPrincipal = new Vue({
                         JSON.stringify(response.data)
                     )
                     this.listTask = response.data;
+                    this.changeMonth();
                 } else {
                     this.showAlert(response.data.message, 'Fallo en el inicio de sesion', 'warning')
                 }

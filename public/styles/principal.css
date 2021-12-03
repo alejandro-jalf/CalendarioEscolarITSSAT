@@ -136,6 +136,26 @@
     border-radius: 100%;
 }
 
+.container-listTask {
+    position: fixed;
+    z-index: 10;
+    top: -10px;
+    left: 0px;
+    background: rgba(4, 37, 0, 0.635);
+    width: 100%;
+    height: calc(100% + 10px);
+    padding: 10%;
+}
+
+.itemListTask {
+    margin-top: 5px;
+    border: 1px solid #cecece;
+    border-left: 4px solid #129c00;
+    padding: 10px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .container-details {
     position: fixed;
     top: 0px;

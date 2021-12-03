@@ -271,10 +271,6 @@
                         <select v-model="taskNew.area" class="form-select">
                             <option value="null">Seleccione area</option>
                             <option v-for="(area, indexArea) in areasRefactor" :key="indexArea" :value="area.UUID_area">{{ area.nombre_area }}</option>
-                            <optgroup label="Area2">
-                                <option value="contabilidad">contabilidad</option>
-                                <option value="Administracion">Administracion</option>
-                            </optgroup>
                         </select>
                     </div>
 

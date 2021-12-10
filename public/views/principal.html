@@ -163,7 +163,7 @@
                 </button>
             </h5>
             <div class="container-task">
-                <div v-for="(taskNext, nextIndex) in taskProximas" class="container-task-list"  @click="setDetails(taskNext)">
+                <div v-for="(taskNext, nextIndex) in taskProximas" class="container-task-list cursor-pointer"  @click="setDetails(taskNext)">
                     <div class="title-task">{{ taskNext.descripcion_task }}</div>
                     <div class="date-task">{{ taskNext.next }}</div>
                 </div>

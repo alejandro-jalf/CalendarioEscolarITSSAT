@@ -60,8 +60,10 @@ var appPrincipal = new Vue({
                     const fechaMoment = new moment(fecha.replace('z', ''));
                     return fechaMoment >= now && fechaMoment <= dateEnd;
                 })
-                task.next = new moment(dateValid.replace('z', '')).format('DD/MM/YYYY');
-                task.nextLetters = dateValid.replace('z', '');
+                if (dateValid) {
+                    task.next = new moment(dateValid.replace('z', '')).format('DD/MM/YYYY');
+                    task.nextLetters = dateValid.replace('z', '');
+                }
                 return !!dateValid;
             });
             return tasks.sort((a, b) => new moment(a.nextLetters) < new moment(b.nextLetters) ? -1 : 1);

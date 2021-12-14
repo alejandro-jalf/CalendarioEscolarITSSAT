@@ -36,27 +36,38 @@ const servicesActividades =  (() => {
             !response[3].success
         )
             return createResponse(400, createContentError('Error al obtener las actividades'));
+        
+        if (response[0].message === 'No hay actividades registradas')
+            return createResponse(400, response[0]);
 
         const dataRefactor = response[0].data.map((actividad) => {
-            let masterFinded = response[1].data.find((master) => actividad.id_master_task === master.UUID_master_task)
-            if (masterFinded) actividad.id_master_task = {
-                uuid: masterFinded.UUID_master_task,
-                titulo: masterFinded.titulo_master_task
+            if (response[1].data) {
+                let masterFinded = response[1].data.find((master) => actividad.id_master_task === master.UUID_master_task)
+                if (masterFinded) actividad.id_master_task = {
+                    uuid: masterFinded.UUID_master_task,
+                    titulo: masterFinded.titulo_master_task
+                }
             }
-            let areaFinded = response[2].data.find((areas) => actividad.para_area_task === areas.UUID_area)
-            if (areaFinded) actividad.para_area_task = {
-                uuid: areaFinded.UUID_area,
-                nombre: areaFinded.nombre_area
+
+            if (response[2].data) {
+                let areaFinded = response[2].data.find((areas) => actividad.para_area_task === areas.UUID_area)
+                if (areaFinded) actividad.para_area_task = {
+                    uuid: areaFinded.UUID_area,
+                    nombre: areaFinded.nombre_area
+                }
             }
-            let userFinded = response[3].data.find((user) => actividad.creada_por_task === user.UUID_user)
-            if (userFinded) actividad.creada_por_task = {
-                uuid: userFinded.UUID_user,
-                correo: userFinded.correo_user
-            }
-            userFinded = response[3].data.find((user) => actividad.modificada_por_task === user.UUID_user)
-            if (userFinded) actividad.modificada_por_task = {
-                uuid: userFinded.UUID_user,
-                correo: userFinded.correo_user
+
+            if (response[3].data) {
+                let userFinded = response[3].data.find((user) => actividad.creada_por_task === user.UUID_user)
+                if (userFinded) actividad.creada_por_task = {
+                    uuid: userFinded.UUID_user,
+                    correo: userFinded.correo_user
+                }
+                userFinded = response[3].data.find((user) => actividad.modificada_por_task === user.UUID_user)
+                if (userFinded) actividad.modificada_por_task = {
+                    uuid: userFinded.UUID_user,
+                    correo: userFinded.correo_user
+                }
             }
             return actividad
         })
@@ -78,27 +89,38 @@ const servicesActividades =  (() => {
         )
             return createResponse(400, createContentError('Error al obtener las actividades'));
 
+        if (response[0].message === 'No hay actividades registradas')
+            return createResponse(400, response[0]);
+
         const dataRefactor = response[0].data.map((actividad) => {
-            let masterFinded = response[1].data.find((master) => actividad.id_master_task === master.UUID_master_task)
-            if (masterFinded) actividad.id_master_task = {
-                uuid: masterFinded.UUID_master_task,
-                titulo: masterFinded.titulo_master_task,
-                publica: masterFinded.publicada_master_task
+            if (response[1].data) {
+                let masterFinded = response[1].data.find((master) => actividad.id_master_task === master.UUID_master_task)
+                if (masterFinded) actividad.id_master_task = {
+                    uuid: masterFinded.UUID_master_task,
+                    titulo: masterFinded.titulo_master_task,
+                    publica: masterFinded.publicada_master_task
+                }
             }
-            let areaFinded = response[2].data.find((areas) => actividad.para_area_task === areas.UUID_area)
-            if (areaFinded) actividad.para_area_task = {
-                uuid: areaFinded.UUID_area,
-                nombre: areaFinded.nombre_area
+
+            if (response[2].data) {
+                let areaFinded = response[2].data.find((areas) => actividad.para_area_task === areas.UUID_area)
+                if (areaFinded) actividad.para_area_task = {
+                    uuid: areaFinded.UUID_area,
+                    nombre: areaFinded.nombre_area
+                }
             }
-            let userFinded = response[3].data.find((user) => actividad.creada_por_task === user.UUID_user)
-            if (userFinded) actividad.creada_por_task = {
-                uuid: userFinded.UUID_user,
-                correo: userFinded.correo_user
-            }
-            userFinded = response[3].data.find((user) => actividad.modificada_por_task === user.UUID_user)
-            if (userFinded) actividad.modificada_por_task = {
-                uuid: userFinded.UUID_user,
-                correo: userFinded.correo_user
+
+            if (response[3].data) {
+                let userFinded = response[3].data.find((user) => actividad.creada_por_task === user.UUID_user)
+                if (userFinded) actividad.creada_por_task = {
+                    uuid: userFinded.UUID_user,
+                    correo: userFinded.correo_user
+                }
+                userFinded = response[3].data.find((user) => actividad.modificada_por_task === user.UUID_user)
+                if (userFinded) actividad.modificada_por_task = {
+                    uuid: userFinded.UUID_user,
+                    correo: userFinded.correo_user
+                }
             }
             return actividad
         })
@@ -133,14 +155,19 @@ const servicesActividades =  (() => {
             const failedFinded = response.find((res) => !res.success)
             return createResponse(400, failedFinded);
         }
+        if (response[0].message === 'No hay actividades registradas')
+            return createResponse(400, response[0]);
 
         const dataRefactor = response[0].data.map((actividad) => {
-            let masterFinded = response[1].data.find((master) => actividad.id_master_task === master.UUID_master_task)
-            if (masterFinded) actividad.id_master_task = {
-                uuid: masterFinded.UUID_master_task,
-                titulo: masterFinded.titulo_master_task,
-                publica: masterFinded.publicada_master_task
+            if (response[1].data) {
+                let masterFinded = response[1].data.find((master) => actividad.id_master_task === master.UUID_master_task)
+                if (masterFinded) actividad.id_master_task = {
+                    uuid: masterFinded.UUID_master_task,
+                    titulo: masterFinded.titulo_master_task,
+                    publica: masterFinded.publicada_master_task
+                }
             }
+
             if (response[2].data) {
                 let areaFinded = response[2].data.find((areas) => actividad.para_area_task === areas.UUID_area)
                 if (areaFinded) actividad.para_area_task = {
@@ -148,15 +175,18 @@ const servicesActividades =  (() => {
                     nombre: areaFinded.nombre_area
                 }
             }
-            let userFinded = response[3].data.find((user) => actividad.creada_por_task === user.UUID_user)
-            if (userFinded) actividad.creada_por_task = {
-                uuid: userFinded.UUID_user,
-                correo: userFinded.correo_user
-            }
-            userFinded = response[3].data.find((user) => actividad.modificada_por_task === user.UUID_user)
-            if (userFinded) actividad.modificada_por_task = {
-                uuid: userFinded.UUID_user,
-                correo: userFinded.correo_user
+
+            if (response[3].data) {
+                let userFinded = response[3].data.find((user) => actividad.creada_por_task === user.UUID_user)
+                if (userFinded) actividad.creada_por_task = {
+                    uuid: userFinded.UUID_user,
+                    correo: userFinded.correo_user
+                }
+                userFinded = response[3].data.find((user) => actividad.modificada_por_task === user.UUID_user)
+                if (userFinded) actividad.modificada_por_task = {
+                    uuid: userFinded.UUID_user,
+                    correo: userFinded.correo_user
+                }
             }
             return actividad
         })

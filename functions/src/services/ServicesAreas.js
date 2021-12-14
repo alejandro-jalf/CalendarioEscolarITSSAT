@@ -111,8 +111,8 @@ const servicesUsuarios =  (() => {
             return createResponse(400, existArea);
 
         if (!existArea.success) return createResponse(404, existArea);
-        
-        if (existArea.data[0].activa_area === bodyArea.activa_area) 
+
+        if (existArea.data.activa_area === bodyArea.activa_area) 
             return createResponse(
                 200,
                 createContentError("El estatus de activa_area es igual", {})

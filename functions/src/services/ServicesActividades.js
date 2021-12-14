@@ -141,10 +141,12 @@ const servicesActividades =  (() => {
                 titulo: masterFinded.titulo_master_task,
                 publica: masterFinded.publicada_master_task
             }
-            let areaFinded = response[2].data.find((areas) => actividad.para_area_task === areas.UUID_area)
-            if (areaFinded) actividad.para_area_task = {
-                uuid: areaFinded.UUID_area,
-                nombre: areaFinded.nombre_area
+            if (response[2].data) {
+                let areaFinded = response[2].data.find((areas) => actividad.para_area_task === areas.UUID_area)
+                if (areaFinded) actividad.para_area_task = {
+                    uuid: areaFinded.UUID_area,
+                    nombre: areaFinded.nombre_area
+                }
             }
             let userFinded = response[3].data.find((user) => actividad.creada_por_task === user.UUID_user)
             if (userFinded) actividad.creada_por_task = {

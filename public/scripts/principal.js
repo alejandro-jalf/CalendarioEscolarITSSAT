@@ -319,13 +319,22 @@ var appPrincipal = new Vue({
                     this.listTask = response.data;
                     this.changeMonth();
                 } else {
-                    this.showAlert(response.data.message, 'Fallo en el inicio de sesion', 'warning')
+                    this.showAlert(response.data.message, 'Fallo al cargar actividades', 'warning');
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.loading = false;
-                if (error.response !== undefined)
+                if (error.response !== undefined) {
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                    if (error.response.data.message === 'No hay actividades registradas') {
+                        error.response.data.data = [];
+                        localStorage.setItem(
+                            'calendario_list_task',
+                            JSON.stringify(error.response.data)
+                        )
+                        this.listTask = error.response.data;
+                        this.changeMonth();
+                    }
+                }
                 else
                     this.showAlert('Fallo cargar actividades intentelo mas tarde', 'Error inesperado', 'danger');
             }

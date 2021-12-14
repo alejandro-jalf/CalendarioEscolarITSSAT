@@ -162,37 +162,44 @@
                 </select>
                 <span class="input-group-text bg-info text-white icofont-search-2 fs-5" @click="searchListTaskByIdMaster"></span>
             </div>
-            <div v-if="statusTask === 0" class="h5 mb-3">{{ nameMasterTask }}</div>
-            <table v-if="statusTask === 0" class="table table-striped table-sm table-bordered table-responsive">
-                <thead class="thead-dark">
-                    <tr class="table-dark">
-                        <th>Lista maestro</th>
-                        <th>Actividad</th>
-                        <th>Estatus</th>
-                        <th>Observaciones</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(task, indexTask) in listTaskByIdMasterRefactor" :key="indexTask">
-                        <td>{{ task.id_master_task.titulo  }}</td>
-                        <td>{{ task.descripcion_task }}</td>
-                        <td>{{ task.estatus_task }}</td>
-                        <td>{{ task.observaciones_task }}</td>
-                        <td>
-                            <button class="btn btn-primary mb-1" type="button" @click="viewTask(task)">
-                                <span class="icofont-eye-alt"></span>
-                            </button>
-                            <button class="btn btn-warning mb-1" type="button" @click="setDataForEdit(task)">
-                                <span class="icofont-pencil-alt-2"></span>
-                            </button>
-                            <button class="btn btn-danger mb-1" type="button" @click="setForDelete(task.UUID_task)">
-                                <span class="icofont-ui-delete"></span>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div v-if="statusTask === 0">
+                <div v-if="emptyActividades" class="alert alert-info" role="alert">
+                    No hay actividades registradas para esta lista maestro
+                </div>
+                <div v-else>
+                    <div class="h5 mb-3">{{ nameMasterTask }}</div>
+                    <table class="table table-striped table-sm table-bordered table-responsive">
+                        <thead class="thead-dark">
+                            <tr class="table-dark">
+                                <th>Lista maestro</th>
+                                <th>Actividad</th>
+                                <th>Estatus</th>
+                                <th>Observaciones</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(task, indexTask) in listTaskByIdMasterRefactor" :key="indexTask">
+                                <td>{{ task.id_master_task.titulo  }}</td>
+                                <td>{{ task.descripcion_task }}</td>
+                                <td>{{ task.estatus_task }}</td>
+                                <td>{{ task.observaciones_task }}</td>
+                                <td>
+                                    <button class="btn btn-primary mb-1" type="button" @click="viewTask(task)">
+                                        <span class="icofont-eye-alt"></span>
+                                    </button>
+                                    <button class="btn btn-warning mb-1" type="button" @click="setDataForEdit(task)">
+                                        <span class="icofont-pencil-alt-2"></span>
+                                    </button>
+                                    <button class="btn btn-danger mb-1" type="button" @click="setForDelete(task.UUID_task)">
+                                        <span class="icofont-ui-delete"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <div v-else-if="editandoCreandoTask" class="card">
                 <div class="card-header">

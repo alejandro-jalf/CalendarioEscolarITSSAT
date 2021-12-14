@@ -85,6 +85,9 @@ var appAdministracion = new Vue({
         areasRefactor() {
             return this.listAreas.data
         },
+        emptyAreas() {
+            return this.listAreas.data.length === 0
+        },
         maestrosAreas() {
             return this.listAreas.data.reduce((acumMaster, area) => {
                 console.log(area);
@@ -201,10 +204,12 @@ var appAdministracion = new Vue({
                 const response = await axios({
                     method: 'get',
                     url,
+                    
                 })
 
                 this.setLoading(false);
 
+                console.log(response);
                 if (response.data.success) {
                     localStorage.setItem(
                         'calendario_areas_data',
@@ -212,13 +217,23 @@ var appAdministracion = new Vue({
                     )
                     this.listAreas = response.data;
                 } else {
-                    this.showAlert(response.data.message, 'Fallo al cargar las areas', 'warning')
+                    this.showAlert(response.data.message, 'Fallo al cargar las areas', 'warning');
                 }
             } catch (error) {
+                console.log(error, error.response);
                 this.setLoading(false);
-                if (error.response !== undefined)
-                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
-                else
+                if (error.response !== undefined) {
+                    if (error.response.data.message === 'No hay areas registradas') {
+                        this.showAlert(error.response.data.message, 'Fallo al cargar las areas', 'warning');
+                        error.response.data.data = [];
+                        localStorage.setItem(
+                            'calendario_areas_data',
+                            JSON.stringify(error.response.data)
+                        )
+                        this.listAreas = error.response.data;
+                    } else
+                        this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                } else
                     this.showAlert('Fallo al cargar areas intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },

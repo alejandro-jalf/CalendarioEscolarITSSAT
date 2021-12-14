@@ -67,6 +67,9 @@ var appAdministracion = new Vue({
             return 'bg-warning';
         },
 
+        emptyMaster() {
+            return this.masterTask.data.length === 0
+        },
         styleFloatMaster() {
             return this.showOptionsMaster ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
         },
@@ -206,8 +209,18 @@ var appAdministracion = new Vue({
             } catch (error) {
                 console.log(error, error.response);
                 this.setLoading(false);
-                if (error.response !== undefined)
-                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                if (error.response !== undefined) {
+                    if (error.response.data.message === 'No hay lista de actividades registradas') {
+                        this.showAlert(error.response.data.message, 'Fallo al cargar las actividades', 'warning');
+                        error.response.data.data = [];
+                        localStorage.setItem(
+                            'calendario_master_task',
+                            JSON.stringify(error.response.data)
+                        )
+                        this.masterTask = error.response.data;
+                    } else
+                        this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                }
                 else
                     this.showAlert('Fallo cargar las listas de actividades intentelo mas tarde', 'Error inesperado', 'danger');
             }
@@ -375,7 +388,6 @@ var appAdministracion = new Vue({
                     this.showAlert(response.data.message, 'Fallo al eliminar maestro actividad', 'warning')
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined)
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');

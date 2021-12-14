@@ -112,7 +112,6 @@ var appAdministracion = new Vue({
                         this.showAlert(response.data.message, 'Fallo al cargar las listas de actividades', 'warning')
                     }
                 } catch (error) {
-                    console.log(error, error.response);
                     this.setLoading(false);
                     if (error.response !== undefined)
                         this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
@@ -172,7 +171,10 @@ var appAdministracion = new Vue({
         },
         listTaskByIdMasterRefactor() {
             return this.listTaskByIdMaster.data
-                .sort((a, b) => new moment(a.fecha_creada_task.replace('z', '')) < new moment(b.fecha_creada_task.replace('z', '')) ? 1 : -1);;
+                .sort((a, b) => new moment(a.fecha_creada_task.replace('z', '')) < new moment(b.fecha_creada_task.replace('z', '')) ? 1 : -1);
+        },
+        emptyActividades() {
+            return this.listTaskByIdMaster.data.length === 0
         },
         nameMasterTask() {
             return (this.listTaskByIdMaster.data.length > 0) ?
@@ -275,7 +277,6 @@ var appAdministracion = new Vue({
 
         // Para actividades
         setDataForEdit(data) {
-            console.log(data);
             const {
                 UUID_task, descripcion_task, dias_task, estatus_task, year_task,
                 fecha_final_task, fecha_inicial_task,id_master_task, mes_task,
@@ -307,7 +308,6 @@ var appAdministracion = new Vue({
                 return dia;
             });
 
-            console.log(fecha_final_task.slice(0, 10));
             
             this.taskNew = {
                 UUID_task,
@@ -329,7 +329,6 @@ var appAdministracion = new Vue({
             this.statusTask = 2;
         },
         viewTask(task) {
-            console.log(task);
             this.statusTask = 3;
             this.detailsTask = { ...task }
         },
@@ -414,10 +413,19 @@ var appAdministracion = new Vue({
                     this.idMasterTaskSearch = idMasterSelected;
                     localStorage.setItem('calendario_id_master_selected', idMasterSelected);
                 } else {
-                    this.showAlert(response.data.message, 'Fallo al cargar las actividades', 'warning')
+                    this.showAlert(response.data.message, 'Fallo al cargar las actividades', 'warning');
+                    if (response.data.message === 'Actividades por Maestro actividad no fueron encontrada') {
+                        response.data.data = [];
+                        localStorage.setItem(
+                            'calendario_task_id_master',
+                            JSON.stringify(response.data)
+                        )
+                        this.listTaskByIdMaster = response.data;
+                        this.idMasterTaskSearch = idMasterSelected;
+                        localStorage.setItem('calendario_id_master_selected', idMasterSelected);
+                    }
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined)
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
@@ -694,7 +702,6 @@ var appAdministracion = new Vue({
                     this.showAlert(response.data.message, 'Fallo al eliminar actividad', 'warning')
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined)
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');

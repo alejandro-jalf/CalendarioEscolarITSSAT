@@ -41,10 +41,13 @@ const servicesUsuarios =  (() => {
                 uuid: userFinded.UUID_user,
                 correo: userFinded.correo_user
             }
-            let areaFinded = response[1].data.find((area) => user.area_user === area.UUID_area)
-            if (areaFinded) user.area_user = {
-                uuid: areaFinded.UUID_area,
-                nombre: areaFinded.nombre_area
+
+            if (response[1].data) {
+                let areaFinded = response[1].data.find((area) => user.area_user === area.UUID_area)
+                if (areaFinded) user.area_user = {
+                    uuid: areaFinded.UUID_area,
+                    nombre: areaFinded.nombre_area
+                }
             }
             return user
         })

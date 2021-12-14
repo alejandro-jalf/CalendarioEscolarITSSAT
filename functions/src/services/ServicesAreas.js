@@ -24,6 +24,9 @@ const servicesUsuarios =  (() => {
         if (!response[0].success || !response[1].success)
             return createResponse(400, createContentError('Error al obtener las areas'));
 
+        if (response[0].message === 'No hay areas registradas')
+            return createResponse(400, response[0]);
+
         const dataRefactor = response[0].data.map((area) => {
             let userFinded = response[1].data.find((user) => area.creada_por_area === user.UUID_user)
             if (userFinded) area.creada_por_area = {

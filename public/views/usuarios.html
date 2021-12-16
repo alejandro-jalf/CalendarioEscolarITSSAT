@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../images/logo500.png" type="image/x-icon">
+    <title>Usuarios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="../styles/icofont.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/administracion.css">
+    <link rel="stylesheet" href="../styles/usuarios.css">
+</head>
+<body>
+    <div id="app">
+        <div v-if="loading" class="container-spinner">
+            <div class="spinner-border spinner-general" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1b5702;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="./principal.html">
+                    <img src="../images/logo500t.png" alt="" class="logo-header">
+                    Calendario Escolar
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a href="./principal.html" class="nav-link" aria-current="page">
+                                <span class="icofont-home"></span>
+                                Inicio
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./maestroactividades.html">
+                                <span class="icofont-tasks-alt"></span>
+                                Maestro Actividades
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./actividades.html">
+                                <span class="icofont-sub-listing"></span>
+                                Actividades
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./areas.html">
+                                <span class="icofont-ui-clip-board"></span>
+                                Areas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active">
+                                <span class="icofont-users"></span>
+                                Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="icofont-user-alt-4"></span>
+                                Perfil
+                            </a>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <div class="nav-item dropdown containerPerfil">
+                            <div class="dropdown-toggle text-light" data-bs-toggle="collapse" href="#collapsePerfil" role="button" aria-expanded="false" aria-controls="collapsePerfil">
+                                <span class="icofont-user-alt-7 userIconPerfil"></span>
+                                {{ apodo }}
+                            </div>
+                        </div>
+                        <div class="collapse subPerfil" id="collapsePerfil">
+                            <div class="card card-body">
+                                <div>
+                                    <span class="icofont-user-alt-4"></span>
+                                    <span>{{ apodo }}</span>
+                                </div>
+                                <hr>
+                                <button class="btn btn-outline-success btnPerfil" type="button">
+                                    <span class="icofont-refresh"></span>
+                                    Refrescar perfil
+                                </button>
+                                <button class="btn btn-outline-warning btnPerfil" type="button">
+                                    <span class="icofont-pencil-alt-2"></span>
+                                    Editar perfil
+                                </button>
+                                <button class="btn btn-outline-danger btnPerfil" type="button" @click="closeSession">
+                                    <span class="icofont-power"></span>
+                                    Cerrar Sesion
+                                </button>
+                                <div>
+                                    <div class="btnClose" data-bs-toggle="collapse" href="#collapsePerfil" role="button" aria-expanded="false" aria-controls="collapsePerfil">Cerrar</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="navbarSupportedContent" class="collapse slider-menu">
+                <div class="background-slider"  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"></div>
+
+                <h4 class="fw-bold">Calendario escolar</h4>
+                <span class="icofont-close-circled close-slider"  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"></span>
+                <div class="icofont-user-alt-3 logo-slider"></div>
+                <div class="text-center fs-5 fw-bold">{{ apodo }}</div>
+
+                <div class="text-center mb-5">
+                    <button class="btn btn-outline-success" type="button">
+                        <span class="icofont-refresh"></span>
+                    </button>
+                    <button class="btn btn-outline-warning" type="button">
+                        <span class="icofont-pencil-alt-2"></span>
+                    </button>
+                </div>
+                <div class="list-group">
+                    <a href="./principal.html" class="list-group-item list-group-item-action">
+                        <span class="me-2 icofont-home"></span>
+                        Inicio
+                    </a>
+                    <a href="./maestroactividades.html" class="list-group-item list-group-item-action">
+                        <span class="me-2 icofont-tasks-alt"></span>
+                        Maestro Actividades
+                    </a>
+                    <a  href="./actividades.html" class="list-group-item list-group-item-action">
+                        <span class="me-2 icofont-sub-listing"></span>
+                        Actividades
+                    </a>
+                    <a href="./areas.html" class="list-group-item list-group-item-action">
+                        <span class="me-2 icofont-ui-clip-board"></span>
+                        Areas
+                    </a>
+                    <a class="list-group-item list-group-item-action active">
+                        <span class="me-2 icofont-users"></span>
+                        Usuarios
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <span class="me-2 icofont-user-alt-4"></span>
+                        Perfil
+                    </a>
+                </div>
+                
+                <div class="container-close">
+                    <button class="btn btn-outline-danger btnPerfil" type="button" @click="closeSession">
+                        <span class="icofont-power"></span>
+                        Cerrar Sesion
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-xxl mt-3">
+            <div v-if="statusUser === 0">
+                <div v-if="emptyUsers" class="alert alert-info" role="alert">
+                    No hay usuarios registrados
+                </div>
+                <div v-else>
+                    <table class="table table-striped table-sm table-bordered table-responsive">
+                        <thead class="thead-dark">
+                            <tr class="table-dark">
+                                <th>Correo</th>
+                                <th>Nombre</th>
+                                <th>Estatus</th>
+                                <th>Tipo usuario</th>
+                                <th>Fecha alta</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(user, indexUser) in listDataUsers" :key="indexUser">
+                                <td>{{ user.correo_user  }}</td>
+                                <td>{{ user.nombre_user }}</td>
+                                <td>
+                                    <div class="cursor-pointer" @click="dontAviable(user.UUID_area, user.activo_user)">
+                                        <span v-if="user.activo_user" class="fs-1 float-start icofont-toggle-on text-success"></span>
+                                        <span v-else class="fs-1 float-start icofont-toggle-off text-danger"></span>
+                                        <span class="p-1 pt-2 float-start">{{ refactorStatus(user.activo_user) }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ user.tipo_user }}</td>
+                                <td>{{ formatDate(user.fecha_alta_user) }}</td>
+                                <td>
+                                    <button class="btn btn-primary mb-1" type="button" @click="dontAviable">
+                                        <span class="icofont-eye-alt"></span>
+                                    </button>
+                                    <button class="btn btn-warning mb-1" type="button" @click="dontAviable">
+                                        <span class="icofont-pencil-alt-2"></span>
+                                    </button>
+                                    <button class="btn btn-danger mb-1" type="button" @click="dontAviable">
+                                        <span class="icofont-ui-delete"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div v-else-if="editandoCreandoUser" class="card">
+                <div class="card-header">
+                    <div class="float-start cursor-pointer" @click="statusUser = 0">
+                        <span class="icofont-simple-left"></span>
+                        Regresar
+                    </div>
+                    <div class="float-end fw-bold">{{ titleCardUser }}</div>
+                </div>
+                <div class="card-body">
+                    <div class="mt-2">
+                        <label for="userEmail" class="form-label">Correo electronico:</label>
+                        <input v-model="userNew.correo_user" type="email" class="form-control" id="userEmail" placeholder="alguien@dominio.subdominio">
+                    </div>
+
+                    <div class="mt-2 mb-1">Nombre Completo:</div>
+                    <div class="row">
+                        <div class="col-md mb-2">
+                            <div class="form-floating">
+                                <input v-model="userNew.nombre_user" type="email" class="form-control" id="inputName" placeholder="Nombre(s)">
+                                <label for="inputName">Nombre(s)</label>
+                            </div>
+                        </div>
+                        <div class="col-md mb-2">
+                            <div class="form-floating">
+                                <input v-model="userNew.apellid_p_user" type="text" class="form-control" id="iptAP" placeholder="Apellido paterno">
+                                <label for="iptAP">Apellido paterno</label>
+                            </div>
+                        </div>
+                        <div class="col-md mb-2">
+                            <div class="form-floating">
+                                <input v-model="userNew.apellid_m_user" type="text" class="form-control" id="inputAM" placeholder="Apellido Materno">
+                                <label for="inputAM">Apellido Materno</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <label for="areaAddress" class="form-label">Direccion:</label>
+                        <textarea v-model="userNew.direccion_user" class="form-control" id="areaAddress" rows="2" placeholder="Direccion"></textarea>
+                    </div>
+
+                    <div class="mt-2">
+                        <label for="userCity" class="form-label">Ciudad:</label>
+                        <input v-model="userNew.ciudad_user" type="text" class="form-control" id="userCity" placeholder="Ciudad">
+                    </div>
+
+                    <div class="mt-2">
+                        <label for="userTel" class="form-label">Telefono:</label>
+                        <input v-model="userNew.telefono_user" type="text" class="form-control" id="userTel" placeholder="0000000000">
+                    </div>
+
+                    <div class="accordion  mt-2" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Informacion extra
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div v-if="statusUser === 1">
+                                        <div class="mb-2">
+                                            <label for="userPass" class="form-label">Contraseña:</label>
+                                            <input v-model="userNew.password_user" type="password" class="form-control" :class="isValidPassword" id="userPass" placeholder="contraseña">
+                                            <div class="invalid-feedback">
+                                                {{ messageInvalidPassword }}
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Formato valido
+                                            </div>
+                                        </div>
+    
+                                        <div class="mb-2">
+                                            <label for="userRepeatPass" class="form-label">Repetir contraseña:</label>
+                                            <input v-model="userNew.password_r_user" type="password" class="form-control" :class="isValidPasswordRepeat" id="userRepeatPass" placeholder="repetir contraseña">
+                                            <div class="invalid-feedback">
+                                                Las contraseñas no coinciden
+                                            </div>
+                                            <div class="valid-feedback">
+                                                Contraseñas coinciden
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <div> Tipo de usuario: </div>
+                                        <div class="input-group mb-3">
+                                            <select v-model="userNew.tipo_user" class="form-select" @change="selectInvitadoUser">
+                                                <option value="invitado">Invitado</option>
+                                                <option value="ejecutivo">Ejecutivo</option>
+                                                <option value="administrador">Administrador</option>
+                                            </select>
+                                            <span class="input-group-text bg-info text-white cursor-pointer" @click="infoTipeUser">
+                                                <span class="icofont-question-circle"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <label for="userArea" class="form-label">Area:</label>
+                                        <select v-model="userNew.area_user" class="form-select" id="userArea">
+                                            <option value="null">Seleccione area al que pertenece</option>
+                                            <option v-for="(area, indexArea) in listDataAreas" :key="indexArea" :value="area.UUID_area">
+                                                {{ area.maestro_area }} - {{ area.nombre_area }}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="card mt-2">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Permisos y accesos</h5>
+                                            <div>
+                                                <div class="form-check">
+                                                    <input v-model="userNew.accessTo_user.principal.select" class="form-check-input" type="checkbox" id="checkPrin" disabled>
+                                                    <label class="form-check-label" for="checkPrin">Principal</label>
+                                                </div>
+                                                <div class="tree-second">
+                                                    <div class="form-check">
+                                                        <input v-model="userNew.accessTo_user.principal.view" class="form-check-input" type="checkbox" id="checkPrinView" disabled>
+                                                        <label class="form-check-label" for="checkPrinView">Lectura</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input v-model="userNew.accessTo_user.actividades.select" class="form-check-input" type="checkbox" id="checkTask" data-bs-toggle="collapse" href="#collapseTasks" role="button" aria-controls="collapseTasks">
+                                                    <label class="form-check-label" for="checkTask">Actividades</label>
+                                                </div>
+                                                <div class="tree-second collapse" id="collapseTasks">
+                                                    <div v-if="!isInvitedSelected" class="form-check">
+                                                        <input ref="checkTaskAll" class="form-check-input" type="checkbox" id="checkTaskAll" @click="changeAllTask">
+                                                        <label class="form-check-label" for="checkTaskAll">Todo</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input v-model="userNew.accessTo_user.actividades.view" class="form-check-input" type="checkbox" id="checkTaskView" disabled>
+                                                        <label class="form-check-label" for="checkTaskView">Lectura</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkTaskCreate" v-model="userNew.accessTo_user.actividades.create" class="form-check-input" type="checkbox" id="checkTaskCreate" @click="selectItemActividades">
+                                                        <label class="form-check-label" for="checkTaskCreate">Creacion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkTaskUpdate" v-model="userNew.accessTo_user.actividades.update" class="form-check-input" type="checkbox" id="checkTaskUpdate" @click="selectItemActividades">
+                                                        <label class="form-check-label" for="checkTaskUpdate">Actualizacion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkTaskDelete" v-model="userNew.accessTo_user.actividades.delete" class="form-check-input" type="checkbox" id="checkTaskDelete" @click="selectItemActividades">
+                                                        <label class="form-check-label" for="checkTaskDelete">Eliminacion</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input v-model="userNew.accessTo_user.maestroActividades.select" class="form-check-input" type="checkbox" id="checkMaster"  data-bs-toggle="collapse" href="#collapseMaster" role="button" aria-controls="collapseMaster">
+                                                    <label class="form-check-label" for="checkMaster">Maestro Actividades</label>
+                                                </div>
+                                                <div class="tree-second collapse" id="collapseMaster">
+                                                    <div v-if="!isInvitedSelected" class="form-check">
+                                                        <input ref="checkMasterAll" class="form-check-input" type="checkbox" id="checkMasterAll" @click="changeAllMaster">
+                                                        <label class="form-check-label" for="checkMasterAll">Todo</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input v-model="userNew.accessTo_user.maestroActividades.view" class="form-check-input" type="checkbox" id="checkMasterView" disabled>
+                                                        <label class="form-check-label" for="checkMasterView">Lectura</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkMasterCreate" v-model="userNew.accessTo_user.maestroActividades.create" class="form-check-input" type="checkbox" id="checkMasterCreate" @click="selectItemMaster">
+                                                        <label class="form-check-label" for="checkMasterCreate">Creacion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkMasterUpdate" v-model="userNew.accessTo_user.maestroActividades.update" class="form-check-input" type="checkbox" id="checkMasterUpdate" @click="selectItemMaster">
+                                                        <label class="form-check-label" for="checkMasterUpdate">Actualizacion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkMasterDelete" v-model="userNew.accessTo_user.maestroActividades.delete" class="form-check-input" type="checkbox" id="checkMasterDelete" @click="selectItemMaster">
+                                                        <label class="form-check-label" for="checkMasterDelete">Eliminacion</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input v-model="userNew.accessTo_user.areas.select" class="form-check-input" type="checkbox" id="checkAreas"  data-bs-toggle="collapse" href="#collapseAreas" role="button" aria-controls="collapseAreas">
+                                                    <label class="form-check-label" for="checkAreas">Areas</label>
+                                                </div>
+                                                <div class="tree-second collapse" id="collapseAreas">
+                                                    <div v-if="!isInvitedSelected" class="form-check">
+                                                        <input ref="checkAreasAll" class="form-check-input" type="checkbox" id="checkAreasAll" @click="changeAllAreas">
+                                                        <label class="form-check-label" for="checkAreasAll">Todo</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input v-model="userNew.accessTo_user.areas.view" class="form-check-input" type="checkbox" id="checkAreasView" disabled>
+                                                        <label class="form-check-label" for="checkAreasView">Lectura</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkAreasCreate" v-model="userNew.accessTo_user.areas.create" class="form-check-input" type="checkbox" id="checkAreasCreate" @click="selectItemArea">
+                                                        <label class="form-check-label" for="checkAreasCreate">Creacion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkAreasUpdate" v-model="userNew.accessTo_user.areas.update" class="form-check-input" type="checkbox" id="checkAreasUpdate" @click="selectItemArea">
+                                                        <label class="form-check-label" for="checkAreasUpdate">Actualizacion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkAreasDelete" v-model="userNew.accessTo_user.areas.delete" class="form-check-input" type="checkbox" id="checkAreasDelete" @click="selectItemArea">
+                                                        <label class="form-check-label" for="checkAreasDelete">Eliminacion</label>
+                                                    </div>
+                                                </div>
+
+                                                <div v-if="isManagerSelected" class="form-check">
+                                                    <input v-model="userNew.accessTo_user.usuarios.select" class="form-check-input" type="checkbox" id="checkUser"  data-bs-toggle="collapse" href="#collapseUsers" role="button" aria-controls="collapseUsers">
+                                                    <label class="form-check-label" for="checkUser">Usuarios</label>
+                                                </div>
+                                                <div v-if="isManagerSelected" class="tree-second collapse" id="collapseUsers">
+                                                    <div v-if="!isInvitedSelected" class="form-check">
+                                                        <input ref="checkUserAll" class="form-check-input" type="checkbox" id="checkUserAll" @click="changeAllUsers">
+                                                        <label class="form-check-label" for="checkUserAll">Todo</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input v-model="userNew.accessTo_user.usuarios.view" class="form-check-input" type="checkbox" id="checkUserView" disabled>
+                                                        <label class="form-check-label" for="checkUserView">Lectura</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkUserCreate" v-model="userNew.accessTo_user.usuarios.create" class="form-check-input" type="checkbox" id="checkUserCreate" @click="selectItemUsers">
+                                                        <label class="form-check-label" for="checkUserCreate">Creacion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkUserUpdate" v-model="userNew.accessTo_user.usuarios.update" class="form-check-input" type="checkbox" id="checkUserUpdate" @click="selectItemUsers">
+                                                        <label class="form-check-label" for="checkUserUpdate">Actualizacion</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input :disabled="isInvitedSelected" ref="checkUserDelete" v-model="userNew.accessTo_user.usuarios.delete" class="form-check-input" type="checkbox" id="checkUserDelete" @click="selectItemUsers">
+                                                        <label class="form-check-label" for="checkUserDelete">Eliminacion</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input v-model="userNew.accessTo_user.perfil.select" class="form-check-input" type="checkbox" id="checkProfile" disabled>
+                                                    <label class="form-check-label" for="checkProfile">Perfil</label>
+                                                </div>
+                                                <div class="tree-second">
+                                                    <div class="form-check">
+                                                        <input v-model="userNew.accessTo_user.perfil.view" class="form-check-input" type="checkbox" id="checkProfileView" disabled>
+                                                        <label class="form-check-label" for="checkProfileView">Lectura</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input v-model="userNew.accessTo_user.perfil.update" class="form-check-input" type="checkbox" id="checkProfileUpdate" disabled>
+                                                        <label class="form-check-label" for="checkProfileUpdate">Actualizacion</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 mb-2">
+                        <button v-if="statusUser === 1" class="btn btn-primary float-end" type="button" @click="createUser">
+                            <span class="icofont-plus-circle"></span>
+                            Agregar
+                        </button>
+                        <button v-else class="btn btn-primary float-end" type="button" @click="dontAviable">
+                            Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!--
+
+            <div v-else class="card">
+                <div class="card-header">
+                    <div class="float-start cursor-pointer" @click="statusUser = 0">
+                        <span class="icofont-simple-left"></span>
+                        Regresar
+                    </div>
+                    <div class="float-end fw-bold">Visualizando actividad</div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ detailsTask.descripcion_task }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ detailsTask.id_master_task.titulo }}</h6>
+                    <div class="mb-2">
+                        <span class="fw-bold">Año:</span> {{ detailsTask.year_task }}
+                    </div>
+                    <div v-if="detailsTask.rango_fechas_task">
+                        <div class="fechas-predeterminadas">
+                            <span class="fw-bold">Del:</span> {{ formatDate(detailsTask.fecha_inicial_task) }}
+                        </div>
+                        <div class="fechas-predeterminadas">
+                            <span class="fw-bold">Al:</span> {{ formatDate(detailsTask.fecha_final_task) }}
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="container-box">
+                            <span class="title-box">Meses</span>
+                            <span v-for="(mes, indexMes) in detailsTask.mes_task" :key="indexMes" class="badge bg-success m-1">{{ arrayMonths()[mes - 1] }}</span>
+                        </div>
+                        <div class="container-box">
+                            <span class="title-box">Dias</span>
+                            <span v-for="(dia, indexDia) in detailsTask.dias_task" :key="indexDia" class="badge bg-success m-1">{{ dia }}</span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <span class="fw-bold">Area:</span> {{ detailsTask.para_area_task.nombre }}
+                    </div>
+                    <div class="mt-3">
+                        <span class="fw-bold">Encargado:</span> {{ detailsTask.encargado_task }}
+                    </div>
+                    <div class="mt-3">
+                        <span class="fw-bold">Observaciones:</span> {{ detailsTask.observaciones_task }}
+                    </div>
+
+                    <div class="container-box mt-4 mb-5">
+                        <span class="title-box">Detalles cambio de estatus</span>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Estatus:</span> {{ detailsTask.estatus_task }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Identificador usuario:</span> {{ detailsTask.motivo_cancelado_task.uuid }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Correo:</span> {{ detailsTask.motivo_cancelado_task.correo }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Informe estatus:</span> {{ detailsTask.motivo_cancelado_task.informe }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Fecha modificacion:</span> {{ formatDate(detailsTask.motivo_cancelado_task.date, true, true) }}
+                        </div>
+                    </div>
+
+                    <div class="container-box mt-4 mb-5">
+                        <span class="title-box">Detalles generales</span>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Creada por:</span> {{ detailsTask.creada_por_task.correo }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Fecha creada:</span> {{ formatDate(detailsTask.fecha_creada_task, true, true) }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Actualizada por:</span> {{ detailsTask.modificada_por_task.correo }}
+                        </div>
+                        <div class="mt-3 mb-1">
+                            <span class="fw-bold">Fecha actualizada:</span> {{ formatDate(detailsTask.fecha_modificada_task, true, true) }}
+                        </div>
+                    </div>
+
+                    <button class="btn btn-warning float-end" type="button" @click="setDataForEdit(detailsTask)">
+                        <span class="icofont-pencil-alt-2"></span>
+                        Editar
+                    </button>
+                </div>
+            </div> -->
+
+            <div style="transition-property: all; transition-duration: 1s;" :style="styleFloat">
+                <span class="icofont-refresh float-button float-btn-second"  :style="styleFloatTasksSecond" @click="loadUsers"></span>
+                <span class="icofont-ui-add float-button float-btn-load" :style="styleFloatTasks" @click="newUser"></span>
+                <span class="float-button" :class="iconTasksFloat" @click="showOptionsUsersClick"></span>
+            </div>
+        </div>
+
+        <button ref="btnAlert" type="button" class="btn btn-primary invisible" data-bs-toggle="modal" data-bs-target="#modalAlert">
+            Launch demo modal
+        </button>
+
+        <div id="modalAlert" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white" :class="backgroundHeader">
+                    <h5 class="modal-title">{{ alert.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark">
+                    <p>{{ alert.message }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <button ref="btnAlertOptions" type="button" class="btn btn-primary invisible" data-bs-toggle="modal" data-bs-target="#modalAlertOptions">
+            Launch demo modal
+        </button>
+
+        <div id="modalAlertOptions" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-white" :class="backgroundHeaderOptions">
+                    <h5 class="modal-title">{{ alertOptions.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark">
+                    <p>{{ alertOptions.message }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="alertOptions.callBack">Aceptar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="../scripts/usuarios.js"></script>
+</body>
+</html>

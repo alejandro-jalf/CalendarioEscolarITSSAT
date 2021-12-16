@@ -1,7 +1,7 @@
 const joi = require("joi");
 
 const schemasUsuario = (() => {
-    const schemaEmail = joi.string().regex(/^\w+@{1,1}\w+\.{1,1}\w+$/).min(5);
+    const schemaEmail = joi.string().regex(/^\w+@{1,1}\w+\.{1,1}\w+\.{1,1}\w+$/).min(5);
     
     const schemaContentLetters = joi.string().regex(/[a-zA-Z]+/);
 

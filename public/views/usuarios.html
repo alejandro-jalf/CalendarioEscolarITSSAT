@@ -188,10 +188,10 @@
                                     <button class="btn btn-primary mb-1" type="button" @click="dontAviable">
                                         <span class="icofont-eye-alt"></span>
                                     </button>
-                                    <button class="btn btn-warning mb-1" type="button" @click="dontAviable">
+                                    <button v-if="!isEqualsUser(user.UUID_user)" class="btn btn-warning mb-1" type="button" @click="setDataForUpdate(user)">
                                         <span class="icofont-pencil-alt-2"></span>
                                     </button>
-                                    <button class="btn btn-danger mb-1" type="button" @click="dontAviable">
+                                    <button v-if="!isEqualsUser(user.UUID_user)" class="btn btn-danger mb-1" type="button" @click="dontAviable">
                                         <span class="icofont-ui-delete"></span>
                                     </button>
                                 </td>
@@ -210,7 +210,7 @@
                     <div class="float-end fw-bold">{{ titleCardUser }}</div>
                 </div>
                 <div class="card-body">
-                    <div class="mt-2">
+                    <div v-if="statusUser === 1" class="mt-2">
                         <label for="userEmail" class="form-label">Correo electronico:</label>
                         <input v-model="userNew.correo_user" type="email" class="form-control" id="userEmail" placeholder="alguien@dominio.subdominio">
                     </div>
@@ -252,7 +252,7 @@
                         <input v-model="userNew.telefono_user" type="text" class="form-control" id="userTel" placeholder="0000000000">
                     </div>
 
-                    <div class="accordion  mt-2" id="accordionExample">
+                    <div class="accordion mt-2 mb-2" id="accordionExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -325,112 +325,120 @@
                                                 </div>
 
                                                 <div class="form-check">
-                                                    <input v-model="userNew.accessTo_user.actividades.select" class="form-check-input" type="checkbox" id="checkTask" data-bs-toggle="collapse" href="#collapseTasks" role="button" aria-controls="collapseTasks">
+                                                    <input v-model="userNew.accessTo_user.actividades.select" class="form-check-input" type="checkbox" id="checkTask">
                                                     <label class="form-check-label" for="checkTask">Actividades</label>
                                                 </div>
-                                                <div class="tree-second collapse" id="collapseTasks">
-                                                    <div v-if="!isInvitedSelected" class="form-check">
-                                                        <input ref="checkTaskAll" class="form-check-input" type="checkbox" id="checkTaskAll" @click="changeAllTask">
-                                                        <label class="form-check-label" for="checkTaskAll">Todo</label>
+                                                <transition name="fade">
+                                                    <div class="tree-second" v-if="userNew.accessTo_user.actividades.select">
+                                                        <div v-if="!isInvitedSelected" class="form-check">
+                                                            <input :checked="selectAllTask" ref="checkTaskAll" class="form-check-input" type="checkbox" id="checkTaskAll" @click="changeAllTask">
+                                                            <label class="form-check-label" for="checkTaskAll">Todo</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input v-model="userNew.accessTo_user.actividades.view" class="form-check-input" type="checkbox" id="checkTaskView" disabled>
+                                                            <label class="form-check-label" for="checkTaskView">Lectura</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkTaskCreate" v-model="userNew.accessTo_user.actividades.create" class="form-check-input" type="checkbox" id="checkTaskCreate">
+                                                            <label class="form-check-label" for="checkTaskCreate">Creacion</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkTaskUpdate" v-model="userNew.accessTo_user.actividades.update" class="form-check-input" type="checkbox" id="checkTaskUpdate">
+                                                            <label class="form-check-label" for="checkTaskUpdate">Actualizacion</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkTaskDelete" v-model="userNew.accessTo_user.actividades.delete" class="form-check-input" type="checkbox" id="checkTaskDelete">
+                                                            <label class="form-check-label" for="checkTaskDelete">Eliminacion</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check">
-                                                        <input v-model="userNew.accessTo_user.actividades.view" class="form-check-input" type="checkbox" id="checkTaskView" disabled>
-                                                        <label class="form-check-label" for="checkTaskView">Lectura</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkTaskCreate" v-model="userNew.accessTo_user.actividades.create" class="form-check-input" type="checkbox" id="checkTaskCreate" @click="selectItemActividades">
-                                                        <label class="form-check-label" for="checkTaskCreate">Creacion</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkTaskUpdate" v-model="userNew.accessTo_user.actividades.update" class="form-check-input" type="checkbox" id="checkTaskUpdate" @click="selectItemActividades">
-                                                        <label class="form-check-label" for="checkTaskUpdate">Actualizacion</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkTaskDelete" v-model="userNew.accessTo_user.actividades.delete" class="form-check-input" type="checkbox" id="checkTaskDelete" @click="selectItemActividades">
-                                                        <label class="form-check-label" for="checkTaskDelete">Eliminacion</label>
-                                                    </div>
-                                                </div>
+                                                </transition>
 
                                                 <div class="form-check">
-                                                    <input v-model="userNew.accessTo_user.maestroActividades.select" class="form-check-input" type="checkbox" id="checkMaster"  data-bs-toggle="collapse" href="#collapseMaster" role="button" aria-controls="collapseMaster">
+                                                    <input v-model="userNew.accessTo_user.maestroActividades.select" class="form-check-input" type="checkbox" id="checkMaster">
                                                     <label class="form-check-label" for="checkMaster">Maestro Actividades</label>
                                                 </div>
-                                                <div class="tree-second collapse" id="collapseMaster">
-                                                    <div v-if="!isInvitedSelected" class="form-check">
-                                                        <input ref="checkMasterAll" class="form-check-input" type="checkbox" id="checkMasterAll" @click="changeAllMaster">
-                                                        <label class="form-check-label" for="checkMasterAll">Todo</label>
+                                                <transition name="fade">
+                                                    <div class="tree-second" v-if="userNew.accessTo_user.maestroActividades.select">
+                                                        <div v-if="!isInvitedSelected" class="form-check">
+                                                            <input :checked="selectAllMaster" ref="checkMasterAll" class="form-check-input" type="checkbox" id="checkMasterAll" @click="changeAllMaster">
+                                                            <label class="form-check-label" for="checkMasterAll">Todo</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input v-model="userNew.accessTo_user.maestroActividades.view" class="form-check-input" type="checkbox" id="checkMasterView" disabled>
+                                                            <label class="form-check-label" for="checkMasterView">Lectura</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkMasterCreate" v-model="userNew.accessTo_user.maestroActividades.create" class="form-check-input" type="checkbox" id="checkMasterCreate">
+                                                            <label class="form-check-label" for="checkMasterCreate">Creacion</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkMasterUpdate" v-model="userNew.accessTo_user.maestroActividades.update" class="form-check-input" type="checkbox" id="checkMasterUpdate">
+                                                            <label class="form-check-label" for="checkMasterUpdate">Actualizacion</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkMasterDelete" v-model="userNew.accessTo_user.maestroActividades.delete" class="form-check-input" type="checkbox" id="checkMasterDelete">
+                                                            <label class="form-check-label" for="checkMasterDelete">Eliminacion</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check">
-                                                        <input v-model="userNew.accessTo_user.maestroActividades.view" class="form-check-input" type="checkbox" id="checkMasterView" disabled>
-                                                        <label class="form-check-label" for="checkMasterView">Lectura</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkMasterCreate" v-model="userNew.accessTo_user.maestroActividades.create" class="form-check-input" type="checkbox" id="checkMasterCreate" @click="selectItemMaster">
-                                                        <label class="form-check-label" for="checkMasterCreate">Creacion</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkMasterUpdate" v-model="userNew.accessTo_user.maestroActividades.update" class="form-check-input" type="checkbox" id="checkMasterUpdate" @click="selectItemMaster">
-                                                        <label class="form-check-label" for="checkMasterUpdate">Actualizacion</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkMasterDelete" v-model="userNew.accessTo_user.maestroActividades.delete" class="form-check-input" type="checkbox" id="checkMasterDelete" @click="selectItemMaster">
-                                                        <label class="form-check-label" for="checkMasterDelete">Eliminacion</label>
-                                                    </div>
-                                                </div>
+                                                </transition>
 
                                                 <div class="form-check">
-                                                    <input v-model="userNew.accessTo_user.areas.select" class="form-check-input" type="checkbox" id="checkAreas"  data-bs-toggle="collapse" href="#collapseAreas" role="button" aria-controls="collapseAreas">
+                                                    <input v-model="userNew.accessTo_user.areas.select" class="form-check-input" type="checkbox" id="checkAreas">
                                                     <label class="form-check-label" for="checkAreas">Areas</label>
                                                 </div>
-                                                <div class="tree-second collapse" id="collapseAreas">
-                                                    <div v-if="!isInvitedSelected" class="form-check">
-                                                        <input ref="checkAreasAll" class="form-check-input" type="checkbox" id="checkAreasAll" @click="changeAllAreas">
-                                                        <label class="form-check-label" for="checkAreasAll">Todo</label>
+                                                <transition name="fade">
+                                                    <div class="tree-second" v-if="userNew.accessTo_user.areas.select">
+                                                        <div v-if="!isInvitedSelected" class="form-check">
+                                                            <input :checked="selectAllAreas" ref="checkAreasAll" class="form-check-input" type="checkbox" id="checkAreasAll" @click="changeAllAreas">
+                                                            <label class="form-check-label" for="checkAreasAll">Todo</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input v-model="userNew.accessTo_user.areas.view" class="form-check-input" type="checkbox" id="checkAreasView" disabled>
+                                                            <label class="form-check-label" for="checkAreasView">Lectura</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkAreasCreate" v-model="userNew.accessTo_user.areas.create" class="form-check-input" type="checkbox" id="checkAreasCreate">
+                                                            <label class="form-check-label" for="checkAreasCreate">Creacion</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkAreasUpdate" v-model="userNew.accessTo_user.areas.update" class="form-check-input" type="checkbox" id="checkAreasUpdate">
+                                                            <label class="form-check-label" for="checkAreasUpdate">Actualizacion</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkAreasDelete" v-model="userNew.accessTo_user.areas.delete" class="form-check-input" type="checkbox" id="checkAreasDelete">
+                                                            <label class="form-check-label" for="checkAreasDelete">Eliminacion</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check">
-                                                        <input v-model="userNew.accessTo_user.areas.view" class="form-check-input" type="checkbox" id="checkAreasView" disabled>
-                                                        <label class="form-check-label" for="checkAreasView">Lectura</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkAreasCreate" v-model="userNew.accessTo_user.areas.create" class="form-check-input" type="checkbox" id="checkAreasCreate" @click="selectItemArea">
-                                                        <label class="form-check-label" for="checkAreasCreate">Creacion</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkAreasUpdate" v-model="userNew.accessTo_user.areas.update" class="form-check-input" type="checkbox" id="checkAreasUpdate" @click="selectItemArea">
-                                                        <label class="form-check-label" for="checkAreasUpdate">Actualizacion</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkAreasDelete" v-model="userNew.accessTo_user.areas.delete" class="form-check-input" type="checkbox" id="checkAreasDelete" @click="selectItemArea">
-                                                        <label class="form-check-label" for="checkAreasDelete">Eliminacion</label>
-                                                    </div>
-                                                </div>
+                                                </transition>
 
                                                 <div v-if="isManagerSelected" class="form-check">
-                                                    <input v-model="userNew.accessTo_user.usuarios.select" class="form-check-input" type="checkbox" id="checkUser"  data-bs-toggle="collapse" href="#collapseUsers" role="button" aria-controls="collapseUsers">
+                                                    <input v-model="userNew.accessTo_user.usuarios.select" class="form-check-input" type="checkbox" id="checkUser">
                                                     <label class="form-check-label" for="checkUser">Usuarios</label>
                                                 </div>
-                                                <div v-if="isManagerSelected" class="tree-second collapse" id="collapseUsers">
-                                                    <div v-if="!isInvitedSelected" class="form-check">
-                                                        <input ref="checkUserAll" class="form-check-input" type="checkbox" id="checkUserAll" @click="changeAllUsers">
-                                                        <label class="form-check-label" for="checkUserAll">Todo</label>
+                                                <transition name="fade">
+                                                    <div class="tree-second" v-if="userNew.accessTo_user.usuarios.select">
+                                                        <div v-if="!isInvitedSelected" class="form-check">
+                                                            <input :checked="selectAllUser" ref="checkUserAll" class="form-check-input" type="checkbox" id="checkUserAll" @click="changeAllUsers">
+                                                            <label class="form-check-label" for="checkUserAll">Todo</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input v-model="userNew.accessTo_user.usuarios.view" class="form-check-input" type="checkbox" id="checkUserView" disabled>
+                                                            <label class="form-check-label" for="checkUserView">Lectura</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkUserCreate" v-model="userNew.accessTo_user.usuarios.create" class="form-check-input" type="checkbox" id="checkUserCreate">
+                                                            <label class="form-check-label" for="checkUserCreate">Creacion</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkUserUpdate" v-model="userNew.accessTo_user.usuarios.update" class="form-check-input" type="checkbox" id="checkUserUpdate">
+                                                            <label class="form-check-label" for="checkUserUpdate">Actualizacion</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input :disabled="isInvitedSelected" ref="checkUserDelete" v-model="userNew.accessTo_user.usuarios.delete" class="form-check-input" type="checkbox" id="checkUserDelete">
+                                                            <label class="form-check-label" for="checkUserDelete">Eliminacion</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check">
-                                                        <input v-model="userNew.accessTo_user.usuarios.view" class="form-check-input" type="checkbox" id="checkUserView" disabled>
-                                                        <label class="form-check-label" for="checkUserView">Lectura</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkUserCreate" v-model="userNew.accessTo_user.usuarios.create" class="form-check-input" type="checkbox" id="checkUserCreate" @click="selectItemUsers">
-                                                        <label class="form-check-label" for="checkUserCreate">Creacion</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkUserUpdate" v-model="userNew.accessTo_user.usuarios.update" class="form-check-input" type="checkbox" id="checkUserUpdate" @click="selectItemUsers">
-                                                        <label class="form-check-label" for="checkUserUpdate">Actualizacion</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input :disabled="isInvitedSelected" ref="checkUserDelete" v-model="userNew.accessTo_user.usuarios.delete" class="form-check-input" type="checkbox" id="checkUserDelete" @click="selectItemUsers">
-                                                        <label class="form-check-label" for="checkUserDelete">Eliminacion</label>
-                                                    </div>
-                                                </div>
+                                                </transition>
 
                                                 <div class="form-check">
                                                     <input v-model="userNew.accessTo_user.perfil.select" class="form-check-input" type="checkbox" id="checkProfile" disabled>
@@ -454,12 +462,18 @@
                         </div>
                     </div>
 
-                    <div class="mt-2 mb-2">
+                    <div v-if="statusUser === 2" class="mt-2">
+                        <span v-if="!userNew.activo_user" class="icofont-toggle-off fs-1 text-danger"></span>
+                        <span v-else class="icofont-toggle-on fs-1 text-success"></span>
+                        {{ activoUser }}
+                    </div>
+
+                    <div class="pt-2 mb-2">
                         <button v-if="statusUser === 1" class="btn btn-primary float-end" type="button" @click="createUser">
                             <span class="icofont-plus-circle"></span>
                             Agregar
                         </button>
-                        <button v-else class="btn btn-primary float-end" type="button" @click="dontAviable">
+                        <button v-else class="btn btn-primary float-end" type="button" @click="questionUpdate">
                             Guardar cambios
                         </button>
                     </div>
@@ -552,11 +566,17 @@
                 </div>
             </div> -->
 
-            <div style="transition-property: all; transition-duration: 1s;" :style="styleFloat">
-                <span class="icofont-refresh float-button float-btn-second"  :style="styleFloatTasksSecond" @click="loadUsers"></span>
-                <span class="icofont-ui-add float-button float-btn-load" :style="styleFloatTasks" @click="newUser"></span>
-                <span class="float-button" :class="iconTasksFloat" @click="showOptionsUsersClick"></span>
-            </div>
+            <transition name="fade">
+                <div v-if="statusUser === 0">
+                    <transition name="fade">
+                        <div v-if="showOptionsUsers">
+                            <span class="icofont-refresh float-button float-btn-second" @click="loadUsers"></span>
+                            <span class="icofont-ui-add float-button float-btn-load" @click="newUser"></span>
+                        </div>
+                    </transition>
+                    <span class="float-button" :class="iconTasksFloat" @click="showOptionsUsersClick"></span>
+                </div>
+            </transition>
         </div>
 
         <button ref="btnAlert" type="button" class="btn btn-primary invisible" data-bs-toggle="modal" data-bs-target="#modalAlert">

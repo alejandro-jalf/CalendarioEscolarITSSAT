@@ -41,6 +41,7 @@ var appAdministracion = new Vue({
                 password_r_user: '',
                 tipo_user: 'invitado',
                 area_user: null,
+                activo_user: true,
                 accessTo_user: {
                     principal: {
                         select: true,
@@ -87,7 +88,6 @@ var appAdministracion = new Vue({
             dataUsers: localStorage.getItem('calendario_users') ?
                 JSON.parse(localStorage.getItem('calendario_users')) :
                 { data: [] },
-            
             dataAreas: localStorage.getItem('calendario_areas_data') ?
                 JSON.parse(localStorage.getItem('calendario_areas_data')) :
                 { data: [] },
@@ -120,6 +120,34 @@ var appAdministracion = new Vue({
         },
 
         // Para actividades
+        selectAllTask() {
+            return (
+                this.userNew.accessTo_user.actividades.create &&
+                this.userNew.accessTo_user.actividades.update &&
+                this.userNew.accessTo_user.actividades.delete
+            );
+        },
+        selectAllMaster() {
+            return (
+                this.userNew.accessTo_user.maestroActividades.create &&
+                this.userNew.accessTo_user.maestroActividades.update &&
+                this.userNew.accessTo_user.maestroActividades.delete
+            );
+        },
+        selectAllAreas() {
+            return (
+                this.userNew.accessTo_user.areas.create &&
+                this.userNew.accessTo_user.areas.update &&
+                this.userNew.accessTo_user.areas.delete
+            );
+        },
+        selectAllUser() {
+            return (
+                this.userNew.accessTo_user.usuarios.create &&
+                this.userNew.accessTo_user.usuarios.update &&
+                this.userNew.accessTo_user.usuarios.delete
+            );
+        },
         isManagerSelected() {
             return this.userNew.tipo_user === 'administrador'
         },
@@ -177,6 +205,9 @@ var appAdministracion = new Vue({
         },
         titleCardUser() {
             return this.statusUser === 1 ? 'Creando usuario' : 'Editando usuario'
+        },
+        activoUser() {
+            return this.userNew.activo_user ? 'Cuenta activa' : 'Cuenta deshabilitada';
         },
 
         listDataAreas() {
@@ -241,6 +272,9 @@ var appAdministracion = new Vue({
         },
 
         // Para actividades
+        isEqualsUser(uuidUser) {
+            return this.dataUser.data[0].UUID_user === uuidUser;
+        },
         selectInvitadoUser() {
             if (this.userNew.tipo_user === 'invitado') {
                 this.userNew.accessTo_user.usuarios.select = false;
@@ -272,63 +306,27 @@ var appAdministracion = new Vue({
         },
         changeAllAreas() {
             const checkedAll = this.$refs.checkAreasAll.checked;
-
             this.userNew.accessTo_user.areas.create = checkedAll;
             this.userNew.accessTo_user.areas.update = checkedAll;
             this.userNew.accessTo_user.areas.delete = checkedAll;
         },
         changeAllTask() {
             const checkedAll = this.$refs.checkTaskAll.checked;
-
             this.userNew.accessTo_user.actividades.create = checkedAll;
             this.userNew.accessTo_user.actividades.update = checkedAll;
             this.userNew.accessTo_user.actividades.delete = checkedAll;
         },
         changeAllMaster() {
             const checkedAll = this.$refs.checkMasterAll.checked;
-
             this.userNew.accessTo_user.maestroActividades.create = checkedAll;
             this.userNew.accessTo_user.maestroActividades.update = checkedAll;
             this.userNew.accessTo_user.maestroActividades.delete = checkedAll;
         },
         changeAllUsers() {
             const checkedAll = this.$refs.checkUserAll.checked;
-
             this.userNew.accessTo_user.usuarios.create = checkedAll;
             this.userNew.accessTo_user.usuarios.update = checkedAll;
             this.userNew.accessTo_user.usuarios.delete = checkedAll;
-        },
-        selectItemActividades() {
-            const selectAllPermisions = (
-                this.$refs.checkTaskCreate.checked &&
-                this.$refs.checkTaskUpdate.checked &&
-                this.$refs.checkTaskDelete.checked
-            )
-            this.$refs.checkTaskAll.checked = selectAllPermisions;
-        },
-        selectItemMaster() {
-            const selectAllPermisions = (
-                this.$refs.checkMasterCreate.checked &&
-                this.$refs.checkMasterUpdate.checked &&
-                this.$refs.checkMasterDelete.checked
-            )
-            this.$refs.checkMasterAll.checked = selectAllPermisions;
-        },
-        selectItemUsers() {
-            const selectAllPermisions = (
-                this.$refs.checkUserCreate.checked &&
-                this.$refs.checkUserDelete.checked &&
-                this.$refs.checkUserUpdate.checked
-            )
-            this.$refs.checkUserAll.checked = selectAllPermisions;
-        },
-        selectItemArea() {
-            const selectAllPermisions = (
-                this.$refs.checkAreasCreate.checked &&
-                this.$refs.checkAreasUpdate.checked &&
-                this.$refs.checkAreasDelete.checked
-            )
-            this.$refs.checkAreasAll.checked = selectAllPermisions;
         },
         infoTipeUser() {
             this.showAlert(
@@ -396,9 +394,6 @@ var appAdministracion = new Vue({
                 }
             };
         },
-        daySelected(dia) {
-            return dia.select ? 'bg-primary' : 'bg-light text-dark';
-        },
         showOptionsUsersClick() { this.showOptionsUsers = !this.showOptionsUsers;},
         
         async loadUsers() {
@@ -432,15 +427,17 @@ var appAdministracion = new Vue({
         },
 
         validateDataUser() {
-            if (this.userNew.correo_user.trim() === '') {
-                this.showAlert('Necesita ingresar el correo electronico');
-                return false;
-            }
-
-            const correo_split = this.userNew.correo_user.trim().split('@');
-            if (correo_split[1].trim() !== 'itssat.edu.mx') {
-                this.showAlert(`El correo "${this.userNew.correo_user}" no pertenece a un dominio autorizado`);
-                return false;
+            if (this.statusUser === 1) {
+                if (this.userNew.correo_user.trim() === '') {
+                    this.showAlert('Necesita ingresar el correo electronico');
+                    return false;
+                }
+    
+                const correo_split = this.userNew.correo_user.trim().split('@');
+                if (correo_split[1].trim() !== 'itssat.edu.mx') {
+                    this.showAlert(`El correo "${this.userNew.correo_user}" no pertenece a un dominio autorizado`);
+                    return false;
+                }
             }
 
             if (this.userNew.nombre_user.trim() === '') {
@@ -507,7 +504,7 @@ var appAdministracion = new Vue({
         async createUser() {
             if (!this.validateDataUser()) return false;
             try {
-                this.showOptionsArea = false;
+                this.showOptionsUsers = false;
                 const url =
                 'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios';
 
@@ -556,6 +553,71 @@ var appAdministracion = new Vue({
             }
         },
 
+        setDataForUpdate(data) {
+            const dataActual = { ...data };
+            dataActual.area_user = dataActual.area_user.uuid
+            console.log(dataActual);
+            this.statusUser = 2;
+            this.userNew = dataActual;
+            this.showOptionsUsers = false;
+        },
+
+        questionUpdate() {
+            this.showAlertOptions(
+                '¿Guardar cambios en el usuario?',
+                'Actualizando usuario',
+                () => { this.updateUser(); }
+            );
+        },
+        async updateUser() {
+            if (!this.validateDataUser()) return false;
+            try {
+                this.showOptionsUsers = false;
+                const url =
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' + this.userNew.correo_user;
+
+                this.setLoading(true);
+                const dateAction = this.getDateNow().format('YYYY-MM-DDTHH:MM:ss') + '.000z';
+
+                const response = await axios({
+                    method: 'put',
+                    url,
+                    data: {
+                        nombre_user: this.userNew.nombre_user,
+                        apellid_p_user: this.userNew.apellid_p_user,
+                        apellid_m_user: this.userNew.apellid_m_user,
+                        direccion_user: this.userNew.direccion_user,
+                        telefono_user: this.userNew.telefono_user,
+                        ciudad_user: this.userNew.ciudad_user,
+                        tipo_user: this.userNew.tipo_user,
+                        area_user: this.userNew.area_user,
+                        accessTo_user: this.userNew.accessTo_user,
+                        activo_user: this.userNew.activo_user,
+                        fecha_modificacion_user: dateAction,
+                        modificado_por_user: this.dataUser.data[0].UUID_user,
+                    },
+                })
+
+                this.setLoading(false);
+
+                console.log(response);
+                if (response.data.success) {
+                    this.showAlert(response.data.message, 'Exito', 'success');
+                    this.loadUsers();
+                    this.statusUser = 0;
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al actualizar usuario', 'warning');
+                }
+            } catch (error) {
+                console.log(error, error.response);
+                this.setLoading(false);
+                if (error.response !== undefined) {
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                } else
+                    this.showAlert('Fallo al actualizar usuario intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+
         setForDelete(idTask) {
             this.showAlertOptions(
                 '¿Quiere eliminar esta actividad de manera permanente?',
@@ -596,7 +658,7 @@ var appAdministracion = new Vue({
         
         async loadAreas() {
             try {
-                this.showOptionsArea = false;
+                this.showOptionsUsers = false;
                 const url =
                 'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/areas';
 

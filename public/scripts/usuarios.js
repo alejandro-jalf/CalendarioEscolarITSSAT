@@ -272,6 +272,9 @@ var appAdministracion = new Vue({
         },
 
         // Para actividades
+        iconToggle(status) {
+            return status ? 'icofont-toggle-on text-success fs-1' : 'icofont-toggle-off text-danger fs-1';
+        },
         isEqualsUser(uuidUser) {
             return this.dataUser.data[0].UUID_user === uuidUser;
         },
@@ -424,6 +427,14 @@ var appAdministracion = new Vue({
                 else
                     this.showAlert('Fallo al cargar los usuarios intentelo mas tarde', 'Error inesperado', 'danger');
             }
+        },
+
+        setDetailsUser(data) {
+            const dataActual = { ...data };
+            console.log(dataActual);
+            this.statusUser = 3;
+            this.detailsUser = dataActual;
+            this.showOptionsUsers = false;
         },
 
         validateDataUser() {

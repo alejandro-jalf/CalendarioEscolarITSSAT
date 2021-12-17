@@ -185,7 +185,7 @@
                                 <td>{{ user.tipo_user }}</td>
                                 <td>{{ formatDate(user.fecha_alta_user) }}</td>
                                 <td>
-                                    <button class="btn btn-primary mb-1" type="button" @click="dontAviable">
+                                    <button class="btn btn-primary mb-1" type="button" @click="setDetailsUser(user)">
                                         <span class="icofont-eye-alt"></span>
                                     </button>
                                     <button v-if="!isEqualsUser(user.UUID_user)" class="btn btn-warning mb-1" type="button" @click="setDataForUpdate(user)">
@@ -214,6 +214,7 @@
                         <label for="userEmail" class="form-label">Correo electronico:</label>
                         <input v-model="userNew.correo_user" type="email" class="form-control" id="userEmail" placeholder="alguien@dominio.subdominio">
                     </div>
+                    <h5 v-else class="card-title">{{ userNew.correo_user }}</h5>
 
                     <div class="mt-2 mb-1">Nombre Completo:</div>
                     <div class="row">
@@ -480,91 +481,128 @@
                 </div>
             </div>
 
-            <!--
-
             <div v-else class="card">
                 <div class="card-header">
                     <div class="float-start cursor-pointer" @click="statusUser = 0">
                         <span class="icofont-simple-left"></span>
                         Regresar
                     </div>
-                    <div class="float-end fw-bold">Visualizando actividad</div>
+                    <div class="float-end fw-bold">Visualizando usuario</div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ detailsTask.descripcion_task }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ detailsTask.id_master_task.titulo }}</h6>
-                    <div class="mb-2">
-                        <span class="fw-bold">Año:</span> {{ detailsTask.year_task }}
-                    </div>
-                    <div v-if="detailsTask.rango_fechas_task">
-                        <div class="fechas-predeterminadas">
-                            <span class="fw-bold">Del:</span> {{ formatDate(detailsTask.fecha_inicial_task) }}
+                    <h5 class="card-title">{{ detailsUser.correo_user }}</h5>
+                    <div class="row">
+                        <div class="col-md">
+                            
+                            <div class="mt-3">
+                                <span class="fw-bold ps-2">Nombre:</span>
+                                {{ detailsUser.nombre_user }}
+                                {{ detailsUser.apellid_p_user }}
+                                {{ detailsUser.apellid_m_user }}
+                                <hr class="m-0 p-0">
+                            </div>
+                            <div class="mt-3">
+                                <span class="fw-bold ps-2">Direccion:</span> {{ detailsUser.direccion_user }}
+                                <hr class="m-0 p-0">
+                            </div>
+                            <div class="mt-3">
+                                <span class="fw-bold ps-2">Ciudad:</span> {{ detailsUser.ciudad_user }}
+                                <hr class="m-0 p-0">
+                            </div>
                         </div>
-                        <div class="fechas-predeterminadas">
-                            <span class="fw-bold">Al:</span> {{ formatDate(detailsTask.fecha_final_task) }}
-                        </div>
-                    </div>
-                    <div v-else>
-                        <div class="container-box">
-                            <span class="title-box">Meses</span>
-                            <span v-for="(mes, indexMes) in detailsTask.mes_task" :key="indexMes" class="badge bg-success m-1">{{ arrayMonths()[mes - 1] }}</span>
-                        </div>
-                        <div class="container-box">
-                            <span class="title-box">Dias</span>
-                            <span v-for="(dia, indexDia) in detailsTask.dias_task" :key="indexDia" class="badge bg-success m-1">{{ dia }}</span>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <span class="fw-bold">Area:</span> {{ detailsTask.para_area_task.nombre }}
-                    </div>
-                    <div class="mt-3">
-                        <span class="fw-bold">Encargado:</span> {{ detailsTask.encargado_task }}
-                    </div>
-                    <div class="mt-3">
-                        <span class="fw-bold">Observaciones:</span> {{ detailsTask.observaciones_task }}
-                    </div>
-
-                    <div class="container-box mt-4 mb-5">
-                        <span class="title-box">Detalles cambio de estatus</span>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Estatus:</span> {{ detailsTask.estatus_task }}
-                        </div>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Identificador usuario:</span> {{ detailsTask.motivo_cancelado_task.uuid }}
-                        </div>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Correo:</span> {{ detailsTask.motivo_cancelado_task.correo }}
-                        </div>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Informe estatus:</span> {{ detailsTask.motivo_cancelado_task.informe }}
-                        </div>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Fecha modificacion:</span> {{ formatDate(detailsTask.motivo_cancelado_task.date, true, true) }}
+                        <div class="col-md">
+                            <div class="mt-3">
+                                <span class="fw-bold ps-2">Telefono:</span> {{ detailsUser.telefono_user }}
+                                <hr class="m-0 p-0">
+                            </div>
+                            <div class="mt-3">
+                                <span class="fw-bold ps-2">Tipo de usuario:</span> {{ detailsUser.tipo_user }}
+                                <hr class="m-0 p-0">
+                            </div>
+                            <div class="mt-3">
+                                <span class="fw-bold ps-2">Area:</span> {{ detailsUser.area_user.nombre }}
+                                <hr class="m-0 p-0">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="container-box mt-4 mb-5">
-                        <span class="title-box">Detalles generales</span>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Creada por:</span> {{ detailsTask.creada_por_task.correo }}
-                        </div>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Fecha creada:</span> {{ formatDate(detailsTask.fecha_creada_task, true, true) }}
-                        </div>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Actualizada por:</span> {{ detailsTask.modificada_por_task.correo }}
-                        </div>
-                        <div class="mt-3 mb-1">
-                            <span class="fw-bold">Fecha actualizada:</span> {{ formatDate(detailsTask.fecha_modificada_task, true, true) }}
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Accesos y permisos</h5>
+                            <div>
+                                <div> <span :class="iconToggle(detailsUser.accessTo_user.principal.select)"></span> Principal </div>
+                                <div class="tree-second">
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.principal.view)"></span> Lectura </div>
+                                </div>
+
+                                <div> <span :class="iconToggle(detailsUser.accessTo_user.actividades.select)"></span> Actividades </div>
+                                <div class="tree-second" v-if="detailsUser.accessTo_user.actividades.select">
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.actividades.view)"></span> Lectura </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.actividades.create)"></span> Creacion </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.actividades.update)"></span> Actualizacion </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.actividades.delete)"></span> Eliminacion </div>
+                                </div>
+
+                                <div> <span :class="iconToggle(detailsUser.accessTo_user.maestroActividades.select)"></span> Maestro actividades </div>
+                                <div class="tree-second" v-if="detailsUser.accessTo_user.maestroActividades.select">
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.maestroActividades.view)"></span> Lectura </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.maestroActividades.create)"></span> Creacion </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.maestroActividades.update)"></span> Actualizacion </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.maestroActividades.delete)"></span> Eliminacion </div>
+                                </div>
+
+                                <div> <span :class="iconToggle(detailsUser.accessTo_user.areas.select)"></span> Areas </div>
+                                <div class="tree-second" v-if="detailsUser.accessTo_user.areas.select">
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.areas.view)"></span> Lectura </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.areas.create)"></span> Creacion </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.areas.update)"></span> Actualizacion </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.areas.delete)"></span> Eliminacion </div>
+                                </div>
+
+                                <div> <span :class="iconToggle(detailsUser.accessTo_user.usuarios.select)"></span> Usuarios </div>
+                                <div class="tree-second" v-if="detailsUser.accessTo_user.usuarios.select">
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.usuarios.view)"></span> Lectura </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.usuarios.create)"></span> Creacion </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.usuarios.update)"></span> Actualizacion </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.usuarios.delete)"></span> Eliminacion </div>
+                                </div>
+
+                                <div> <span :class="iconToggle(detailsUser.accessTo_user.perfil.select)"></span> Perfil </div>
+                                <div class="tree-second">
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.perfil.view)"></span> Lectura </div>
+                                    <div> <span :class="iconToggle(detailsUser.accessTo_user.perfil.update)"></span> Actualizacion </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <button class="btn btn-warning float-end" type="button" @click="setDataForEdit(detailsTask)">
+                    <div class="mt-3">
+                        <span class="fw-bold ps-2">Estatus:</span> {{ refactorStatus(detailsUser.activo_user) }}
+                        <hr class="m-0 p-0">
+                    </div>
+                    <div class="mt-3">
+                        <span class="fw-bold ps-2">Creado por:</span> {{ detailsUser.creado_por_user.correo }}
+                        <hr class="m-0 p-0">
+                    </div>
+                    <div class="mt-3">
+                        <span class="fw-bold ps-2">Fecha de creacion:</span> {{ formatDate(detailsUser.fecha_alta_user, true, true) }}
+                        <hr class="m-0 p-0">
+                    </div>
+                    <div class="mt-3">
+                        <span class="fw-bold ps-2">Actualizado por:</span> {{ detailsUser.creado_por_user.correo }}
+                        <hr class="m-0 p-0">
+                    </div>
+                    <div class="mt-3">
+                        <span class="fw-bold ps-2">Fecha actualizacion:</span> {{ formatDate(detailsUser.fecha_modificacion_user, true, true) }}
+                        <hr class="m-0 p-0">
+                    </div>
+
+                    <button class="btn btn-warning float-end mt-2" type="button" @click="setDataForUpdate(detailsUser)">
                         <span class="icofont-pencil-alt-2"></span>
                         Editar
                     </button>
                 </div>
-            </div> -->
+            </div>
 
             <transition name="fade">
                 <div v-if="statusUser === 0">

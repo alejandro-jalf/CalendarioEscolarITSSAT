@@ -598,7 +598,7 @@
                         <hr class="m-0 p-0">
                     </div>
 
-                    <button class="btn btn-warning float-end mt-2" type="button" @click="setDataForUpdate(detailsUser)">
+                    <button v-if="!isEqualsUser(detailsUser.UUID_user)" class="btn btn-warning float-end mt-2" type="button" @click="setDataForUpdate(detailsUser)">
                         <span class="icofont-pencil-alt-2"></span>
                         Editar
                     </button>

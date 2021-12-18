@@ -415,6 +415,7 @@ var appAdministracion = new Vue({
                 if (response.data.success) {
                     localStorage.setItem('calendario_data_user', JSON.stringify(response.data));
                     this.dataUser = response.data;
+                    if (!response.data.data[0].activo_user) this.closeSession();
                 } else {
                     this.showAlert(response.data.message, 'Fallo al recargar perfil', 'warning')
                 }

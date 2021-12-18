@@ -413,7 +413,6 @@ var appAdministracion = new Vue({
 
                 this.setLoading(false);
 
-                console.log(response);
                 if (response.data.success) {
                     localStorage.setItem('calendario_users', JSON.stringify(response.data));
                     this.dataUsers = response.data;
@@ -431,7 +430,6 @@ var appAdministracion = new Vue({
 
         setDetailsUser(data) {
             const dataActual = { ...data };
-            console.log(dataActual);
             this.statusUser = 3;
             this.detailsUser = dataActual;
             this.showOptionsUsers = false;
@@ -546,7 +544,6 @@ var appAdministracion = new Vue({
 
                 this.setLoading(false);
 
-                console.log(response);
                 if (response.data.success) {
                     this.showAlert(response.data.message, 'Exito', 'success');
                     this.loadUsers();
@@ -555,7 +552,6 @@ var appAdministracion = new Vue({
                     this.showAlert(response.data.message, 'Fallo al crear usuario', 'warning');
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined) {
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
@@ -567,7 +563,6 @@ var appAdministracion = new Vue({
         setDataForUpdate(data) {
             const dataActual = { ...data };
             dataActual.area_user = dataActual.area_user.uuid
-            console.log(dataActual);
             this.statusUser = 2;
             this.userNew = dataActual;
             this.showOptionsUsers = false;
@@ -611,7 +606,6 @@ var appAdministracion = new Vue({
 
                 this.setLoading(false);
 
-                console.log(response);
                 if (response.data.success) {
                     this.showAlert(response.data.message, 'Exito', 'success');
                     this.loadUsers();
@@ -620,7 +614,6 @@ var appAdministracion = new Vue({
                     this.showAlert(response.data.message, 'Fallo al actualizar usuario', 'warning');
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined) {
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
@@ -629,17 +622,57 @@ var appAdministracion = new Vue({
             }
         },
 
-        setForDelete(idTask) {
+        setForUpdateStatus(correo_user, status) {
             this.showAlertOptions(
-                '¿Quiere eliminar esta actividad de manera permanente?',
-                'Eliminando Actividad',
-                () => { this.deleteTask(idTask); }
+                `¿Quiere cambiar el estatus usuario "${correo_user}" a "${this.refactorStatus(!status)}"?`,
+                'Cambiando estatus del usuario',
+                () => { this.updateActivoUser(correo_user, !status); }
             );
         },
-        async deleteTask(idTask) {
+        async updateActivoUser(correo_user, status) {
             try {
                 const url =
-                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/actividades/' + idTask;
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' + correo_user + '/status';
+
+                this.setLoading(true);
+
+                const response = await axios({
+                    method: 'put',
+                    url,
+                    data: {
+                        activo_user: status,
+                    },
+                })
+
+                this.setLoading(false);
+
+                if (response.data.success) {
+                    this.loadUsers();
+                    this.statusUser = 0;
+                    this.showAlert(response.data.message, 'Exito', 'success')
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al actualizar', 'warning')
+                }
+            } catch (error) {
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                else
+                    this.showAlert('Fallo al actualizar el usuario intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+
+        setForDelete(correo_user) {
+            this.showAlertOptions(
+                `¿Quiere eliminar al usuario "${correo_user}" de manera permanente?`,
+                'Eliminando usuario',
+                () => { this.deleteUser(correo_user); }
+            );
+        },
+        async deleteUser(correo_user) {
+            try {
+                const url =
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' + correo_user;
 
                 this.setLoading(true);
 
@@ -651,17 +684,18 @@ var appAdministracion = new Vue({
                 this.setLoading(false);
 
                 if (response.data.success) {
-                    this.reloadListTaskByIdMaster();
+                    this.loadUsers();
+                    this.statusUser = 0;
                     this.showAlert(response.data.message, 'Exito', 'success')
                 } else {
-                    this.showAlert(response.data.message, 'Fallo al eliminar actividad', 'warning')
+                    this.showAlert(response.data.message, 'Fallo al eliminar usuario', 'warning')
                 }
             } catch (error) {
                 this.setLoading(false);
                 if (error.response !== undefined)
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                 else
-                    this.showAlert('Fallo al eliminar actividad intentelo mas tarde', 'Error inesperado', 'danger');
+                    this.showAlert('Fallo al eliminar usuario intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
 
@@ -682,7 +716,6 @@ var appAdministracion = new Vue({
 
                 this.setLoading(false);
 
-                console.log(response);
                 if (response.data.success) {
                     localStorage.setItem(
                         'calendario_areas_data',
@@ -693,7 +726,6 @@ var appAdministracion = new Vue({
                     this.showAlert(response.data.message, 'Fallo al cargar las areas', 'warning');
                 }
             } catch (error) {
-                console.log(error, error.response);
                 this.setLoading(false);
                 if (error.response !== undefined) {
                     if (error.response.data.message === 'No hay areas registradas') {

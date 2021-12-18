@@ -176,11 +176,12 @@
                                 <td>{{ user.correo_user  }}</td>
                                 <td>{{ user.nombre_user }}</td>
                                 <td>
-                                    <div class="cursor-pointer" @click="dontAviable(user.UUID_area, user.activo_user)">
+                                    <div v-if="!isEqualsUser(user.UUID_user)" class="cursor-pointer" @click="setForUpdateStatus(user.correo_user, user.activo_user)">
                                         <span v-if="user.activo_user" class="fs-1 float-start icofont-toggle-on text-success"></span>
                                         <span v-else class="fs-1 float-start icofont-toggle-off text-danger"></span>
                                         <span class="p-1 pt-2 float-start">{{ refactorStatus(user.activo_user) }}</span>
                                     </div>
+                                    <div v-else>{{ refactorStatus(user.activo_user) }}</div>
                                 </td>
                                 <td>{{ user.tipo_user }}</td>
                                 <td>{{ formatDate(user.fecha_alta_user) }}</td>
@@ -191,7 +192,7 @@
                                     <button v-if="!isEqualsUser(user.UUID_user)" class="btn btn-warning mb-1" type="button" @click="setDataForUpdate(user)">
                                         <span class="icofont-pencil-alt-2"></span>
                                     </button>
-                                    <button v-if="!isEqualsUser(user.UUID_user)" class="btn btn-danger mb-1" type="button" @click="dontAviable">
+                                    <button v-if="!isEqualsUser(user.UUID_user)" class="btn btn-danger mb-1" type="button" @click="setForDelete(user.correo_user)">
                                         <span class="icofont-ui-delete"></span>
                                     </button>
                                 </td>

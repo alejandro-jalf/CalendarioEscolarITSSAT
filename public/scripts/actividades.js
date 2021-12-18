@@ -86,40 +86,6 @@ var appAdministracion = new Vue({
             diaSelected: {}, 
             mesSelected: {},
 
-            // Master
-            async loadListTasks() {
-                try {
-                    this.showOptionsMaster = false;
-                    const url =
-                    'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/maestroactividades';
-
-                    this.setLoading(true);
-
-                    const response = await axios({
-                        method: 'get',
-                        url,
-                    })
-
-                    this.setLoading(false);
-
-                    if (response.data.success) {
-                        localStorage.setItem(
-                            'calendario_master_task',
-                            JSON.stringify(response.data)
-                        )
-                        this.masterTask = response.data;
-                    } else {
-                        this.showAlert(response.data.message, 'Fallo al cargar las listas de actividades', 'warning')
-                    }
-                } catch (error) {
-                    this.setLoading(false);
-                    if (error.response !== undefined)
-                        this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
-                    else
-                        this.showAlert('Fallo cargar las listas de actividades intentelo mas tarde', 'Error inesperado', 'danger');
-                }
-            },
-
             // Data para areas
             listAreas: localStorage.getItem('calendario_areas_data') ?
                 JSON.parse(localStorage.getItem('calendario_areas_data')) :
@@ -209,7 +175,9 @@ var appAdministracion = new Vue({
             if (this.firtsSession === 'SI') {
                 this.loadPerfil();
                 this.loadAreas();
-                this.loadTasksByIdMaster(this.idMasterTaskSearch);
+                this.loadListTasks();
+                if (this.idMasterTaskSearch.trim() !== '')
+                    this.loadTasksByIdMaster(this.idMasterTaskSearch);
                 sessionStorage.setItem('actividades_firts_session', 'NO');
             }
             
@@ -386,8 +354,8 @@ var appAdministracion = new Vue({
                 this.loadTasksByIdMaster(this.idMasterSelected)
         },
         reloadListTaskByIdMaster() {
-            this.loadListTasks();
             this.loadAreas();
+            this.loadListTasks();
             this.showOptionsTasks = false;
             this.statusTask = 0;
             if (this.idMasterTaskSearch.trim() !== '')
@@ -749,6 +717,50 @@ var appAdministracion = new Vue({
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                 else
                     this.showAlert('Fallo al cargar areas intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+
+        // Para maestro actividades
+        async loadListTasks() {
+            try {
+                this.showOptionsMaster = false;
+                const url =
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/maestroactividades';
+
+                this.setLoading(true);
+
+                const response = await axios({
+                    method: 'get',
+                    url,
+                })
+
+                this.setLoading(false);
+
+                if (response.data.success) {
+                    localStorage.setItem(
+                        'calendario_master_task',
+                        JSON.stringify(response.data)
+                    )
+                    this.masterTask = response.data;
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al cargar las listas de actividades', 'warning')
+                }
+            } catch (error) {
+                this.setLoading(false);
+                if (error.response !== undefined) {
+                    if (error.response.data.message === 'No hay lista de actividades registradas') {
+                        this.showAlert(error.response.data.message, 'Fallo al cargar las actividades', 'warning');
+                        error.response.data.data = [];
+                        localStorage.setItem(
+                            'calendario_master_task',
+                            JSON.stringify(error.response.data)
+                        )
+                        this.masterTask = error.response.data;
+                    } else
+                        this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
+                }
+                else
+                    this.showAlert('Fallo cargar las listas de actividades intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
 

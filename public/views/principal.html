@@ -55,7 +55,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="./usuarios.html">
                                 <span class="icofont-users"></span>
                                 Usuarios
                             </a>
@@ -81,7 +81,7 @@
                                     <span>{{ apodo }}</span>
                                 </div>
                                 <hr>
-                                <button class="btn btn-outline-success btnPerfil" type="button">
+                                <button class="btn btn-outline-success btnPerfil" type="button" @click="loadPerfil">
                                     <span class="icofont-refresh"></span>
                                     Refrescar perfil
                                 </button>
@@ -110,7 +110,7 @@
                 <div class="text-center fs-5 fw-bold">{{ apodo }}</div>
 
                 <div class="text-center mb-5">
-                    <button class="btn btn-outline-success" type="button">
+                    <button class="btn btn-outline-success" type="button" @click="loadPerfil">
                         <span class="icofont-refresh"></span>
                     </button>
                     <button class="btn btn-outline-warning" type="button">
@@ -134,7 +134,7 @@
                         <span class="me-2 icofont-ui-clip-board"></span>
                         Areas
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="./usuarios.html" class="list-group-item list-group-item-action">
                         <span class="me-2 icofont-users"></span>
                         Usuarios
                     </a>

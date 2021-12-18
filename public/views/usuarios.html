@@ -82,7 +82,7 @@
                                     <span>{{ apodo }}</span>
                                 </div>
                                 <hr>
-                                <button class="btn btn-outline-success btnPerfil" type="button">
+                                <button class="btn btn-outline-success btnPerfil" type="button" @click="loadPerfil">
                                     <span class="icofont-refresh"></span>
                                     Refrescar perfil
                                 </button>
@@ -111,7 +111,7 @@
                 <div class="text-center fs-5 fw-bold">{{ apodo }}</div>
 
                 <div class="text-center mb-5">
-                    <button class="btn btn-outline-success" type="button">
+                    <button class="btn btn-outline-success" type="button" @click="loadPerfil">
                         <span class="icofont-refresh"></span>
                     </button>
                     <button class="btn btn-outline-warning" type="button">

@@ -108,6 +108,7 @@ var appPrincipal = new Vue({
         if (!this.login) window.location.href = '../index.html';
         else {
             if (this.firtsSession === 'SI') {
+                this.loadPerfil();
                 this.loadTask();
                 sessionStorage.setItem('calendario_firts_session', 'NO');
             }
@@ -337,6 +338,38 @@ var appPrincipal = new Vue({
                 }
                 else
                     this.showAlert('Fallo cargar actividades intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+
+        // Actualizar perfil
+        async loadPerfil() {
+            try {
+                this.showOptionsTasks = false;
+                const user = this.dataUser.data[0].correo_user;
+                const url =
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' + user;
+
+                this.loading = true;
+
+                const response = await axios({
+                    method: 'get',
+                    url,
+                })
+
+                this.loading = false;
+
+                if (response.data.success) {
+                    localStorage.setItem('calendario_data_user', JSON.stringify(response.data));
+                    this.dataUser = response.data;
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al recargar perfil', 'warning')
+                }
+            } catch (error) {
+                this.loading = false;
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'warning');
+                else
+                    this.showAlert('Fallo al recargar perfil intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
     },

@@ -29,7 +29,6 @@ var appAdministracion = new Vue({
             loadingCount: 0,
             widthWindow: 0,
             firtsSession: sessionStorage.getItem('master_firts_session'),
-            shiftSelected: false,
             arrayYearTasks: [],
 
             masterTask: localStorage.getItem('calendario_master_task') ?
@@ -90,6 +89,7 @@ var appAdministracion = new Vue({
         if (!this.login) window.location.href = '../index.html';
         else {
             if (this.firtsSession === 'SI') {
+                this.loadPerfil();
                 this.loadListTasks();
                 sessionStorage.setItem('master_firts_session', 'NO');
             }
@@ -98,12 +98,6 @@ var appAdministracion = new Vue({
             const yearInitial = parseInt(dateActual.format('YYYY'));
             for (let index = 0; index < 5; index++) this.arrayYearTasks.push(yearInitial + index);
             
-            window.addEventListener('keyup', (evt) => {
-                if (evt.key === 'Shift') this.shiftSelected = false;
-            });
-            window.addEventListener('keydown', (evt) => {
-                if (evt.key === 'Shift') this.shiftSelected = true;
-            });
         }
     },
     methods: {
@@ -390,6 +384,38 @@ var appAdministracion = new Vue({
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                 else
                     this.showAlert('Fallo al eliminar maestro actividad intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+
+        // Actualizar perfil
+        async loadPerfil() {
+            try {
+                this.showOptionsTasks = false;
+                const user = this.dataUser.data[0].correo_user;
+                const url =
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' + user;
+
+                this.setLoading(true);
+
+                const response = await axios({
+                    method: 'get',
+                    url,
+                })
+
+                this.setLoading(false);
+
+                if (response.data.success) {
+                    localStorage.setItem('calendario_data_user', JSON.stringify(response.data));
+                    this.dataUser = response.data;
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al recargar perfil', 'warning')
+                }
+            } catch (error) {
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'warning');
+                else
+                    this.showAlert('Fallo al recargar perfil intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
     },

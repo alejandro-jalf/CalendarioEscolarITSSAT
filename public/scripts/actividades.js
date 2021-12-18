@@ -197,6 +197,7 @@ var appAdministracion = new Vue({
         if (!this.login) window.location.href = '../index.html';
         else {
             if (this.firtsSession === 'SI') {
+                this.loadPerfil();
                 this.loadAreas();
                 this.loadTasksByIdMaster(this.idMasterTaskSearch);
                 sessionStorage.setItem('actividades_firts_session', 'NO');
@@ -736,6 +737,38 @@ var appAdministracion = new Vue({
                     this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
                 else
                     this.showAlert('Fallo al cargar areas intentelo mas tarde', 'Error inesperado', 'danger');
+            }
+        },
+
+        // Actualizar perfil
+        async loadPerfil() {
+            try {
+                this.showOptionsTasks = false;
+                const user = this.dataUser.data[0].correo_user;
+                const url =
+                'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' + user;
+
+                this.setLoading(true);
+
+                const response = await axios({
+                    method: 'get',
+                    url,
+                })
+
+                this.setLoading(false);
+
+                if (response.data.success) {
+                    localStorage.setItem('calendario_data_user', JSON.stringify(response.data));
+                    this.dataUser = response.data;
+                } else {
+                    this.showAlert(response.data.message, 'Fallo al recargar perfil', 'warning')
+                }
+            } catch (error) {
+                this.setLoading(false);
+                if (error.response !== undefined)
+                    this.showAlert(error.response.data.message, 'Error inesperado', 'warning');
+                else
+                    this.showAlert('Fallo al recargar perfil intentelo mas tarde', 'Error inesperado', 'danger');
             }
         },
     },

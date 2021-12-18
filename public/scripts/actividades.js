@@ -160,14 +160,8 @@ var appAdministracion = new Vue({
         editandoCreandoTask() {
             return this.statusTask === 1 || this.statusTask === 2;
         },
-        styleFloat() {
-            return this.statusTask === 0 ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
-        },
         iconTasksFloat() {
             return this.showOptionsTasks ? 'icofont-close' : 'icofont-sub-listing';
-        },
-        styleFloatTasks() {
-            return this.showOptionsTasks ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
         },
         listTaskByIdMasterRefactor() {
             return this.listTaskByIdMaster.data

@@ -55,7 +55,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="./usuarios.html">
                                 <span class="icofont-users"></span>
                                 Usuarios
                             </a>
@@ -134,7 +134,7 @@
                         <span class="me-2 icofont-ui-clip-board"></span>
                         Areas
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="./usuarios.html" class="list-group-item list-group-item-action">
                         <span class="me-2 icofont-users"></span>
                         Usuarios
                     </a>
@@ -282,11 +282,18 @@
                     </div>
                 </div>
             </div>
-            
-            <span class="icofont-refresh float-button float-btn-second"  :style="styleFloatMaster" @click="loadListTasks"></span>
-            <span class="icofont-ui-add float-button float-btn-load" :style="styleFloatMaster" @click="newMasterTask"></span>
-            <span class="float-button" :class="iconMasterTaskFloat" @click="showOptionsMasterClick"></span>
-            
+
+            <transition name="fade">
+                <div v-if="statusMasterTask === 0">
+                    <transition name="fade">
+                        <div v-if="showOptionsMaster">
+                            <span class="icofont-refresh float-button float-btn-second" @click="loadListTasks"></span>
+                            <span class="icofont-ui-add float-button float-btn-load" @click="newMasterTask"></span>
+                        </div>
+                    </transition>
+                    <span class="float-button" :class="iconMasterTaskFloat" @click="showOptionsMasterClick"></span>
+                </div>
+            </transition>
         </div>
 
         <button ref="btnAlert" type="button" class="btn btn-primary invisible" data-bs-toggle="modal" data-bs-target="#modalAlert">

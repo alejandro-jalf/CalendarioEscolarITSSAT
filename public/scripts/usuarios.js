@@ -187,8 +187,8 @@ var appAdministracion = new Vue({
         styleFloat() {
             return this.statusUser === 0 ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
         },
-        iconTasksFloat() {
-            return this.showOptionsUsers ? 'icofont-close' : 'icofont-sub-listing';
+        iconUsersFloat() {
+            return this.showOptionsUsers ? 'icofont-close' : 'icofont-users';
         },
         styleFloatTasks() {
             return this.showOptionsUsers ? 'opacity: 1.0; right: 20pt; background: rgb(2, 138, 21);' : 'opacity: 0.0; right: 15pt; background: rgba(0, 0, 0, 0);';

@@ -70,9 +70,6 @@ var appAdministracion = new Vue({
         emptyMaster() {
             return this.masterTask.data.length === 0
         },
-        styleFloatMaster() {
-            return this.showOptionsMaster ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
-        },
         iconMasterTaskFloat() {
             return this.showOptionsMaster ? 'icofont-close' : 'icofont-tasks-alt';
         },

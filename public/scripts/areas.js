@@ -68,12 +68,6 @@ var appAdministracion = new Vue({
             if (this.alertOptions.type === 'dark') return 'bg-dark';
             return 'bg-warning';
         },
-        styleFloat() {
-            return this.statusAreas === 0 ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
-        },
-        styleFloatArea() {
-            return this.showOptionsArea ? 'opacity: 1.0; right: 20pt;' : 'opacity: 0.0; right: 15pt;';
-        },
         iconAreaFloat() {
             return this.showOptionsArea ? 'icofont-close' : 'icofont-ui-clip-board';
         },

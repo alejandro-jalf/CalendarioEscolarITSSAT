@@ -98,6 +98,9 @@ var appAdministracion = new Vue({
         accessToMasters() { return this.dataUser.data[0].accessTo_user.maestroActividades.select },
         accessToAreas() { return this.dataUser.data[0].accessTo_user.areas.select },
         accessToUsers() { return this.dataUser.data[0].accessTo_user.usuarios.select },
+        permissionToCreate() { return this.dataUser.data[0].accessTo_user.usuarios.create },
+        permissionToUpdate() { return this.dataUser.data[0].accessTo_user.usuarios.update },
+        permissionToDelete() { return this.dataUser.data[0].accessTo_user.usuarios.delete },
 
         loading() {
             return this.loadingCount > 0
@@ -342,60 +345,62 @@ var appAdministracion = new Vue({
             return status ? 'Activo' : 'Inactivo';
         },
         newUser() {
-            this.statusUser = 1;
-            this.showOptionsUsers = false;
-            this.userNew = {
-                correo_user: '',
-                nombre_user: '',
-                apellid_p_user: '',
-                apellid_m_user: '',
-                direccion_user: '',
-                telefono_user: '',
-                ciudad_user: '',
-                password_user: '',
-                password_r_user: '',
-                tipo_user: 'invitado',
-                area_user: null,
-                accessTo_user: {
-                    principal: {
-                        select: true,
-                        view: true
-                    },
-                    maestroActividades: {
-                        select: false,
-                        view: true,
-                        create: false,
-                        update: false,
-                        delete: false
-                    },
-                    actividades: {
-                        select: false,
-                        view: true,
-                        create: false,
-                        update: false,
-                        delete: false
-                    },
-                    areas: {
-                        select: false,
-                        view: true,
-                        create: false,
-                        update: false,
-                        delete: false
-                    },
-                    usuarios: {
-                        select: false,
-                        view: true,
-                        create: false,
-                        update: false,
-                        delete: false
-                    },
-                    perfil: {
-                        select: true,
-                        view: true,
-                        update: true
-                    },
-                }
-            };
+            if (this.permissionToCreate) {
+                this.statusUser = 1;
+                this.showOptionsUsers = false;
+                this.userNew = {
+                    correo_user: '',
+                    nombre_user: '',
+                    apellid_p_user: '',
+                    apellid_m_user: '',
+                    direccion_user: '',
+                    telefono_user: '',
+                    ciudad_user: '',
+                    password_user: '',
+                    password_r_user: '',
+                    tipo_user: 'invitado',
+                    area_user: null,
+                    accessTo_user: {
+                        principal: {
+                            select: true,
+                            view: true
+                        },
+                        maestroActividades: {
+                            select: false,
+                            view: true,
+                            create: false,
+                            update: false,
+                            delete: false
+                        },
+                        actividades: {
+                            select: false,
+                            view: true,
+                            create: false,
+                            update: false,
+                            delete: false
+                        },
+                        areas: {
+                            select: false,
+                            view: true,
+                            create: false,
+                            update: false,
+                            delete: false
+                        },
+                        usuarios: {
+                            select: false,
+                            view: true,
+                            create: false,
+                            update: false,
+                            delete: false
+                        },
+                        perfil: {
+                            select: true,
+                            view: true,
+                            update: true
+                        },
+                    }
+                };
+            } else this.showAlert('No tienes permisos de creador');
         },
         showOptionsUsersClick() { this.showOptionsUsers = !this.showOptionsUsers;},
         

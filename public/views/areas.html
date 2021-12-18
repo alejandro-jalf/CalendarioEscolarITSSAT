@@ -172,20 +172,21 @@
                             <td>{{ area.maestro_area  }}</td>
                             <td>{{ area.nombre_area }}</td>
                             <td>
-                                <div class="cursor-pointer" @click="prepareForUpdateStatus(area.UUID_area, area.activa_area)">
+                                <div v-if="permissionToUpdate" class="cursor-pointer" @click="prepareForUpdateStatus(area.UUID_area, area.activa_area)">
                                     <span v-if="area.activa_area" class="fs-1 float-start icofont-toggle-on text-success"></span>
                                     <span v-else class="fs-1 float-start icofont-toggle-off text-danger"></span>
                                     <span class="p-1 pt-2 float-start">{{ refactorStatus(area.activa_area) }}</span>
                                 </div>
+                                <div v-else>{{ refactorStatus(area.activa_area) }}</div>
                             </td>
                             <td>
                                 <button class="btn btn-primary mb-1" type="button" @click="viewArea(area)">
                                     <span class="icofont-eye-alt"></span>
                                 </button>
-                                <button class="btn btn-warning mb-1" type="button" @click="setDataForEdit(area)">
+                                <button v-if="permissionToUpdate" class="btn btn-warning mb-1" type="button" @click="setDataForEdit(area)">
                                     <span class="icofont-pencil-alt-2"></span>
                                 </button>
-                                <button class="btn btn-danger mb-1" type="button" @click="prepareForDelete(area.UUID_area, area.nombre_area)">
+                                <button v-if="permissionToDelete" class="btn btn-danger mb-1" type="button" @click="prepareForDelete(area.UUID_area, area.nombre_area)">
                                     <span class="icofont-ui-delete"></span>
                                 </button>
                             </td>
@@ -264,7 +265,7 @@
                         <span class="fw-bold">Fecha actualizada:</span> {{ formatDate(detailsArea.fecha_modificada_area, true, true) }}
                     </div>
 
-                    <button class="btn btn-warning float-end" type="button" @click="setDataForEdit(detailsArea)">
+                    <button v-if="permissionToUpdate" class="btn btn-warning float-end" type="button" @click="setDataForEdit(detailsArea)">
                         <span class="icofont-pencil-alt-2"></span>
                         Editar
                     </button>

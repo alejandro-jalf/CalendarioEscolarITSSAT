@@ -176,7 +176,7 @@
                                 <td>{{ user.correo_user  }}</td>
                                 <td>{{ user.nombre_user }}</td>
                                 <td>
-                                    <div v-if="!isEqualsUser(user.UUID_user)" class="cursor-pointer" @click="setForUpdateStatus(user.correo_user, user.activo_user)">
+                                    <div v-if="!isEqualsUser(user.UUID_user) && permissionToUpdate" class="cursor-pointer" @click="setForUpdateStatus(user.correo_user, user.activo_user)">
                                         <span v-if="user.activo_user" class="fs-1 float-start icofont-toggle-on text-success"></span>
                                         <span v-else class="fs-1 float-start icofont-toggle-off text-danger"></span>
                                         <span class="p-1 pt-2 float-start">{{ refactorStatus(user.activo_user) }}</span>
@@ -189,10 +189,10 @@
                                     <button class="btn btn-primary mb-1" type="button" @click="setDetailsUser(user)">
                                         <span class="icofont-eye-alt"></span>
                                     </button>
-                                    <button v-if="!isEqualsUser(user.UUID_user)" class="btn btn-warning mb-1" type="button" @click="setDataForUpdate(user)">
+                                    <button v-if="!isEqualsUser(user.UUID_user) && permissionToUpdate" class="btn btn-warning mb-1" type="button" @click="setDataForUpdate(user)">
                                         <span class="icofont-pencil-alt-2"></span>
                                     </button>
-                                    <button v-if="!isEqualsUser(user.UUID_user)" class="btn btn-danger mb-1" type="button" @click="setForDelete(user.correo_user)">
+                                    <button v-if="!isEqualsUser(user.UUID_user) && permissionToDelete" class="btn btn-danger mb-1" type="button" @click="setForDelete(user.correo_user)">
                                         <span class="icofont-ui-delete"></span>
                                     </button>
                                 </td>
@@ -598,7 +598,7 @@
                         <hr class="m-0 p-0">
                     </div>
 
-                    <button v-if="!isEqualsUser(detailsUser.UUID_user)" class="btn btn-warning float-end mt-2" type="button" @click="setDataForUpdate(detailsUser)">
+                    <button v-if="!isEqualsUser(detailsUser.UUID_user) && permissionToUpdate" class="btn btn-warning float-end mt-2" type="button" @click="setDataForUpdate(detailsUser)">
                         <span class="icofont-pencil-alt-2"></span>
                         Editar
                     </button>

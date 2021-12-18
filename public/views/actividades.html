@@ -188,10 +188,10 @@
                                     <button class="btn btn-primary mb-1" type="button" @click="viewTask(task)">
                                         <span class="icofont-eye-alt"></span>
                                     </button>
-                                    <button class="btn btn-warning mb-1" type="button" @click="setDataForEdit(task)">
+                                    <button v-if="permissionToUpdate" class="btn btn-warning mb-1" type="button" @click="setDataForEdit(task)">
                                         <span class="icofont-pencil-alt-2"></span>
                                     </button>
-                                    <button class="btn btn-danger mb-1" type="button" @click="setForDelete(task.UUID_task)">
+                                    <button v-if="permissionToDelete" class="btn btn-danger mb-1" type="button" @click="setForDelete(task.UUID_task)">
                                         <span class="icofont-ui-delete"></span>
                                     </button>
                                 </td>
@@ -402,7 +402,7 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-warning float-end" type="button" @click="setDataForEdit(detailsTask)">
+                    <button v-if="permissionToUpdate" class="btn btn-warning float-end" type="button" @click="setDataForEdit(detailsTask)">
                         <span class="icofont-pencil-alt-2"></span>
                         Editar
                     </button>

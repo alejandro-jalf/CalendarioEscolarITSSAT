@@ -172,11 +172,12 @@
                         <tr v-for="(master, indexMaster) in masterTaskRefactor" :key="indexMaster">
                             <td>{{ master.titulo_master_task }}</td>
                             <td>
-                                <div class="cursor-pointer" @click="prepareUpdatePublicaMaster(master, master.publicada_master_task)">
+                                <div v-if="permissionToUpdate" class="cursor-pointer" @click="prepareUpdatePublicaMaster(master, master.publicada_master_task)">
                                     <span v-if="master.publicada_master_task" class="fs-1 float-start icofont-toggle-on text-success"></span>
                                     <span v-else class="fs-1 float-start icofont-toggle-off text-danger"></span>
                                     <span class="p-1 pt-2 float-start">{{ refactorStatus(master.publicada_master_task) }}</span>
                                 </div>
+                                <div v-else>{{ refactorStatus(master.publicada_master_task) }}</div>
                             </td>
                             <td>{{ formatDate(master.fecha_creada_master_task, true) }}</td>
                             <td>{{ master.creada_por_master_task.correo }}</td>
@@ -184,10 +185,10 @@
                                 <button class="btn btn-primary mb-1" type="button" @click="detailsMasterTask(master)">
                                     <span class="icofont-eye-alt"></span>
                                 </button>
-                                <button class="btn btn-warning mb-1" type="button" @click="editMasterTask(master)">
+                                <button v-if="permissionToUpdate" class="btn btn-warning mb-1" type="button" @click="editMasterTask(master)">
                                     <span class="icofont-pencil-alt-2"></span>
                                 </button>
-                                <button class="btn btn-danger mb-1" type="button" @click="prepareDeleteMasterTask(master.UUID_master_task)">
+                                <button v-if="permissionToDelete" class="btn btn-danger mb-1" type="button" @click="prepareDeleteMasterTask(master.UUID_master_task)">
                                     <span class="icofont-ui-delete"></span>
                                 </button>
                             </td>
@@ -275,7 +276,7 @@
                             <input class="form-check-input" type="checkbox" role="switch" id="checkPublicaNew" :checked="masterTaskActual.publicada_master_task" disabled>
                             <label class="form-check-label" for="checkPublicaNew">{{ refactorStatus(masterTaskActual.publicada_master_task) }}</label>
                         </div>
-                        <button class="btn btn-warning float-end" type="button" @click="editMasterTask(masterTaskActual)">
+                        <button v-if="permissionToUpdate" class="btn btn-warning float-end" type="button" @click="editMasterTask(masterTaskActual)">
                             <span class="icofont-pencil-alt-2"></span>
                             Editar
                         </button>

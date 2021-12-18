@@ -46,6 +46,9 @@ var appAdministracion = new Vue({
         accessToMasters() { return this.dataUser.data[0].accessTo_user.maestroActividades.select },
         accessToAreas() { return this.dataUser.data[0].accessTo_user.areas.select },
         accessToUsers() { return this.dataUser.data[0].accessTo_user.usuarios.select },
+        permissionToCreate() { return this.dataUser.data[0].accessTo_user.maestroActividades.create },
+        permissionToUpdate() { return this.dataUser.data[0].accessTo_user.maestroActividades.update },
+        permissionToDelete() { return this.dataUser.data[0].accessTo_user.maestroActividades.delete },
 
         loading() {
             return this.loadingCount > 0
@@ -149,10 +152,12 @@ var appAdministracion = new Vue({
             this.statusMasterTask = 0;
         },
         newMasterTask() {
-            this.showOptionsMaster = false;
-            this.statusMasterTask = 1;
-            this.masterTaskActualEdit.titulo_master_task = '';
-            this.masterTaskActualEdit.publicada_master_task = false;
+            if (this.permissionToCreate) {
+                this.showOptionsMaster = false;
+                this.statusMasterTask = 1;
+                this.masterTaskActualEdit.titulo_master_task = '';
+                this.masterTaskActualEdit.publicada_master_task = false;
+            } else this.showAlert('No tienes permisos de creador');
         },
         detailsMasterTask(task) {
             this.masterTaskActual = task;

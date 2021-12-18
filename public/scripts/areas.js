@@ -48,6 +48,9 @@ var appAdministracion = new Vue({
         accessToMasters() { return this.dataUser.data[0].accessTo_user.maestroActividades.select },
         accessToAreas() { return this.dataUser.data[0].accessTo_user.areas.select },
         accessToUsers() { return this.dataUser.data[0].accessTo_user.usuarios.select },
+        permissionToCreate() { return this.dataUser.data[0].accessTo_user.areas.create },
+        permissionToUpdate() { return this.dataUser.data[0].accessTo_user.areas.update },
+        permissionToDelete() { return this.dataUser.data[0].accessTo_user.areas.delete },
 
         loading() {
             return this.loadingCount > 0
@@ -172,11 +175,13 @@ var appAdministracion = new Vue({
             this.showOptionsArea = false;
         },
         formNewArea() {
-            this.statusAreas = 1;
-            this.showOptionsArea = false;
-            this.areaNew.maestro_area = null;
-            this.areaNew.nombre_area = '';
-            this.newMasterArea = '';
+            if (this.permissionToCreate) {
+                this.statusAreas = 1;
+                this.showOptionsArea = false;
+                this.areaNew.maestro_area = null;
+                this.areaNew.nombre_area = '';
+                this.newMasterArea = '';
+            } else this.showAlert('No tienes permisos de creador');
         },
         refactorStatus(status) {
             return status ? 'Habilitada' : 'Deshabilitada';

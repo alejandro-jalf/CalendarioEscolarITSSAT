@@ -111,7 +111,6 @@ var appLogin = new Vue({
                         this.showAlert(response.data.message, 'Fallo en el inicio de sesion', 'warning')
                     }
                 } catch (error) {
-                    console.log(error, error.response);
                     this.loading = false;
                     if (error.response !== undefined)
                         this.showAlert(error.response.data.message, 'Error inesperado', 'danger');
@@ -144,7 +143,6 @@ var appLogin = new Vue({
 
                     this.loading = false;
 
-                    console.log(response);
                     if (response.data.success) {
                         this.showAlert(response.data.message, 'Exito', 'success');
                         this.recuperandoCuenta = false;

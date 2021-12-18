@@ -127,6 +127,12 @@ var appAdministracion = new Vue({
         }
     },
     computed: {
+        // Accesos
+        accessToTasks() { return this.dataUser.data[0].accessTo_user.actividades.select },
+        accessToMasters() { return this.dataUser.data[0].accessTo_user.maestroActividades.select },
+        accessToAreas() { return this.dataUser.data[0].accessTo_user.areas.select },
+        accessToUsers() { return this.dataUser.data[0].accessTo_user.usuarios.select },
+
         loading() {
             return this.loadingCount > 0
         },
@@ -195,6 +201,7 @@ var appAdministracion = new Vue({
     mounted() {
         this.widthWindow = window.innerWidth;
         if (!this.login) window.location.href = '../index.html';
+        else if (!this.accessToTasks) window.location.href = '../views/principal.html';
         else {
             if (this.firtsSession === 'SI') {
                 this.loadPerfil();

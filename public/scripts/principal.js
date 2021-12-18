@@ -37,6 +37,12 @@ var appPrincipal = new Vue({
         }
     },
     computed: {
+        // Accesos
+        accessToTasks() { return this.dataUser.data[0].accessTo_user.actividades.select },
+        accessToMasters() { return this.dataUser.data[0].accessTo_user.maestroActividades.select },
+        accessToAreas() { return this.dataUser.data[0].accessTo_user.areas.select },
+        accessToUsers() { return this.dataUser.data[0].accessTo_user.usuarios.select },
+
         apodo() {
             return this.dataUser.data[0].nombre_user
         },

@@ -36,7 +36,7 @@
                                 Inicio
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li v-if="accessToMasters" class="nav-item">
                             <a class="nav-link" href="./maestroactividades.html">
                                 <span class="icofont-tasks-alt"></span>
                                 Maestro Actividades
@@ -48,13 +48,13 @@
                                 Actividades
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li v-if="accessToAreas" class="nav-item">
                             <a class="nav-link" href="./areas.html">
                                 <span class="icofont-ui-clip-board"></span>
                                 Areas
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li v-if="accessToUsers" class="nav-item">
                             <a class="nav-link" href="./usuarios.html">
                                 <span class="icofont-users"></span>
                                 Usuarios
@@ -122,7 +122,7 @@
                         <span class="me-2 icofont-home"></span>
                         Inicio
                     </a>
-                    <a href="./maestroactividades.html" class="list-group-item list-group-item-action">
+                    <a v-if="accessToMasters" href="./maestroactividades.html" class="list-group-item list-group-item-action">
                         <span class="me-2 icofont-tasks-alt"></span>
                         Maestro Actividades
                     </a>
@@ -130,11 +130,11 @@
                         <span class="me-2 icofont-sub-listing"></span>
                         Actividades
                     </a>
-                    <a href="./areas.html" class="list-group-item list-group-item-action">
+                    <a v-if="accessToAreas" href="./areas.html" class="list-group-item list-group-item-action">
                         <span class="me-2 icofont-ui-clip-board"></span>
                         Areas
                     </a>
-                    <a href="./usuarios.html" class="list-group-item list-group-item-action">
+                    <a v-if="accessToUsers" href="./usuarios.html" class="list-group-item list-group-item-action">
                         <span class="me-2 icofont-users"></span>
                         Usuarios
                     </a>

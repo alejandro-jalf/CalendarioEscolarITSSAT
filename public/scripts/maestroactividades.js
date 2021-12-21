@@ -107,7 +107,8 @@ var appAdministracion = new Vue({
             const dateActual = this.getDateNow();
             const yearInitial = parseInt(dateActual.format('YYYY'));
             for (let index = 0; index < 5; index++) this.arrayYearTasks.push(yearInitial + index);
-            
+
+            window.addEventListener('resize', (evt) => { this.widthWindow = window.innerWidth; });
         }
     },
     methods: {
@@ -147,6 +148,9 @@ var appAdministracion = new Vue({
             this.$refs.btnAlertOptions.click()
         },
 
+        statusMasterBorder(status) {
+            return status ? 'cardTaskRealizada' : 'cardTaskCancelada';
+        },
         showOptionsMasterClick() { this.showOptionsMaster = !this.showOptionsMaster; },
         listMasterTask() {
             this.statusMasterTask = 0;

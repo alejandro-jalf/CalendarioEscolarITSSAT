@@ -158,43 +158,78 @@
                 <div v-if="emptyMaster"  class="alert alert-info" role="alert">
                     No hay listas maestros registradas
                 </div>
-                <table v-else class="table table-striped table-sm table-bordered table-responsive ">
-                    <thead class="thead-dark">
-                        <tr class="table-dark">
-                            <th>Titulo</th>
-                            <th>Publica</th>
-                            <th>Creada</th>
-                            <th>Creada por</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(master, indexMaster) in masterTaskRefactor" :key="indexMaster">
-                            <td>{{ master.titulo_master_task }}</td>
-                            <td>
+                <div v-else>
+                    <table v-if="widthWindow >= 550" class="table table-striped table-sm table-bordered table-responsive ">
+                        <thead class="thead-dark">
+                            <tr class="table-dark">
+                                <th>Titulo</th>
+                                <th>Publica</th>
+                                <th>Creada</th>
+                                <th>Creada por</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(master, indexMaster) in masterTaskRefactor" :key="indexMaster">
+                                <td>{{ master.titulo_master_task }}</td>
+                                <td>
+                                    <div v-if="permissionToUpdate" class="cursor-pointer" @click="prepareUpdatePublicaMaster(master, master.publicada_master_task)">
+                                        <span v-if="master.publicada_master_task" class="fs-1 float-start icofont-toggle-on text-success"></span>
+                                        <span v-else class="fs-1 float-start icofont-toggle-off text-danger"></span>
+                                        <span class="p-1 pt-2 float-start">{{ refactorStatus(master.publicada_master_task) }}</span>
+                                    </div>
+                                    <div v-else>{{ refactorStatus(master.publicada_master_task) }}</div>
+                                </td>
+                                <td>{{ formatDate(master.fecha_creada_master_task, true) }}</td>
+                                <td>{{ master.creada_por_master_task.correo }}</td>
+                                <td>
+                                    <button class="btn btn-primary mb-1" type="button" @click="detailsMasterTask(master)">
+                                        <span class="icofont-eye-alt"></span>
+                                    </button>
+                                    <button v-if="permissionToUpdate" class="btn btn-warning mb-1" type="button" @click="editMasterTask(master)">
+                                        <span class="icofont-pencil-alt-2"></span>
+                                    </button>
+                                    <button v-if="permissionToDelete" class="btn btn-danger mb-1" type="button" @click="prepareDeleteMasterTask(master.UUID_master_task)">
+                                        <span class="icofont-ui-delete"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div v-else>
+                        <div v-for="(master, indexMaster) in masterTaskRefactor" :key="indexMaster" class="card mb-2" :class="statusMasterBorder(master.publicada_master_task)">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ master.titulo_master_task }}</h5>
                                 <div v-if="permissionToUpdate" class="cursor-pointer" @click="prepareUpdatePublicaMaster(master, master.publicada_master_task)">
-                                    <span v-if="master.publicada_master_task" class="fs-1 float-start icofont-toggle-on text-success"></span>
-                                    <span v-else class="fs-1 float-start icofont-toggle-off text-danger"></span>
-                                    <span class="p-1 pt-2 float-start">{{ refactorStatus(master.publicada_master_task) }}</span>
+                                    <span v-if="master.publicada_master_task" class="fs-1 icofont-toggle-on text-success"></span>
+                                    <span v-else class="fs-1 icofont-toggle-off text-danger"></span>
+                                    <span class="p-1 pt-2">{{ refactorStatus(master.publicada_master_task) }}</span>
                                 </div>
                                 <div v-else>{{ refactorStatus(master.publicada_master_task) }}</div>
-                            </td>
-                            <td>{{ formatDate(master.fecha_creada_master_task, true) }}</td>
-                            <td>{{ master.creada_por_master_task.correo }}</td>
-                            <td>
-                                <button class="btn btn-primary mb-1" type="button" @click="detailsMasterTask(master)">
-                                    <span class="icofont-eye-alt"></span>
-                                </button>
-                                <button v-if="permissionToUpdate" class="btn btn-warning mb-1" type="button" @click="editMasterTask(master)">
-                                    <span class="icofont-pencil-alt-2"></span>
-                                </button>
-                                <button v-if="permissionToDelete" class="btn btn-danger mb-1" type="button" @click="prepareDeleteMasterTask(master.UUID_master_task)">
-                                    <span class="icofont-ui-delete"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                <div class="row mt-2">
+                                    <div class="col d-grid gap-2 mt-1">
+                                        <button class="btn btn-primary" type="button" @click="detailsMasterTask(master)">
+                                            <span class="icofont-eye-alt"></span>
+                                        </button>
+                                    </div>
+                                    <div v-if="permissionToUpdate" class="col d-grid gap-2 mt-1">
+                                        <button class="btn btn-warning" type="button" @click="editMasterTask(master)">
+                                            <span class="icofont-pencil-alt-2"></span>
+                                        </button>
+                                    </div>
+                                    <div v-if="permissionToDelete" class="col d-grid gap-2 mt-1">
+                                        <button class="btn btn-danger" type="button" @click="prepareDeleteMasterTask(master.UUID_master_task)">
+                                            <span class="icofont-ui-delete"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="statusTaskCard">{{ refactorStatus(master.publicada_master_task) }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div v-else-if="createEditMasterTask" class="card">

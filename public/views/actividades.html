@@ -209,12 +209,12 @@
                                             <span class="icofont-eye-alt"></span>
                                         </button>
                                     </div>
-                                    <div class="col d-grid gap-2">
+                                    <div v-if="permissionToUpdate" class="col d-grid gap-2">
                                         <button class="btn btn-warning" type="button" @click="setDataForEdit(task)">
                                             <span class="icofont-pencil-alt-2"></span>
                                         </button>
                                     </div>
-                                    <div class="col d-grid gap-2">
+                                    <div v-if="permissionToDelete" class="col d-grid gap-2">
                                         <button class="btn btn-danger" type="button" @click="setForDelete(task.UUID_task)">
                                             <span class="icofont-ui-delete"></span>
                                         </button>

@@ -102,7 +102,7 @@ var appAdministracion = new Vue({
     },
     mounted() {
         this.widthWindow = window.innerWidth;
-        if (!this.login) window.location.href = '../index.html';
+        if (!this.login) window.location.href = '../views/login.html';
         else if (!this.accessToAreas) window.location.href = '../views/principal.html';
         else {
             if (this.firtsSession === 'SI') {

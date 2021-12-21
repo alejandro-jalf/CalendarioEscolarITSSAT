@@ -1,0 +1,20 @@
+.title-index {
+    text-align: center;
+    font-family: 'Bungee Inline', cursive;
+    font-size: 30pt;
+    margin-top: 30px;
+    color: rgba(0, 0, 0, 0.685);
+}
+
+.fd-index {
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.img-index {
+    width: 50%;
+}

@@ -110,6 +110,7 @@ var appAdministracion = new Vue({
                 this.loadAreas();
                 sessionStorage.setItem('areas_firts_session', 'NO');
             }
+            window.addEventListener('resize', (evt) => { this.widthWindow = window.innerWidth; });
         }
     },
     methods: {
@@ -169,6 +170,9 @@ var appAdministracion = new Vue({
         dontAviable() { this.showAlert('Accion no habilitada por el momento'); },
 
         // Methodos para areas
+        statusAreasBorder(status) {
+            return status ? 'cardTaskRealizada' : 'cardTaskCancelada';
+        },
         viewArea(area) {
             this.detailsArea = area;
             this.statusAreas = 3;

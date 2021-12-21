@@ -234,6 +234,7 @@ var appAdministracion = new Vue({
                 this.loadUsers();
                 sessionStorage.setItem('users_firts_session', 'NO');
             }
+            window.addEventListener('resize', (evt) => { this.widthWindow = window.innerWidth; });
         }
     },
     methods: {
@@ -275,6 +276,9 @@ var appAdministracion = new Vue({
         },
 
         // Para actividades
+        statusUsuarioBorder(status) {
+            return status ? 'cardTaskRealizada' : 'cardTaskCancelada';
+        },
         iconToggle(status) {
             return status ? 'icofont-toggle-on text-success fs-1' : 'icofont-toggle-off text-danger fs-1';
         },

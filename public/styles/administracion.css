@@ -23,3 +23,21 @@
         width: 100%;
     }
 }
+
+.statusTaskCard {
+    float: right;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.cardTaskPendiente {
+    border-left: 5px solid #d6d300;
+}
+
+.cardTaskRealizada {
+    border-left: 5px solid #0b6200;
+}
+
+.cardTaskCancelada {
+    border-left: 5px solid #9c0500;
+}

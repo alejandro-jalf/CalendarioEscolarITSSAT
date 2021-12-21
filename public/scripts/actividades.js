@@ -186,6 +186,7 @@ var appAdministracion = new Vue({
             for (let index = 0; index < 5; index++) this.arrayYearTasks.push(yearInitial + index);
             this.taskNew.year = yearInitial;
             
+            window.addEventListener('resize', (evt) => { this.widthWindow = window.innerWidth; });
             window.addEventListener('keyup', (evt) => {
                 if (evt.key === 'Shift') this.shiftSelected = false;
             });
@@ -195,6 +196,12 @@ var appAdministracion = new Vue({
         }
     },
     methods: {
+        statusTaskBorder(status) {
+            return status === 'Pendiente' ?
+                'cardTaskPendiente' :
+                status === 'Realizada' ?
+                    'cardTaskRealizada' : 'cardTaskCancelada'; 
+        },
         formatDate(dateString, hours = false, am = false) {
             const formatHours = !hours ? '' :
                 !am ? ' HH:MM' : ' hh:MM a';

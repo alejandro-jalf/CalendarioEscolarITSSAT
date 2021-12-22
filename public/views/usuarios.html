@@ -251,7 +251,7 @@
                 <div class="card-body">
                     <div v-if="statusUser === 1" class="mt-2">
                         <label for="userEmail" class="form-label">Correo electronico:</label>
-                        <input v-model="userNew.correo_user" type="email" class="form-control" id="userEmail" placeholder="alguien@dominio.subdominio">
+                        <input v-model="userNew.correo_user" type="email" class="form-control" id="userEmail" placeholder="alguien@dominio.subdominio" @keyup.enter="$refs.inputName.focus()">
                     </div>
                     <h5 v-else class="card-title">{{ userNew.correo_user }}</h5>
 
@@ -259,19 +259,19 @@
                     <div class="row">
                         <div class="col-md mb-2">
                             <div class="form-floating">
-                                <input v-model="userNew.nombre_user" type="email" class="form-control" id="inputName" placeholder="Nombre(s)">
+                                <input ref="inputName" v-model="userNew.nombre_user" type="email" class="form-control" id="inputName" placeholder="Nombre(s)" @keyup.enter="$refs.iptAP.focus()">
                                 <label for="inputName">Nombre(s)</label>
                             </div>
                         </div>
                         <div class="col-md mb-2">
                             <div class="form-floating">
-                                <input v-model="userNew.apellid_p_user" type="text" class="form-control" id="iptAP" placeholder="Apellido paterno">
+                                <input ref="iptAP" v-model="userNew.apellid_p_user" type="text" class="form-control" id="iptAP" placeholder="Apellido paterno" @keyup.enter="$refs.inputAM.focus()">
                                 <label for="iptAP">Apellido paterno</label>
                             </div>
                         </div>
                         <div class="col-md mb-2">
                             <div class="form-floating">
-                                <input v-model="userNew.apellid_m_user" type="text" class="form-control" id="inputAM" placeholder="Apellido Materno">
+                                <input ref="inputAM" v-model="userNew.apellid_m_user" type="text" class="form-control" id="inputAM" placeholder="Apellido Materno" @keyup.enter="$refs.areaAddress.focus()">
                                 <label for="inputAM">Apellido Materno</label>
                             </div>
                         </div>
@@ -279,17 +279,17 @@
 
                     <div class="mt-2">
                         <label for="areaAddress" class="form-label">Direccion:</label>
-                        <textarea v-model="userNew.direccion_user" class="form-control" id="areaAddress" rows="2" placeholder="Direccion"></textarea>
+                        <textarea ref="areaAddress" v-model="userNew.direccion_user" class="form-control" id="areaAddress" rows="2" placeholder="Direccion"></textarea>
                     </div>
 
                     <div class="mt-2">
                         <label for="userCity" class="form-label">Ciudad:</label>
-                        <input v-model="userNew.ciudad_user" type="text" class="form-control" id="userCity" placeholder="Ciudad">
+                        <input ref="userCity" v-model="userNew.ciudad_user" type="text" class="form-control" id="userCity" placeholder="Ciudad" @keyup.enter="$refs.userTel.focus()">
                     </div>
 
                     <div class="mt-2">
                         <label for="userTel" class="form-label">Telefono:</label>
-                        <input v-model="userNew.telefono_user" type="text" class="form-control" id="userTel" placeholder="0000000000">
+                        <input ref="userTel" v-model="userNew.telefono_user" type="text" class="form-control" id="userTel" placeholder="0000000000" @keyup.enter="$refs.userPass.focus()">
                     </div>
 
                     <div class="accordion mt-2 mb-2" id="accordionExample">
@@ -304,7 +304,7 @@
                                     <div v-if="statusUser === 1">
                                         <div class="mb-2">
                                             <label for="userPass" class="form-label">Contraseña:</label>
-                                            <input v-model="userNew.password_user" type="password" class="form-control" :class="isValidPassword" id="userPass" placeholder="contraseña">
+                                            <input ref="userPass" v-model="userNew.password_user" type="password" class="form-control" :class="isValidPassword" id="userPass" placeholder="contraseña" @keyup.enter="$refs.userRepeatPass.focus()">
                                             <div class="invalid-feedback">
                                                 {{ messageInvalidPassword }}
                                             </div>
@@ -315,7 +315,7 @@
     
                                         <div class="mb-2">
                                             <label for="userRepeatPass" class="form-label">Repetir contraseña:</label>
-                                            <input v-model="userNew.password_r_user" type="password" class="form-control" :class="isValidPasswordRepeat" id="userRepeatPass" placeholder="repetir contraseña">
+                                            <input ref="userRepeatPass" v-model="userNew.password_r_user" type="password" class="form-control" :class="isValidPasswordRepeat" id="userRepeatPass" placeholder="repetir contraseña">
                                             <div class="invalid-feedback">
                                                 Las contraseñas no coinciden
                                             </div>

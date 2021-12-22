@@ -311,13 +311,13 @@
 
                     <div class="mb-2">
                         <label for="encargadoTask" class="form-label">Encargado:</label>
-                        <input v-model="taskNew.encargado" type="text" class="form-control" id="encargadoTask" aria-describedby="encargadoHelp" placeholder="Nombre completo" name="nameEncargado" autocomplete="name">
+                        <input v-model="taskNew.encargado" type="text" class="form-control" id="encargadoTask" aria-describedby="encargadoHelp" placeholder="Nombre completo" name="nameEncargado" autocomplete="name" @keyup.enter="$refs.areaObservaciones.focus()">
                         <div id="encargadoHelp" class="form-text">Persona a cargo de la actividad.</div>
                     </div>
 
                     <div class="mb-2">
                         <label for="areaObservaciones" class="form-label">Observaciones:</label>
-                        <textarea v-model="taskNew.observaciones" class="form-control" id="areaObservaciones" rows="3" placeholder="Observaciones extras de la actividad"></textarea>
+                        <textarea ref="areaObservaciones" v-model="taskNew.observaciones" class="form-control" id="areaObservaciones" rows="3" placeholder="Observaciones extras de la actividad"></textarea>
                     </div>
 
                     <div v-if="statusTask === 1" class="form-check form-switch">

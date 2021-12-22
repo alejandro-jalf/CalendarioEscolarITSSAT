@@ -8,7 +8,7 @@ var appIndex = new Vue({
         }
     },
     mounted() {
-        if (!this.login) window.location.href = './views/login.html';
-        else window.location.href = './views/principal.html';
+        if (!this.login) window.location.replace('./views/login.html');
+        else window.location.replace('./views/principal.html');
     },
 })

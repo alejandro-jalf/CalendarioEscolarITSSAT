@@ -169,8 +169,8 @@ var appAdministracion = new Vue({
     },
     mounted() {
         this.widthWindow = window.innerWidth;
-        if (!this.login) window.location.href = '../views/login.html';
-        else if (!this.accessToTasks) window.location.href = '../views/principal.html';
+        if (!this.login) window.location.replace('../views/login.html');
+        else if (!this.accessToTasks) window.location.replace('../views/principal.html');
         else {
             if (this.firtsSession === 'SI') {
                 this.loadPerfil();
@@ -213,7 +213,7 @@ var appAdministracion = new Vue({
         closeSession() {
             this.login = false;
             localStorage.setItem('calendario_p_login', false);
-            window.location.href = '../index.html';
+            window.location.replace('../index.html');
         },
         getDateNow() {
             return new moment().local(true)

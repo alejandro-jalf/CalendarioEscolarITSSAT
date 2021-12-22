@@ -111,7 +111,7 @@ var appPrincipal = new Vue({
     },
     mounted() {
         this.widthWindow = window.innerWidth;
-        if (!this.login) window.location.href = '../views/login.html';
+        if (!this.login) window.location.replace('../views/login.html');
         else {
             if (this.firtsSession === 'SI') {
                 this.loadPerfil();
@@ -302,7 +302,7 @@ var appPrincipal = new Vue({
         closeSession() {
             this.login = false;
             localStorage.setItem('calendario_p_login', false);
-            window.location.href = '../index.html';
+            window.location.replace('../index.html');
         },
         async loadTask() {
             try {

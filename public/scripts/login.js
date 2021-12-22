@@ -44,7 +44,7 @@ var appLogin = new Vue({
         },
     },
     mounted() {
-        if (this.login) window.location.href = './views/principal.html';
+        if (this.login) window.location.replace('../views/principal.html');
     },
     methods: {
         olvideMiPass() { this.recuperandoCuenta = true },
@@ -106,7 +106,7 @@ var appLogin = new Vue({
                             'calendario_data_user',
                             JSON.stringify(response.data)
                         )
-                        window.location.href = './views/principal.html';
+                        window.location.replace('../views/principal.html');
                     } else {
                         this.showAlert(response.data.message, 'Fallo en el inicio de sesion', 'warning')
                     }
@@ -138,7 +138,7 @@ var appLogin = new Vue({
 
                     const response = await axios({
                         method: 'put',
-                        url,
+                        
                     })
 
                     this.loading = false;

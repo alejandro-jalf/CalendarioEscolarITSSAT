@@ -419,7 +419,27 @@ var appAdministracion = new Vue({
         newTask() {
             if (this.permissionToCreate) {
                 this.showOptionsTasks = false;
-                this.statusTask = 1
+                this.statusTask = 1;
+                this.taskNew = {
+                    idMaster: null,
+                    rangoFechas: true,
+                    dateInit: '',
+                    dateEnd: '',
+                    year: null,
+                    area: null,
+                    meses: [],
+                    dias: [],
+                    titulo: '',
+                    observaciones: '',
+                    publica: true,
+                    encargado: '',
+                    informeCancel: {
+                        correo: '',
+                        uuid: '',
+                        informe: '',
+                        date: '',
+                    },
+                }
             } else this.showAlert('No tienes permisos de creador');
         },
         validateDataNewTask() {

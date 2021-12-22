@@ -196,6 +196,9 @@ var appAdministracion = new Vue({
         }
     },
     methods: {
+        goToWindow(ref) { 
+            if (ref && ref.trim() !== '#') window.location.replace(ref);
+        },
         statusTaskBorder(status) {
             return status === 'Pendiente' ?
                 'cardTaskPendiente' :

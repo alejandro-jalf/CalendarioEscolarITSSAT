@@ -21,7 +21,7 @@
 
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1b5702;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="./principal.html">
+                <a class="navbar-brand cursor-pointer" @click="goToWindow('./principal.html')">
                     <img src="../images/logo500t.png" alt="" class="logo-header">
                     Calendario Escolar
                 </a>
@@ -31,37 +31,37 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent1">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a href="./principal.html" class="nav-link" aria-current="page">
+                            <a @click="goToWindow('./principal.html')" class="nav-link cursor-pointer" aria-current="page">
                                 <span class="icofont-home"></span>
                                 Inicio
                             </a>
                         </li>
                         <li v-if="accessToMasters" class="nav-item">
-                            <a class="nav-link" href="./maestroactividades.html">
+                            <a class="nav-link cursor-pointer" @click="goToWindow('./maestroactividades.html')">
                                 <span class="icofont-tasks-alt"></span>
                                 Maestro Actividades
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active">
+                            <a class="nav-link cursor-pointer active">
                                 <span class="icofont-sub-listing"></span>
                                 Actividades
                             </a>
                         </li>
                         <li v-if="accessToAreas" class="nav-item">
-                            <a class="nav-link" href="./areas.html">
+                            <a class="nav-link cursor-pointer" @click="goToWindow('./areas.html')">
                                 <span class="icofont-ui-clip-board"></span>
                                 Areas
                             </a>
                         </li>
                         <li v-if="accessToUsers" class="nav-item">
-                            <a class="nav-link" href="./usuarios.html">
+                            <a class="nav-link cursor-pointer" @click="goToWindow('./usuarios.html')">
                                 <span class="icofont-users"></span>
                                 Usuarios
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link cursor-pointer" @click="goToWindow">
                                 <span class="icofont-user-alt-4"></span>
                                 Perfil
                             </a>
@@ -118,27 +118,27 @@
                     </button>
                 </div>
                 <div class="list-group">
-                    <a href="./principal.html" class="list-group-item list-group-item-action">
+                    <a @click="goToWindow('./principal.html')" class="list-group-item list-group-item-action cursor-pointer">
                         <span class="me-2 icofont-home"></span>
                         Inicio
                     </a>
-                    <a v-if="accessToMasters" href="./maestroactividades.html" class="list-group-item list-group-item-action">
+                    <a v-if="accessToMasters" @click="goToWindow('./maestroactividades.html')" class="list-group-item list-group-item-action cursor-pointer">
                         <span class="me-2 icofont-tasks-alt"></span>
                         Maestro Actividades
                     </a>
-                    <a class="list-group-item list-group-item-action active">
+                    <a class="list-group-item list-group-item-action cursor-pointer active">
                         <span class="me-2 icofont-sub-listing"></span>
                         Actividades
                     </a>
-                    <a v-if="accessToAreas" href="./areas.html" class="list-group-item list-group-item-action">
+                    <a v-if="accessToAreas" @click="goToWindow('./areas.html')" class="list-group-item list-group-item-action cursor-pointer">
                         <span class="me-2 icofont-ui-clip-board"></span>
                         Areas
                     </a>
-                    <a v-if="accessToUsers" href="./usuarios.html" class="list-group-item list-group-item-action">
+                    <a v-if="accessToUsers" @click="goToWindow('./usuarios.html')" class="list-group-item list-group-item-action cursor-pointer">
                         <span class="me-2 icofont-users"></span>
                         Usuarios
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a @click="goToWindow" class="list-group-item list-group-item-action cursor-pointer">
                         <span class="me-2 icofont-user-alt-4"></span>
                         Perfil
                     </a>

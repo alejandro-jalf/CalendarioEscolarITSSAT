@@ -140,6 +140,9 @@ var appPrincipal = new Vue({
         }
     },
     methods: {
+        goToWindow(ref) { 
+            if (ref && ref.trim() !== '#') window.location.replace(ref);
+        },
         formatDate(dateString) {
             return new moment(dateString.replace('z', '')).format('DD/MM/YYYY');
         },

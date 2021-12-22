@@ -112,6 +112,9 @@ var appAdministracion = new Vue({
         }
     },
     methods: {
+        goToWindow(ref) { 
+            if (ref && ref.trim() !== '#') window.location.replace(ref);
+        },
         formatDate(dateString, hours = false) {
             const formatHours = hours ? ' HH:MM:ss' : '';
             const dateFromat = dateString.replace('z', '');

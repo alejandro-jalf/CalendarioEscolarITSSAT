@@ -495,6 +495,10 @@ var appAdministracion = new Vue({
                 this.showAlert('Titulo de actividad necesario');
                 return false;
             }
+            if (this.taskNew.titulo.trim().length < 3) {
+                this.showAlert('Titulo debe contener por lo menos 3 caracteres');
+                return false;
+            }
             if (this.statusTask === 2) {
                 if (this.taskNew.status === null) {
                     this.showAlert('Falta seleccionar estado de la actividad');

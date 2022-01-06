@@ -286,14 +286,14 @@
 
                             <div class="container-box">
                                 <span class="title-box">Meses</span>
-                                <span v-for="(mes, indexMes) in meses" class="badge border border-info p-2 m-1" :class="daySelected(mes)" @click="setSelectedMonth(mes)">
+                                <span v-for="(mes, indexMes) in meses" class="badge border border-info cursor-pointer p-2 m-1" :class="daySelected(mes)" @click="setSelectedMonth(mes)">
                                     {{ mes.mesLetra }}
                                     <span class="ml-2" :class="{'icofont-close-circled': mes.select, 'icofont-plus-circle': !mes.select}"></span>
                                 </span>
                             </div>
                             <div class="container-box">
                                 <span class="title-box">Dias</span>
-                                <span v-for="(dia, indexDay) in dias" class="badge border border-info p-2 m-1" :class="daySelected(dia)" @click="setSelectedDay(dia)">
+                                <span v-for="(dia, indexDay) in dias" class="badge border border-info cursor-pointer p-2 m-1" :class="daySelected(dia)" @click="setSelectedDay(dia)">
                                     {{ dia.day }}
                                     <span class="ml-2" :class="{'icofont-close-circled': dia.select, 'icofont-plus-circle': !dia.select}"></span>
                                 </span>

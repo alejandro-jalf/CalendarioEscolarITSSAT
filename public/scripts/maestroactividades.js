@@ -239,6 +239,10 @@ var appAdministracion = new Vue({
                 this.showAlert('Titulo no puede quedar vacio');
                 return false;
             }
+            if (this.masterTaskActualEdit.titulo_master_task.trim().length < 3) {
+                this.showAlert('Titulo debe contener por lo menos 3 caracteres');
+                return false;
+            }
             return true;
         },
         async createMasterTask() {

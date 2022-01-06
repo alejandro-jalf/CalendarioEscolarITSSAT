@@ -245,6 +245,10 @@ var appAdministracion = new Vue({
                     this.showAlert('Necesita ingresar el nombre general del area');
                     return false
                 }
+                if (this.newMasterArea.trim().length < 3) {
+                    this.showAlert('Area maestro debe tener por lo menos 3 caracteres');
+                    return false
+                }
                 this.areaNew.maestro_area = this.newMasterArea.trim().toUpperCase()
             } else {
                 if (this.areaNew.maestro_area === null) {
@@ -254,6 +258,10 @@ var appAdministracion = new Vue({
             }
             if (this.areaNew.nombre_area.trim() === '') {
                 this.showAlert('Necesita ingresar el nombre del area');
+                return false
+            }
+            if (this.areaNew.nombre_area.trim().length < 3) {
+                this.showAlert('Nombre de area debe tener por lo menos 3 caracteres');
                 return false
             }
             return true

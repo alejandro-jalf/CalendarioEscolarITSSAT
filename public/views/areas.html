@@ -249,7 +249,7 @@
                     </div>
                     <div v-else class="input-group mb-3">
                         <span class="input-group-text icofont-tasks-alt fs-3"></span>
-                        <input v-model="newMasterArea" type="text" class="form-control" placeholder="Ingrese nombre area general" aria-label="Username" aria-describedby="basic-addon1">
+                        <input v-model="newMasterArea" type="text" class="form-control" placeholder="Ingrese nombre area general" aria-label="Username" aria-describedby="basic-addon1" @keyup="newMasterArea = newMasterArea.toUpperCase()">
                         <span class="input-group-text icofont-ui-close bg-danger text-white cursor-pointer" @click="areaNew.maestro_area = null"></span>
                     </div>
 

@@ -2,9 +2,9 @@ var appIndex = new Vue({
     el: '#app',
     data() {
         return {
-            login:  (typeof localStorage.getItem('calendario_p_login') === 'string') ?
-                localStorage.getItem('calendario_p_login') === 'true' :
-                localStorage.getItem('calendario_p_login'),
+            login:  (typeof sessionStorage.getItem('calendario_p_login') === 'string') ?
+                sessionStorage.getItem('calendario_p_login') === 'true' :
+                sessionStorage.getItem('calendario_p_login'),
         }
     },
     mounted() {

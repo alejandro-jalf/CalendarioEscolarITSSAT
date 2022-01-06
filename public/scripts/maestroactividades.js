@@ -7,9 +7,9 @@ var appAdministracion = new Vue({
     el: '#app',
     data() {
         return {
-            login:  (typeof localStorage.getItem('calendario_p_login') === 'string') ?
-                localStorage.getItem('calendario_p_login') === 'true' :
-                localStorage.getItem('calendario_p_login'),
+            login:  (typeof sessionStorage.getItem('calendario_p_login') === 'string') ?
+                sessionStorage.getItem('calendario_p_login') === 'true' :
+                sessionStorage.getItem('calendario_p_login'),
             dataUser: localStorage.getItem('calendario_data_user') ?
                 JSON.parse(localStorage.getItem('calendario_data_user')) :
                 { data: {}, empty: true },
@@ -109,6 +109,26 @@ var appAdministracion = new Vue({
             for (let index = 0; index < 5; index++) this.arrayYearTasks.push(yearInitial + index);
 
             window.addEventListener('resize', (evt) => { this.widthWindow = window.innerWidth; });
+            
+            let ss = 0;
+            let timer;
+            const second = () => {
+                timer = setTimeout(second, 1000);
+                if (ss >= 360) {
+                    this.closeSession();
+                    sessionStorage.setItem('calendario_session_expired', true)
+                }
+                ss++;
+            }
+            
+            window.addEventListener('blur', (evt) => {
+                ss = 0;
+                second();
+            });
+            window.addEventListener('focus', (evt) => {
+                ss = 0;
+                clearTimeout(timer);
+            });
         }
     },
     methods: {
@@ -124,7 +144,7 @@ var appAdministracion = new Vue({
         },
         closeSession() {
             this.login = false;
-            localStorage.setItem('calendario_p_login', false);
+            sessionStorage.setItem('calendario_p_login', false);
             window.location.replace('../index.html');
         },
         getDateNow() {

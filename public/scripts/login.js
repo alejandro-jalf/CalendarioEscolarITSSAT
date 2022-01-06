@@ -1,5 +1,8 @@
-if (!localStorage.getItem('calendario_p_login'))
-    localStorage.setItem('calendario_p_login', false)
+if (!sessionStorage.getItem('calendario_p_login'))
+    sessionStorage.setItem('calendario_p_login', false);
+
+if (!sessionStorage.getItem('calendario_session_expired'))
+    sessionStorage.setItem('calendario_session_expired', false);
 
 var appLogin = new Vue({
     el: '#app',
@@ -8,9 +11,9 @@ var appLogin = new Vue({
             user_login: '',
             user_recovery: '',
             password_login: '',
-            login: (typeof localStorage.getItem('calendario_p_login') === 'string') ?
-                localStorage.getItem('calendario_p_login') === 'true' :
-                localStorage.getItem('calendario_p_login'),
+            login: (typeof sessionStorage.getItem('calendario_p_login') === 'string') ?
+                sessionStorage.getItem('calendario_p_login') === 'true' :
+                sessionStorage.getItem('calendario_p_login'),
             alert: {
                 title: 'Advertencia',
                 message: 'Any massage',
@@ -27,6 +30,9 @@ var appLogin = new Vue({
             dataUser: localStorage.getItem('calendario_data_user') ?
                 JSON.parse(localStorage.getItem('calendario_data_user')) :
                 { data: {}, empty: true },
+            sessionExpired: (typeof sessionStorage.getItem('calendario_session_expired') === 'string') ?
+                sessionStorage.getItem('calendario_session_expired') === 'true' :
+                sessionStorage.getItem('calendario_session_expired'),
         }
     },
     computed: {
@@ -45,6 +51,12 @@ var appLogin = new Vue({
     },
     mounted() {
         if (this.login) window.location.replace('../views/principal.html');
+        else if (this.sessionExpired)
+            this.showAlert(
+                'Hemos cerrado tu sesion por seguridad, vuelve a acceder a tu cuenta de nuevo',
+                'Sesion cerrada por inactividad',
+                'danger'
+            )
     },
     methods: {
         olvideMiPass() { this.recuperandoCuenta = true },
@@ -56,9 +68,9 @@ var appLogin = new Vue({
         focusURec() { this.colorURec = 'text-dark' },
         blurURec() { this.colorURec = 'text-light' },
         isLogin() {
-            if (typeof localStorage.getItem('calendario_p_login') === 'string')
-                return localStorage.getItem('calendario_p_login') === 'true'
-            return localStorage.getItem('calendario_p_login')
+            if (typeof sessionStorage.getItem('calendario_p_login') === 'string')
+                return sessionStorage.getItem('calendario_p_login') === 'true'
+            return sessionStorage.getItem('calendario_p_login')
         },
         showAlert(message, title = 'Advertencia', type = 'warning') {
             this.alert.title = title;
@@ -82,9 +94,9 @@ var appLogin = new Vue({
             if (this.validateDataLogin()) {
                 try {
                     const url =
-                    'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' +
-                    this.user_login.trim() +
-                    '/login';
+                        'https://us-central1-calendarioescolaritssat.cloudfunctions.net/api/v1/usuarios/' +
+                        this.user_login.trim() +
+                        '/login';
 
                     this.loading = true;
 
@@ -101,7 +113,7 @@ var appLogin = new Vue({
                     if (response.data.success) {
                         this.showAlert(response.data.message, 'Exito', 'success');
                         this.login = true;
-                        localStorage.setItem('calendario_p_login', true)
+                        sessionStorage.setItem('calendario_p_login', true)
                         localStorage.setItem(
                             'calendario_data_user',
                             JSON.stringify(response.data)

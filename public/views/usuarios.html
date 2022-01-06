@@ -279,7 +279,9 @@
 
                     <div class="mt-2">
                         <label for="areaAddress" class="form-label">Direccion:</label>
-                        <textarea ref="areaAddress" v-model="userNew.direccion_user" class="form-control" id="areaAddress" rows="2" placeholder="Direccion"></textarea>
+                        <textarea ref="areaAddress" v-model="userNew.direccion_user" class="form-control" :class="isValidAddress" id="areaAddress" rows="2" placeholder="Direccion"></textarea>
+                        <div class="invalid-feedback"> Debe tener por lo menos 9 caracteres </div>
+                        <div class="valid-feedback"> Cantidad de caracteres valido </div>
                     </div>
 
                     <div class="mt-2">
@@ -289,7 +291,9 @@
 
                     <div class="mt-2">
                         <label for="userTel" class="form-label">Telefono:</label>
-                        <input ref="userTel" v-model="userNew.telefono_user" type="text" class="form-control" id="userTel" placeholder="0000000000" @keyup.enter="$refs.userPass.focus()">
+                        <input ref="userTel" v-model="userNew.telefono_user" type="text" class="form-control" :class="isValidPhone" id="userTel" placeholder="0000000000" @keyup.enter="$refs.userPass.focus()" @keydown="verifyPhone">
+                        <div class="invalid-feedback"> Telefono debe ser mayor de 9 caracteres y menor de 13 caracteres </div>
+                        <div class="valid-feedback"> Cantidad de caracteres valido </div>
                     </div>
 
                     <div class="accordion mt-2 mb-2" id="accordionExample">

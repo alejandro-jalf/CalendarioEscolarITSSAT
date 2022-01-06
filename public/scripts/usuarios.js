@@ -183,6 +183,13 @@ var appAdministracion = new Vue({
                 expresionNumbers.test(this.userNew.password_user)
             ) ? 'is-valid' : 'is-invalid';
         },
+        isValidAddress() {
+            return (this.userNew.direccion_user.trim().length < 9) ? 'is-invalid' : 'is-valid';
+        },
+        isValidPhone() {
+            return (this.userNew.telefono_user.trim().length < 10 || this.userNew.telefono_user.trim().length > 12) 
+            ? 'is-invalid' : 'is-valid';
+        },
         isValidPasswordRepeat() {
             return (
                 this.userNew.password_user.trim() ===
@@ -279,6 +286,25 @@ var appAdministracion = new Vue({
         },
 
         // Para actividades
+        verifyPhone(evt) {
+            if (
+                evt.keyCode !== 9 && // tab
+                evt.keyCode !== 8 && // Backspace
+                evt.keyCode !== 37 && // flecha izquierda
+                evt.keyCode !== 39 && // flecha derecha
+                evt.keyCode !== 46 // Suprimir
+            ) {
+                if (
+                    (evt.keyCode >= 96 && evt.keyCode <= 105) ||
+                    (evt.keyCode >= 48 && evt.keyCode <= 57)
+                ) {
+                    if (
+                        parseInt(evt.key).toString() === 'NaN' ||
+                        this.userNew.telefono_user.trim().length > 12
+                    ) evt.preventDefault()
+                } else evt.preventDefault();
+            }
+        },
         statusUsuarioBorder(status) {
             return status ? 'cardTaskRealizada' : 'cardTaskCancelada';
         },
@@ -465,24 +491,48 @@ var appAdministracion = new Vue({
                 this.showAlert('Nombre no puede quedar vacio');
                 return false;
             }
+            if (this.userNew.nombre_user.trim().length < 3) {
+                this.showAlert('Nombre debe tener por lo menos 3 caracteres');
+                return false;
+            }
             if (this.userNew.apellid_p_user.trim() === '') {
                 this.showAlert('Se necesita ingresar el apellido paterno');
+                return false;
+            }
+            if (this.userNew.apellid_p_user.trim().length < 3) {
+                this.showAlert('Apellido paterno debe tener por lo menos 3 caracteres');
                 return false;
             }
             if (this.userNew.apellid_m_user.trim() === '') {
                 this.showAlert('Se necesita ingresar el apellido materno');
                 return false;
             }
+            if (this.userNew.apellid_m_user.trim().length < 3) {
+                this.showAlert('Apellido materno debe tener por lo menos 3 caracteres');
+                return false;
+            }
             if (this.userNew.direccion_user.trim() === '') {
                 this.showAlert('Direccion es requerida');
+                return false;
+            }
+            if (this.userNew.direccion_user.trim().length < 9) {
+                this.showAlert('Direccion debe tener por lo menos 9 caracteres');
                 return false;
             }
             if (this.userNew.telefono_user.trim() === '') {
                 this.showAlert('Telefono de usuario es necesario');
                 return false;
             }
+            if (this.userNew.telefono_user.trim().length < 10 || this.userNew.telefono_user.trim().length > 12) {
+                this.showAlert('Telefono debe ser mayor de 9 caracteres y menor de 13 caracteres');
+                return false;
+            }
             if (this.userNew.ciudad_user.trim() === '') {
                 this.showAlert('Ciudad no puede ser vacio');
+                return false;
+            }
+            if (this.userNew.ciudad_user.trim().length < 9) {
+                this.showAlert('Ciudad debe tener por lo menos 3 caracteres');
                 return false;
             }
 

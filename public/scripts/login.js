@@ -150,7 +150,7 @@ var appLogin = new Vue({
 
                     const response = await axios({
                         method: 'put',
-                        
+                        url,
                     })
 
                     this.loading = false;
